@@ -50,7 +50,7 @@
 |------|----------|--------|
 | 0 | Инициализация проекта и CI/CD | DONE |
 | 1 | Domain Layer - Модели и интерфейсы | DONE |
-| 2 | Domain Layer - Use Cases | NOT STARTED |
+| 2 | Domain Layer - Use Cases | DONE |
 | 3 | Data Layer - API и сетевой слой | NOT STARTED |
 | 4 | Data Layer - Локальное хранилище | NOT STARTED |
 | 5 | Data Layer - Repository Implementations | NOT STARTED |
@@ -130,18 +130,18 @@
 **Задачи (TDD):**
 | # | Задача | Статус |
 |---|--------|--------|
-| 2.1-2.2 | GetSettingsUseCase | NOT STARTED |
-| 2.3-2.4 | SaveSettingsUseCase | NOT STARTED |
-| 2.5-2.6 | ValidatePublicUrlUseCase | NOT STARTED |
-| 2.7-2.8 | AuthorizeUseCase | NOT STARTED |
-| 2.9-2.10 | LogoutUseCase | NOT STARTED |
-| 2.11-2.12 | GetAuthStateUseCase | NOT STARTED |
-| 2.13-2.14 | GetFilesUseCase | NOT STARTED |
-| 2.15-2.16 | GetFolderContentsUseCase | NOT STARTED |
-| 2.17-2.18 | GetMediaDownloadUrlUseCase | NOT STARTED |
-| 2.19-2.20 | RefreshFilesUseCase | NOT STARTED |
-| 2.21-2.22 | ClearCacheUseCase | NOT STARTED |
-| 2.23-2.24 | GetCacheSizeUseCase | NOT STARTED |
+| 2.1-2.2 | GetSettingsUseCase | DONE |
+| 2.3-2.4 | SaveSettingsUseCase | DONE |
+| 2.5-2.6 | ValidatePublicUrlUseCase | DONE |
+| 2.7-2.8 | AuthorizeUseCase | DONE |
+| 2.9-2.10 | LogoutUseCase | DONE |
+| 2.11-2.12 | GetAuthStateUseCase | DONE |
+| 2.13-2.14 | GetFilesUseCase | DONE |
+| 2.15-2.16 | GetFolderContentsUseCase | DONE |
+| 2.17-2.18 | GetMediaDownloadUrlUseCase | DONE |
+| 2.19-2.20 | RefreshFilesUseCase | DONE |
+| 2.21-2.22 | ClearCacheUseCase | DONE |
+| 2.23-2.24 | GetCacheSizeUseCase | DONE |
 
 ---
 
