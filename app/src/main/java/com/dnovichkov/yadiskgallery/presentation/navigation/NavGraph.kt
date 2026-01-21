@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -11,6 +12,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.dnovichkov.yadiskgallery.presentation.settings.SettingsScreen
 import java.net.URLDecoder
 
 /**
@@ -20,9 +22,12 @@ import java.net.URLDecoder
 @Composable
 fun NavGraph(
     navController: NavHostController,
+    onStartYandexLogin: () -> Unit = {},
     startDestination: String = Screen.Settings.route,
     modifier: Modifier = Modifier,
 ) {
+    val navigationActions = remember(navController) { NavigationActions(navController) }
+
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -30,8 +35,10 @@ fun NavGraph(
     ) {
         // Settings Screen
         composable(route = Screen.Settings.route) {
-            // TODO: Replace with SettingsScreen when implemented
-            PlaceholderScreen("Settings")
+            SettingsScreen(
+                onNavigateToGallery = { navigationActions.navigateToGallery() },
+                onStartYandexLogin = onStartYandexLogin,
+            )
         }
 
         // Gallery Screen

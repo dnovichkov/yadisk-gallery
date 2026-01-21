@@ -266,10 +266,11 @@ class FilesRepositoryImpl
                 cacheMetadataDao.deleteByFolderPath(folderPath)
 
                 // Fetch fresh data
+                // Fetch all items
                 val response =
                     api.getResource(
                         path = folderPath,
-                        limit = 1000, // Fetch all items
+                        limit = 1000,
                         previewSize = "M",
                     )
 
@@ -475,7 +476,9 @@ private fun com.dnovichkov.yadiskgallery.data.api.dto.ResourceDto.toFolderEntity
     )
 }
 
-private fun com.dnovichkov.yadiskgallery.data.api.dto.ResourceDto.toMediaFileEntity(parentPath: String): MediaFileEntity {
+private fun com.dnovichkov.yadiskgallery.data.api.dto.ResourceDto.toMediaFileEntity(
+    parentPath: String,
+): MediaFileEntity {
     return MediaFileEntity(
         id = resourceId ?: path,
         name = name,

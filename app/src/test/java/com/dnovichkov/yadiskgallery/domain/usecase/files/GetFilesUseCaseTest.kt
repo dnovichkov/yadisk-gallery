@@ -136,11 +136,20 @@ class GetFilesUseCaseTest {
             return allMediaResult
         }
 
-        override suspend fun getMediaFile(path: String): Result<MediaFile> = Result.failure(RuntimeException("Not implemented"))
+        override suspend fun getMediaFile(path: String): Result<MediaFile> =
+            Result.failure(
+                RuntimeException("Not implemented"),
+            )
 
-        override suspend fun getFolder(path: String): Result<Folder> = Result.failure(RuntimeException("Not implemented"))
+        override suspend fun getFolder(path: String): Result<Folder> =
+            Result.failure(
+                RuntimeException("Not implemented"),
+            )
 
-        override suspend fun getDownloadUrl(path: String): Result<String> = Result.failure(RuntimeException("Not implemented"))
+        override suspend fun getDownloadUrl(path: String): Result<String> =
+            Result.failure(
+                RuntimeException("Not implemented"),
+            )
 
         override suspend fun getPreviewUrl(
             path: String,

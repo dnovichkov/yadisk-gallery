@@ -8,12 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.dnovichkov.yadiskgallery.presentation.navigation.NavGraph
-import com.dnovichkov.yadiskgallery.presentation.navigation.NavigationActions
 import com.dnovichkov.yadiskgallery.presentation.navigation.Screen
 import com.dnovichkov.yadiskgallery.presentation.theme.YaDiskGalleryTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,18 +34,17 @@ class MainActivity : ComponentActivity() {
 
 /**
  * Main screen composable with navigation.
+ *
+ * @param onStartYandexLogin Callback to start Yandex OAuth login flow (handled by Activity)
  */
 @Composable
-fun MainScreen() {
+fun MainScreen(onStartYandexLogin: () -> Unit = {}) {
     val navController = rememberNavController()
-    val navigationActions =
-        remember(navController) {
-            NavigationActions(navController)
-        }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         NavGraph(
             navController = navController,
+            onStartYandexLogin = onStartYandexLogin,
             startDestination = Screen.Settings.route,
             modifier = Modifier.padding(innerPadding),
         )

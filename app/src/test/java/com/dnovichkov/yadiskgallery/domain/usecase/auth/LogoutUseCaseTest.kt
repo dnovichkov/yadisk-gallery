@@ -58,7 +58,10 @@ class LogoutUseCaseTest {
 
         override suspend fun authenticate(): Result<Unit> = Result.success(Unit)
 
-        override suspend fun handleAuthCallback(authCode: String): Result<UserInfo> = Result.failure(RuntimeException("Not implemented"))
+        override suspend fun handleAuthCallback(authCode: String): Result<UserInfo> =
+            Result.failure(
+                RuntimeException("Not implemented"),
+            )
 
         override suspend fun logout(): Result<Unit> {
             logoutCalled = true

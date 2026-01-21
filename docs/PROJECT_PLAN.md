@@ -55,7 +55,7 @@
 | 4 | Data Layer - Локальное хранилище | DONE |
 | 5 | Data Layer - Repository Implementations | DONE |
 | 6 | Presentation - Navigation и компоненты | DONE |
-| 7 | Settings Screen (FR-01) | NOT STARTED |
+| 7 | Settings Screen (FR-01) | DONE |
 | 8 | Auth Flow (FR-02) | NOT STARTED |
 | 9 | Gallery Screen (FR-03, FR-04, FR-06) | NOT STARTED |
 | 10 | Image Viewer (FR-05.1-FR-05.7) | NOT STARTED |
@@ -250,20 +250,20 @@
 **Задачи:**
 | # | Задача | Статус |
 |---|--------|--------|
-| 7.1 | Тест: SettingsViewModel | NOT STARTED |
-| 7.2 | Создать SettingsUiState data class | NOT STARTED |
-| 7.3 | Создать SettingsViewModel с Hilt | NOT STARTED |
-| 7.4 | Создать PublicUrlTextField composable с валидацией | NOT STARTED |
-| 7.5 | Создать AuthStatusCard composable (статус подключения) | NOT STARTED |
-| 7.6 | Создать YandexLoginButton composable | NOT STARTED |
-| 7.7 | Создать RootFolderSelector composable | NOT STARTED |
-| 7.8 | Создать ViewModeSelector composable (Grid/List) | NOT STARTED |
-| 7.9 | Создать SortOrderSelector composable | NOT STARTED |
-| 7.10 | Создать LogoutButton composable с подтверждением | NOT STARTED |
-| 7.11 | Создать CacheInfoSection composable (размер кеша, очистка) | NOT STARTED |
-| 7.12 | Собрать SettingsScreen composable | NOT STARTED |
-| 7.13 | Интеграция с NavGraph | NOT STARTED |
-| 7.14 | Проверка: UI тесты настроек | NOT STARTED |
+| 7.1 | Тест: SettingsViewModel | DONE |
+| 7.2 | Создать SettingsUiState data class | DONE |
+| 7.3 | Создать SettingsViewModel с Hilt | DONE |
+| 7.4 | Создать PublicUrlTextField composable с валидацией | DONE |
+| 7.5 | Создать AuthStatusCard composable (статус подключения) | DONE |
+| 7.6 | Создать YandexLoginButton composable | DONE |
+| 7.7 | Создать RootFolderSelector composable | DONE |
+| 7.8 | Создать ViewModeSelector composable (Grid/List) | DONE |
+| 7.9 | Создать SortOrderSelector composable | DONE |
+| 7.10 | Создать LogoutButton composable с подтверждением | DONE |
+| 7.11 | Создать CacheInfoSection composable (размер кеша, очистка) | DONE |
+| 7.12 | Собрать SettingsScreen composable | DONE |
+| 7.13 | Интеграция с NavGraph | DONE |
+| 7.14 | Проверка: сборка и тесты проходят | DONE |
 
 **Ключевые файлы:**
 - `presentation/settings/SettingsScreen.kt`

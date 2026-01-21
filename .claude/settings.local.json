@@ -12,7 +12,9 @@
       "Bash(./gradlew test:*)",
       "Bash(./gradlew assembleDebug:*)",
       "Bash(./gradlew ktlintCheck:*)",
-      "Bash(./gradlew ktlintFormat:*)"
+      "Bash(./gradlew ktlintFormat:*)",
+      "Bash(./gradlew compileDebugKotlin:*)",
+      "Bash(./gradlew ktlintMainSourceSetCheck:*)"
     ]
   }
 }

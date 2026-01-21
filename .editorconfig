@@ -1,0 +1,20 @@
+# EditorConfig for ktlint
+# https://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+max_line_length = 120
+trim_trailing_whitespace = true
+
+[*.{kt,kts}]
+# Compose functions follow PascalCase convention
+ktlint_function_naming_ignore_when_annotated_with = Composable
+ktlint_standard_function-naming = disabled
+# Allow underscore prefix for backing properties (standard Kotlin convention)
+ktlint_standard_property-naming = disabled
