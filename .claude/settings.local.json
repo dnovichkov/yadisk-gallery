@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(docx)",
+      "Bash(pandoc:*)",
+      "Bash(python:*)",
+      "Bash(./gradlew.bat assembleDebug:*)",
+      "Bash(ls -la \"C:\\\\Users\\\\Dmitriy\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Projects-yadisk-gallery\\\\tasks\"\" 2>/dev/null || echo \"Directory not found \")",
+      "Bash(./gradlew.bat test:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
