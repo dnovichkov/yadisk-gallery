@@ -54,7 +54,7 @@
 | 3 | Data Layer - API и сетевой слой | DONE |
 | 4 | Data Layer - Локальное хранилище | DONE |
 | 5 | Data Layer - Repository Implementations | DONE |
-| 6 | Presentation - Navigation и компоненты | NOT STARTED |
+| 6 | Presentation - Navigation и компоненты | DONE |
 | 7 | Settings Screen (FR-01) | NOT STARTED |
 | 8 | Auth Flow (FR-02) | NOT STARTED |
 | 9 | Gallery Screen (FR-03, FR-04, FR-06) | NOT STARTED |
@@ -211,9 +211,382 @@
 
 ---
 
-## Фазы 6-16
+## Фаза 6: Presentation - Navigation и базовые компоненты
 
-_(Детальная разбивка будет добавлена при переходе к соответствующим фазам)_
+**Цель:** Настроить навигацию и создать переиспользуемые UI компоненты
+
+**Задачи:**
+| # | Задача | Статус |
+|---|--------|--------|
+| 6.1 | Создать Screen sealed class с маршрутами (Settings, Gallery, ImageViewer, VideoPlayer) | DONE |
+| 6.2 | Создать NavGraph.kt с Compose Navigation | DONE |
+| 6.3 | Создать Color.kt (Material 3 color scheme) | DONE |
+| 6.4 | Создать Type.kt (типографика) | DONE |
+| 6.5 | Создать Theme.kt (light/dark, dynamic colors Android 12+) | DONE |
+| 6.6 | Создать LoadingIndicator composable | DONE |
+| 6.7 | Создать ErrorView composable (с кнопкой retry) | DONE |
+| 6.8 | Создать EmptyStateView composable | DONE |
+| 6.9 | Создать SkeletonLoader composable (shimmer effect) | DONE |
+| 6.10 | Создать Breadcrumbs composable | DONE |
+| 6.11 | Создать MediaTypeIcon composable (иконки для image/video/folder) | DONE |
+| 6.12 | Создать TopAppBar composable с навигацией | DONE |
+| 6.13 | Создать BottomSheet base composable | DONE |
+| 6.14 | Настроить MainActivity с NavHost | DONE |
+| 6.15 | Проверка: сборка и preview компонентов | DONE |
+
+**Ключевые файлы:**
+- `presentation/navigation/Screen.kt` - sealed class маршрутов
+- `presentation/navigation/NavGraph.kt` - граф навигации
+- `presentation/theme/Color.kt`, `Type.kt`, `Theme.kt`
+- `presentation/components/` - LoadingIndicator, ErrorView, EmptyStateView, etc.
+- `MainActivity.kt` - точка входа с NavHost
+
+---
+
+## Фаза 7: Settings Screen (FR-01)
+
+**Цель:** Реализовать экран настроек
+
+**Задачи:**
+| # | Задача | Статус |
+|---|--------|--------|
+| 7.1 | Тест: SettingsViewModel | NOT STARTED |
+| 7.2 | Создать SettingsUiState data class | NOT STARTED |
+| 7.3 | Создать SettingsViewModel с Hilt | NOT STARTED |
+| 7.4 | Создать PublicUrlTextField composable с валидацией | NOT STARTED |
+| 7.5 | Создать AuthStatusCard composable (статус подключения) | NOT STARTED |
+| 7.6 | Создать YandexLoginButton composable | NOT STARTED |
+| 7.7 | Создать RootFolderSelector composable | NOT STARTED |
+| 7.8 | Создать ViewModeSelector composable (Grid/List) | NOT STARTED |
+| 7.9 | Создать SortOrderSelector composable | NOT STARTED |
+| 7.10 | Создать LogoutButton composable с подтверждением | NOT STARTED |
+| 7.11 | Создать CacheInfoSection composable (размер кеша, очистка) | NOT STARTED |
+| 7.12 | Собрать SettingsScreen composable | NOT STARTED |
+| 7.13 | Интеграция с NavGraph | NOT STARTED |
+| 7.14 | Проверка: UI тесты настроек | NOT STARTED |
+
+**Ключевые файлы:**
+- `presentation/settings/SettingsScreen.kt`
+- `presentation/settings/SettingsViewModel.kt`
+- `presentation/settings/SettingsUiState.kt`
+- `presentation/settings/components/` - PublicUrlTextField, AuthStatusCard, etc.
+
+---
+
+## Фаза 8: Auth Flow (FR-02)
+
+**Цель:** Реализовать OAuth авторизацию через Yandex Login SDK
+
+**Задачи:**
+| # | Задача | Статус |
+|---|--------|--------|
+| 8.1 | Добавить Yandex Login SDK в зависимости | NOT STARTED |
+| 8.2 | Настроить AndroidManifest.xml (activity, intent-filter) | NOT STARTED |
+| 8.3 | Создать YandexAuthManager wrapper class | NOT STARTED |
+| 8.4 | Тест: AuthViewModel | NOT STARTED |
+| 8.5 | Создать AuthUiState sealed class | NOT STARTED |
+| 8.6 | Создать AuthViewModel | NOT STARTED |
+| 8.7 | Создать AuthScreen composable | NOT STARTED |
+| 8.8 | Реализовать handleAuthResult в MainActivity | NOT STARTED |
+| 8.9 | Реализовать автообновление токена в AuthInterceptor | NOT STARTED |
+| 8.10 | Тест: интеграция с Yandex SDK (manual) | NOT STARTED |
+| 8.11 | Проверка: полный auth flow | NOT STARTED |
+
+**Ключевые файлы:**
+- `presentation/auth/YandexAuthManager.kt` - wrapper для SDK
+- `presentation/auth/AuthScreen.kt`
+- `presentation/auth/AuthViewModel.kt`
+- `presentation/auth/AuthUiState.kt`
+- `data/api/interceptor/AuthInterceptor.kt` - обновление токена
+
+---
+
+## Фаза 9: Gallery Screen (FR-03, FR-04, FR-06)
+
+**Цель:** Реализовать экран каталога с сеткой/списком и навигацией
+
+**Задачи:**
+| # | Задача | Статус |
+|---|--------|--------|
+| 9.1 | Тест: GalleryViewModel | NOT STARTED |
+| 9.2 | Создать GalleryUiState data class | NOT STARTED |
+| 9.3 | Создать GalleryViewModel с пагинацией | NOT STARTED |
+| 9.4 | Создать MediaGridItem composable (thumbnail + type icon) | NOT STARTED |
+| 9.5 | Создать FolderGridItem composable | NOT STARTED |
+| 9.6 | Создать MediaListItem composable (детальный вид) | NOT STARTED |
+| 9.7 | Создать FolderListItem composable | NOT STARTED |
+| 9.8 | Создать GalleryGrid composable (LazyVerticalGrid 3 columns) | NOT STARTED |
+| 9.9 | Создать GalleryList composable (LazyColumn) | NOT STARTED |
+| 9.10 | Создать BreadcrumbsBar composable | NOT STARTED |
+| 9.11 | Создать GalleryTopBar composable (view mode toggle, sort) | NOT STARTED |
+| 9.12 | Реализовать Pull-to-Refresh (SwipeRefresh) | NOT STARTED |
+| 9.13 | Реализовать infinite scroll с пагинацией | NOT STARTED |
+| 9.14 | Создать SkeletonGrid composable (placeholder при загрузке) | NOT STARTED |
+| 9.15 | Собрать GalleryScreen composable | NOT STARTED |
+| 9.16 | Настроить Coil для загрузки thumbnails | NOT STARTED |
+| 9.17 | Интеграция с NavGraph (навигация в папки) | NOT STARTED |
+| 9.18 | Проверка: UI тесты галереи | NOT STARTED |
+
+**Ключевые файлы:**
+- `presentation/gallery/GalleryScreen.kt`
+- `presentation/gallery/GalleryViewModel.kt`
+- `presentation/gallery/GalleryUiState.kt`
+- `presentation/gallery/components/MediaGridItem.kt`, `FolderGridItem.kt`
+- `presentation/gallery/components/GalleryGrid.kt`, `GalleryList.kt`
+- `presentation/gallery/components/BreadcrumbsBar.kt`, `GalleryTopBar.kt`
+
+---
+
+## Фаза 10: Image Viewer (FR-05.1-FR-05.7)
+
+**Цель:** Реализовать полноэкранный просмотр изображений
+
+**Задачи:**
+| # | Задача | Статус |
+|---|--------|--------|
+| 10.1 | Тест: ImageViewerViewModel | NOT STARTED |
+| 10.2 | Создать ImageViewerUiState data class | NOT STARTED |
+| 10.3 | Создать ImageViewerViewModel | NOT STARTED |
+| 10.4 | Создать ZoomableImage composable (pinch-to-zoom 1x-5x) | NOT STARTED |
+| 10.5 | Реализовать double-tap для 2x zoom | NOT STARTED |
+| 10.6 | Создать ImagePager composable (HorizontalPager для свайпов) | NOT STARTED |
+| 10.7 | Реализовать immersive mode (скрытие system bars) | NOT STARTED |
+| 10.8 | Реализовать загрузку оригинала при зуме >2x | NOT STARTED |
+| 10.9 | Создать ImageLoadingIndicator composable | NOT STARTED |
+| 10.10 | Создать ExifInfoSheet composable (BottomSheet с EXIF) | NOT STARTED |
+| 10.11 | Реализовать чтение EXIF данных | NOT STARTED |
+| 10.12 | Создать ImageViewerTopBar composable (share, info buttons) | NOT STARTED |
+| 10.13 | Собрать ImageViewerScreen composable | NOT STARTED |
+| 10.14 | Интеграция с NavGraph (аргументы: path, index) | NOT STARTED |
+| 10.15 | Проверка: gesture тесты | NOT STARTED |
+
+**Ключевые файлы:**
+- `presentation/viewer/ImageViewerScreen.kt`
+- `presentation/viewer/ImageViewerViewModel.kt`
+- `presentation/viewer/ImageViewerUiState.kt`
+- `presentation/viewer/components/ZoomableImage.kt`
+- `presentation/viewer/components/ImagePager.kt`
+- `presentation/viewer/components/ExifInfoSheet.kt`
+
+---
+
+## Фаза 11: Video Player (FR-05.8-FR-05.12)
+
+**Цель:** Реализовать воспроизведение видео через ExoPlayer
+
+**Задачи:**
+| # | Задача | Статус |
+|---|--------|--------|
+| 11.1 | Тест: VideoPlayerViewModel | NOT STARTED |
+| 11.2 | Создать VideoPlayerUiState data class | NOT STARTED |
+| 11.3 | Создать VideoPlayerViewModel | NOT STARTED |
+| 11.4 | Создать ExoPlayerWrapper class (lifecycle-aware) | NOT STARTED |
+| 11.5 | Создать VideoPlayer composable (AndroidView с PlayerView) | NOT STARTED |
+| 11.6 | Настроить стандартные контролы ExoPlayer | NOT STARTED |
+| 11.7 | Реализовать streaming (без полной загрузки) | NOT STARTED |
+| 11.8 | Реализовать сохранение позиции воспроизведения | NOT STARTED |
+| 11.9 | Создать VideoLoadingOverlay composable | NOT STARTED |
+| 11.10 | Создать VideoErrorOverlay composable | NOT STARTED |
+| 11.11 | Собрать VideoPlayerScreen composable | NOT STARTED |
+| 11.12 | Интеграция с NavGraph | NOT STARTED |
+| 11.13 | Проверка: воспроизведение разных форматов | NOT STARTED |
+
+**Ключевые файлы:**
+- `presentation/viewer/VideoPlayerScreen.kt`
+- `presentation/viewer/VideoPlayerViewModel.kt`
+- `presentation/viewer/VideoPlayerUiState.kt`
+- `presentation/viewer/components/ExoPlayerWrapper.kt`
+- `presentation/viewer/components/VideoPlayer.kt`
+
+---
+
+## Фаза 12: Error Handling и Offline Mode (FR-07, FR-08)
+
+**Цель:** Реализовать обработку ошибок и offline режим
+
+**Задачи:**
+| # | Задача | Статус |
+|---|--------|--------|
+| 12.1 | Создать ConnectivityObserver (NetworkCallback) | NOT STARTED |
+| 12.2 | Создать OfflineState sealed class | NOT STARTED |
+| 12.3 | Создать OfflineBanner composable | NOT STARTED |
+| 12.4 | Интегрировать OfflineBanner в экраны | NOT STARTED |
+| 12.5 | Создать ErrorMapper (API errors -> DomainError) | NOT STARTED |
+| 12.6 | Создать RetryPolicy с exponential backoff | NOT STARTED |
+| 12.7 | Обновить ErrorView с детализацией ошибок | NOT STARTED |
+| 12.8 | Реализовать graceful degradation (показ кеша при offline) | NOT STARTED |
+| 12.9 | Настроить Coil disk cache | NOT STARTED |
+| 12.10 | Реализовать LRU eviction для Room cache | NOT STARTED |
+| 12.11 | Тест: offline сценарии | NOT STARTED |
+| 12.12 | Проверка: переключение online/offline | NOT STARTED |
+
+**Ключевые файлы:**
+- `data/network/ConnectivityObserver.kt`
+- `data/api/ErrorMapper.kt`
+- `data/api/RetryPolicy.kt`
+- `presentation/components/OfflineBanner.kt`
+- `presentation/components/ErrorView.kt` (обновление)
+
+---
+
+## Фаза 13: Performance и Accessibility (NFR)
+
+**Цель:** Оптимизировать производительность и добавить доступность
+
+**Задачи:**
+| # | Задача | Статус |
+|---|--------|--------|
+| 13.1 | Профилирование cold start (Android Studio Profiler) | NOT STARTED |
+| 13.2 | Оптимизация Application.onCreate (lazy init) | NOT STARTED |
+| 13.3 | Добавить App Startup library для зависимостей | NOT STARTED |
+| 13.4 | Профилирование scrolling (frame drops) | NOT STARTED |
+| 13.5 | Оптимизация Compose recomposition (remember, derivedStateOf) | NOT STARTED |
+| 13.6 | Оптимизация LazyGrid (contentType, key) | NOT STARTED |
+| 13.7 | Профилирование memory (LeakCanary) | NOT STARTED |
+| 13.8 | Оптимизация Coil memory cache | NOT STARTED |
+| 13.9 | Добавить contentDescription ко всем интерактивным элементам | NOT STARTED |
+| 13.10 | Добавить semantics для TalkBack | NOT STARTED |
+| 13.11 | Увеличить touch targets до минимум 48dp | NOT STARTED |
+| 13.12 | Тест: TalkBack navigation | NOT STARTED |
+| 13.13 | Benchmark тесты (Macrobenchmark) | NOT STARTED |
+
+**Ключевые файлы:**
+- `YaDiskGalleryApp.kt` (оптимизация инициализации)
+- Все composable (accessibility modifiers)
+- `benchmark/` - модуль для Macrobenchmark
+
+---
+
+## Фаза 14: Security и Локализация (NFR)
+
+**Цель:** Безопасность и i18n
+
+**Задачи:**
+| # | Задача | Статус |
+|---|--------|--------|
+| 14.1 | Добавить Certificate Pinning для cloud-api.yandex.net | NOT STARTED |
+| 14.2 | Настроить network_security_config.xml | NOT STARTED |
+| 14.3 | Проверить ProGuard/R8 rules | NOT STARTED |
+| 14.4 | Добавить R8 rules для Retrofit, Room, Kotlinx Serialization | NOT STARTED |
+| 14.5 | Создать strings.xml (RU - default) | NOT STARTED |
+| 14.6 | Создать strings.xml (EN) | NOT STARTED |
+| 14.7 | Экстрагировать все hardcoded строки | NOT STARTED |
+| 14.8 | Добавить plurals для счетчиков | NOT STARTED |
+| 14.9 | Проверка: release build с R8 | NOT STARTED |
+| 14.10 | Проверка: EN локализация | NOT STARTED |
+
+**Ключевые файлы:**
+- `res/xml/network_security_config.xml`
+- `proguard-rules.pro`
+- `res/values/strings.xml` (RU)
+- `res/values-en/strings.xml` (EN)
+
+---
+
+## Фаза 15: Integration и E2E тестирование
+
+**Цель:** Добавить E2E тесты для критических сценариев
+
+**Задачи:**
+| # | Задача | Статус |
+|---|--------|--------|
+| 15.1 | Настроить androidTest dependencies (Espresso, Compose Testing) | NOT STARTED |
+| 15.2 | Создать TestRunner с Hilt | NOT STARTED |
+| 15.3 | Создать mock сервер для API (MockWebServer) | NOT STARTED |
+| 15.4 | E2E тест: Public folder flow (ввод URL -> просмотр галереи) | NOT STARTED |
+| 15.5 | E2E тест: Auth flow (login -> logout) | NOT STARTED |
+| 15.6 | E2E тест: Gallery navigation (папки, breadcrumbs) | NOT STARTED |
+| 15.7 | E2E тест: Image viewing (zoom, swipe) | NOT STARTED |
+| 15.8 | E2E тест: Video playback (play, pause, seek) | NOT STARTED |
+| 15.9 | E2E тест: Offline mode (показ кеша) | NOT STARTED |
+| 15.10 | E2E тест: Error handling (retry) | NOT STARTED |
+| 15.11 | Настроить CI для instrumented tests | NOT STARTED |
+| 15.12 | Проверка: все E2E тесты проходят | NOT STARTED |
+
+**Ключевые файлы:**
+- `app/src/androidTest/` - все E2E тесты
+- `app/src/androidTest/java/.../di/TestModule.kt`
+- `.github/workflows/android.yml` (обновление для instrumented tests)
+
+---
+
+## Фаза 16: Финализация и Release
+
+**Цель:** Подготовить к релизу
+
+**Задачи:**
+| # | Задача | Статус |
+|---|--------|--------|
+| 16.1 | Создать adaptive app icon (ic_launcher) | NOT STARTED |
+| 16.2 | Создать ic_launcher_foreground.xml (vector) | NOT STARTED |
+| 16.3 | Создать ic_launcher_background.xml | NOT STARTED |
+| 16.4 | Настроить Splash Screen API (Android 12+) | NOT STARTED |
+| 16.5 | Создать splash screen theme | NOT STARTED |
+| 16.6 | Настроить версионирование (SemVer) в build.gradle.kts | NOT STARTED |
+| 16.7 | Создать keystore для release signing | NOT STARTED |
+| 16.8 | Настроить signingConfigs в build.gradle.kts | NOT STARTED |
+| 16.9 | Создать GitHub Actions release workflow | NOT STARTED |
+| 16.10 | Обновить README.md (описание, скриншоты, инструкции) | NOT STARTED |
+| 16.11 | Создать CHANGELOG.md | NOT STARTED |
+| 16.12 | Создать release notes template | NOT STARTED |
+| 16.13 | Финальная сборка release APK | NOT STARTED |
+| 16.14 | Проверка: установка и запуск release версии | NOT STARTED |
+
+**Ключевые файлы:**
+- `res/mipmap-*/ic_launcher*.xml`
+- `res/drawable/ic_launcher_foreground.xml`
+- `res/values/themes.xml` (splash)
+- `build.gradle.kts` (versioning, signing)
+- `.github/workflows/release.yml`
+- `README.md`, `CHANGELOG.md`
+
+---
+
+## Диаграмма зависимостей фаз
+
+```
+Фаза 0 (Setup)
+    │
+    ├──────────────────┐
+    ▼                  ▼
+Фаза 1 (Domain)    Фаза 6 (Navigation/Theme)
+    │                  │
+    ▼                  │
+Фаза 2 (Use Cases)     │
+    │                  │
+    ▼                  │
+Фаза 3 (API)           │
+    │                  │
+    ▼                  │
+Фаза 4 (Cache)         │
+    │                  │
+    ▼                  │
+Фаза 5 (Repositories)  │
+    │                  │
+    └────────┬─────────┘
+             │
+    ┌────────┼────────┬────────┬────────┐
+    ▼        ▼        ▼        ▼        ▼
+Фаза 7   Фаза 8   Фаза 9   Фаза 10  Фаза 11
+Settings  Auth    Gallery   Image    Video
+    │        │        │        │        │
+    └────────┴────────┴────────┴────────┘
+                      │
+                      ▼
+              Фаза 12 (Error/Offline)
+                      │
+             ┌────────┴────────┐
+             ▼                 ▼
+       Фаза 13            Фаза 14
+    (Performance)       (Security/i18n)
+             │                 │
+             └────────┬────────┘
+                      ▼
+               Фаза 15 (E2E Tests)
+                      │
+                      ▼
+               Фаза 16 (Release)
+```
 
 ---
 
