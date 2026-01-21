@@ -52,8 +52,8 @@
 | 1 | Domain Layer - Модели и интерфейсы | DONE |
 | 2 | Domain Layer - Use Cases | DONE |
 | 3 | Data Layer - API и сетевой слой | DONE |
-| 4 | Data Layer - Локальное хранилище | NOT STARTED |
-| 5 | Data Layer - Repository Implementations | NOT STARTED |
+| 4 | Data Layer - Локальное хранилище | DONE |
+| 5 | Data Layer - Repository Implementations | DONE |
 | 6 | Presentation - Navigation и компоненты | NOT STARTED |
 | 7 | Settings Screen (FR-01) | NOT STARTED |
 | 8 | Auth Flow (FR-02) | NOT STARTED |
@@ -166,7 +166,52 @@
 
 ---
 
-## Фазы 4-16
+## Фаза 4: Data Layer - Локальное хранилище
+
+**Цель:** Реализовать Room для кеширования и DataStore для настроек
+
+**Задачи (TDD):**
+| # | Задача | Статус |
+|---|--------|--------|
+| 4.1-4.2 | MediaFileEntity | DONE |
+| 4.3-4.4 | FolderEntity | DONE |
+| 4.5-4.6 | CacheMetadataEntity | DONE |
+| 4.7-4.8 | MediaDao | DONE |
+| 4.9-4.10 | FolderDao + CacheMetadataDao | DONE |
+| 4.11-4.12 | AppDatabase + DatabaseModule | DONE |
+| 4.13-4.14 | SettingsDataStore | DONE |
+| 4.15-4.16 | TokenStorage (EncryptedSharedPreferences) | DONE |
+| 4.17 | DataStoreModule | DONE |
+
+**Ключевые файлы:**
+- `data/cache/entity/` - MediaFileEntity, FolderEntity, CacheMetadataEntity
+- `data/cache/dao/` - MediaDao, FolderDao, CacheMetadataDao
+- `data/cache/AppDatabase.kt`
+- `data/datastore/` - SettingsDataStore, TokenStorage
+- `di/DatabaseModule.kt`, `di/DataStoreModule.kt`
+
+---
+
+## Фаза 5: Data Layer - Repository Implementations
+
+**Цель:** Реализовать все репозитории
+
+**Задачи (TDD):**
+| # | Задача | Статус |
+|---|--------|--------|
+| 5.1-5.2 | SettingsRepositoryImpl | DONE |
+| 5.3-5.4 | AuthRepositoryImpl (TokenStorage) | DONE |
+| 5.5-5.8 | FilesRepositoryImpl (API + Room + cache strategy) | DONE |
+| 5.9-5.10 | CacheRepositoryImpl | DONE |
+| 5.11 | RepositoryModule | DONE |
+
+**Ключевые файлы:**
+- `data/repository/` - SettingsRepositoryImpl, AuthRepositoryImpl, FilesRepositoryImpl, CacheRepositoryImpl
+- `di/RepositoryModule.kt`
+
+---
+
+## Фазы 6-16
 
 _(Детальная разбивка будет добавлена при переходе к соответствующим фазам)_
 
