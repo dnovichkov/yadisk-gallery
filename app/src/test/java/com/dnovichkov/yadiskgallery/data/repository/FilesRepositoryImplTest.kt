@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Test
 import retrofit2.Response
 
 class FilesRepositoryImplTest {
-
     private lateinit var api: YandexDiskApi
     private lateinit var mediaDao: MediaDao
     private lateinit var folderDao: FolderDao
@@ -39,153 +38,165 @@ class FilesRepositoryImplTest {
         cacheMetadataDao = mockk(relaxed = true)
         resourceMapper = ResourceMapper()
 
-        repository = FilesRepositoryImpl(
-            api = api,
-            mediaDao = mediaDao,
-            folderDao = folderDao,
-            cacheMetadataDao = cacheMetadataDao,
-            resourceMapper = resourceMapper
-        )
-    }
-
-    @Test
-    fun `getFolderContents fetches from API when cache is stale`() = runTest {
-        val resourceDto = createFolderResourceDto()
-        coEvery { cacheMetadataDao.getByFolderPath("/") } returns null
-        coEvery {
-            api.getResource(
-                path = any(),
-                fields = any(),
-                limit = any(),
-                offset = any(),
-                previewSize = any(),
-                previewCrop = any(),
-                sort = any()
+        repository =
+            FilesRepositoryImpl(
+                api = api,
+                mediaDao = mediaDao,
+                folderDao = folderDao,
+                cacheMetadataDao = cacheMetadataDao,
+                resourceMapper = resourceMapper,
             )
-        } returns Response.success(resourceDto)
-
-        val result = repository.getFolderContents(
-            path = null,
-            offset = 0,
-            limit = 20,
-            sortOrder = SortOrder.DATE_DESC
-        )
-
-        assertTrue(result.isSuccess)
     }
 
     @Test
-    fun `getDownloadUrl returns download URL from API`() = runTest {
-        val downloadUrl = "https://downloader.disk.yandex.ru/file/123"
-        coEvery { api.getDownloadLink(any()) } returns
-            Response.success(DownloadLinkDto(href = downloadUrl, method = "GET"))
+    fun `getFolderContents fetches from API when cache is stale`() =
+        runTest {
+            val resourceDto = createFolderResourceDto()
+            coEvery { cacheMetadataDao.getByFolderPath("/") } returns null
+            coEvery {
+                api.getResource(
+                    path = any(),
+                    fields = any(),
+                    limit = any(),
+                    offset = any(),
+                    previewSize = any(),
+                    previewCrop = any(),
+                    sort = any(),
+                )
+            } returns Response.success(resourceDto)
 
-        val result = repository.getDownloadUrl("/Photos/image.jpg")
+            val result =
+                repository.getFolderContents(
+                    path = null,
+                    offset = 0,
+                    limit = 20,
+                    sortOrder = SortOrder.DATE_DESC,
+                )
 
-        assertTrue(result.isSuccess)
-        assertEquals(downloadUrl, result.getOrNull())
-    }
-
-    @Test
-    fun `getDownloadUrl returns failure on API error`() = runTest {
-        coEvery { api.getDownloadLink(any()) } returns
-            Response.error(404, "Not found".toResponseBody())
-
-        val result = repository.getDownloadUrl("/nonexistent.jpg")
-
-        assertTrue(result.isFailure)
-    }
-
-    @Test
-    fun `getPublicFolderContents returns items from public URL`() = runTest {
-        val publicResource = createPublicResourceDto()
-        coEvery {
-            api.getPublicResource(
-                publicKey = any(),
-                path = any(),
-                limit = any(),
-                offset = any(),
-                previewSize = any(),
-                previewCrop = any(),
-                sort = any()
-            )
-        } returns Response.success(publicResource)
-
-        val result = repository.getPublicFolderContents(
-            publicUrl = "https://disk.yandex.ru/d/test",
-            path = null,
-            offset = 0,
-            limit = 20
-        )
-
-        assertTrue(result.isSuccess)
-        assertEquals(0, result.getOrNull()?.items?.size)
-    }
+            assertTrue(result.isSuccess)
+        }
 
     @Test
-    fun `getPublicDownloadUrl returns download URL`() = runTest {
-        val downloadUrl = "https://downloader.disk.yandex.ru/public/123"
-        coEvery { api.getPublicDownloadLink(any(), any()) } returns
-            Response.success(DownloadLinkDto(href = downloadUrl, method = "GET"))
+    fun `getDownloadUrl returns download URL from API`() =
+        runTest {
+            val downloadUrl = "https://downloader.disk.yandex.ru/file/123"
+            coEvery { api.getDownloadLink(any()) } returns
+                Response.success(DownloadLinkDto(href = downloadUrl, method = "GET"))
 
-        val result = repository.getPublicDownloadUrl(
-            publicUrl = "https://disk.yandex.ru/d/test",
-            path = "/image.jpg"
-        )
+            val result = repository.getDownloadUrl("/Photos/image.jpg")
 
-        assertTrue(result.isSuccess)
-        assertEquals(downloadUrl, result.getOrNull())
-    }
+            assertTrue(result.isSuccess)
+            assertEquals(downloadUrl, result.getOrNull())
+        }
 
     @Test
-    fun `refreshFolder invalidates cache and fetches fresh data`() = runTest {
-        val resourceDto = createFolderResourceDto()
-        coEvery {
-            api.getResource(
-                path = any(),
-                fields = any(),
-                limit = any(),
-                offset = any(),
-                previewSize = any(),
-                previewCrop = any(),
-                sort = any()
-            )
-        } returns Response.success(resourceDto)
+    fun `getDownloadUrl returns failure on API error`() =
+        runTest {
+            coEvery { api.getDownloadLink(any()) } returns
+                Response.error(404, "Not found".toResponseBody())
 
-        val result = repository.refreshFolder("/Photos")
+            val result = repository.getDownloadUrl("/nonexistent.jpg")
 
-        assertTrue(result.isSuccess)
-        coVerify { cacheMetadataDao.deleteByFolderPath("/Photos") }
-        coVerify { folderDao.deleteByParentPath("/Photos") }
-        coVerify { mediaDao.deleteByParentPath("/Photos") }
-    }
+            assertTrue(result.isFailure)
+        }
 
     @Test
-    fun `getPreviewUrl requests correct preview size`() = runTest {
-        val resourceDto = ResourceDto(
-            name = "test.jpg",
-            path = "/test.jpg",
-            type = "file",
-            mimeType = "image/jpeg",
-            preview = "https://preview.disk.yandex.ru/L/123"
-        )
-        coEvery {
-            api.getResource(
-                path = any(),
-                fields = any(),
-                limit = any(),
-                offset = any(),
-                previewSize = any(),
-                previewCrop = any(),
-                sort = any()
-            )
-        } returns Response.success(resourceDto)
+    fun `getPublicFolderContents returns items from public URL`() =
+        runTest {
+            val publicResource = createPublicResourceDto()
+            coEvery {
+                api.getPublicResource(
+                    publicKey = any(),
+                    path = any(),
+                    limit = any(),
+                    offset = any(),
+                    previewSize = any(),
+                    previewCrop = any(),
+                    sort = any(),
+                )
+            } returns Response.success(publicResource)
 
-        val result = repository.getPreviewUrl("/test.jpg", PreviewSize.L)
+            val result =
+                repository.getPublicFolderContents(
+                    publicUrl = "https://disk.yandex.ru/d/test",
+                    path = null,
+                    offset = 0,
+                    limit = 20,
+                )
 
-        assertTrue(result.isSuccess)
-        assertEquals("https://preview.disk.yandex.ru/L/123", result.getOrNull())
-    }
+            assertTrue(result.isSuccess)
+            assertEquals(0, result.getOrNull()?.items?.size)
+        }
+
+    @Test
+    fun `getPublicDownloadUrl returns download URL`() =
+        runTest {
+            val downloadUrl = "https://downloader.disk.yandex.ru/public/123"
+            coEvery { api.getPublicDownloadLink(any(), any()) } returns
+                Response.success(DownloadLinkDto(href = downloadUrl, method = "GET"))
+
+            val result =
+                repository.getPublicDownloadUrl(
+                    publicUrl = "https://disk.yandex.ru/d/test",
+                    path = "/image.jpg",
+                )
+
+            assertTrue(result.isSuccess)
+            assertEquals(downloadUrl, result.getOrNull())
+        }
+
+    @Test
+    fun `refreshFolder invalidates cache and fetches fresh data`() =
+        runTest {
+            val resourceDto = createFolderResourceDto()
+            coEvery {
+                api.getResource(
+                    path = any(),
+                    fields = any(),
+                    limit = any(),
+                    offset = any(),
+                    previewSize = any(),
+                    previewCrop = any(),
+                    sort = any(),
+                )
+            } returns Response.success(resourceDto)
+
+            val result = repository.refreshFolder("/Photos")
+
+            assertTrue(result.isSuccess)
+            coVerify { cacheMetadataDao.deleteByFolderPath("/Photos") }
+            coVerify { folderDao.deleteByParentPath("/Photos") }
+            coVerify { mediaDao.deleteByParentPath("/Photos") }
+        }
+
+    @Test
+    fun `getPreviewUrl requests correct preview size`() =
+        runTest {
+            val resourceDto =
+                ResourceDto(
+                    name = "test.jpg",
+                    path = "/test.jpg",
+                    type = "file",
+                    mimeType = "image/jpeg",
+                    preview = "https://preview.disk.yandex.ru/L/123",
+                )
+            coEvery {
+                api.getResource(
+                    path = any(),
+                    fields = any(),
+                    limit = any(),
+                    offset = any(),
+                    previewSize = any(),
+                    previewCrop = any(),
+                    sort = any(),
+                )
+            } returns Response.success(resourceDto)
+
+            val result = repository.getPreviewUrl("/test.jpg", PreviewSize.L)
+
+            assertTrue(result.isSuccess)
+            assertEquals("https://preview.disk.yandex.ru/L/123", result.getOrNull())
+        }
 
     // ==================== Helper Methods ====================
 
@@ -194,12 +205,13 @@ class FilesRepositoryImplTest {
             name = "Root",
             path = "/",
             type = "dir",
-            embedded = EmbeddedResourcesDto(
-                items = emptyList(),
-                total = 0,
-                limit = 20,
-                offset = 0
-            )
+            embedded =
+                EmbeddedResourcesDto(
+                    items = emptyList(),
+                    total = 0,
+                    limit = 20,
+                    offset = 0,
+                ),
         )
     }
 
@@ -209,12 +221,13 @@ class FilesRepositoryImplTest {
             path = "/",
             type = "dir",
             publicKey = "https://disk.yandex.ru/d/test",
-            embedded = EmbeddedResourcesDto(
-                items = emptyList(),
-                total = 0,
-                limit = 20,
-                offset = 0
-            )
+            embedded =
+                EmbeddedResourcesDto(
+                    items = emptyList(),
+                    total = 0,
+                    limit = 20,
+                    offset = 0,
+                ),
         )
     }
 }

@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
  * Handles Yandex OAuth authentication and token management.
  */
 interface IAuthRepository {
-
     /**
      * Observes the current authentication state.
      * Emits new values whenever auth state changes.

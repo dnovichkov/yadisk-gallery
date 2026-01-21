@@ -11,12 +11,10 @@ import kotlinx.serialization.Serializable
 data class FilesResponseDto(
     @SerialName("items")
     val items: List<ResourceDto>,
-
     @SerialName("offset")
     val offset: Int,
-
     @SerialName("limit")
-    val limit: Int
+    val limit: Int,
 )
 
 /**
@@ -27,40 +25,28 @@ data class FilesResponseDto(
 data class PublicResourceDto(
     @SerialName("name")
     val name: String,
-
     @SerialName("path")
     val path: String,
-
     @SerialName("type")
     val type: String,
-
     @SerialName("public_key")
     val publicKey: String? = null,
-
     @SerialName("public_url")
     val publicUrl: String? = null,
-
     @SerialName("resource_id")
     val resourceId: String? = null,
-
     @SerialName("mime_type")
     val mimeType: String? = null,
-
     @SerialName("size")
     val size: Long? = null,
-
     @SerialName("created")
     val created: String? = null,
-
     @SerialName("modified")
     val modified: String? = null,
-
     @SerialName("md5")
     val md5: String? = null,
-
     @SerialName("preview")
     val preview: String? = null,
-
     @SerialName("_embedded")
-    val embedded: EmbeddedResourcesDto? = null
+    val embedded: EmbeddedResourcesDto? = null,
 )

@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("SaveSettingsUseCase")
 class SaveSettingsUseCaseTest {
-
     private lateinit var useCase: SaveSettingsUseCase
     private lateinit var repository: FakeSettingsRepository
 
@@ -29,121 +28,126 @@ class SaveSettingsUseCaseTest {
     @Nested
     @DisplayName("setPublicFolderUrl()")
     inner class SetPublicFolderUrlTests {
-
         @Test
         @DisplayName("should save public folder URL")
-        fun `should save public folder URL`() = runTest {
-            val url = "https://disk.yandex.ru/d/abc123"
+        fun `should save public folder URL`() =
+            runTest {
+                val url = "https://disk.yandex.ru/d/abc123"
 
-            val result = useCase.setPublicFolderUrl(url)
+                val result = useCase.setPublicFolderUrl(url)
 
-            assertTrue(result.isSuccess)
-            assertEquals(url, repository.savedPublicFolderUrl)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(url, repository.savedPublicFolderUrl)
+            }
 
         @Test
         @DisplayName("should allow null URL to clear setting")
-        fun `should allow null URL to clear setting`() = runTest {
-            val result = useCase.setPublicFolderUrl(null)
+        fun `should allow null URL to clear setting`() =
+            runTest {
+                val result = useCase.setPublicFolderUrl(null)
 
-            assertTrue(result.isSuccess)
-            assertEquals(null, repository.savedPublicFolderUrl)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(null, repository.savedPublicFolderUrl)
+            }
 
         @Test
         @DisplayName("should propagate errors")
-        fun `should propagate errors`() = runTest {
-            repository.errorToThrow = RuntimeException("Save failed")
+        fun `should propagate errors`() =
+            runTest {
+                repository.errorToThrow = RuntimeException("Save failed")
 
-            val result = useCase.setPublicFolderUrl("url")
+                val result = useCase.setPublicFolderUrl("url")
 
-            assertTrue(result.isFailure)
-        }
+                assertTrue(result.isFailure)
+            }
     }
 
     @Nested
     @DisplayName("setRootFolderPath()")
     inner class SetRootFolderPathTests {
-
         @Test
         @DisplayName("should save root folder path")
-        fun `should save root folder path`() = runTest {
-            val path = "/Photos/2024"
+        fun `should save root folder path`() =
+            runTest {
+                val path = "/Photos/2024"
 
-            val result = useCase.setRootFolderPath(path)
+                val result = useCase.setRootFolderPath(path)
 
-            assertTrue(result.isSuccess)
-            assertEquals(path, repository.savedRootFolderPath)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(path, repository.savedRootFolderPath)
+            }
 
         @Test
         @DisplayName("should allow null path for disk root")
-        fun `should allow null path for disk root`() = runTest {
-            val result = useCase.setRootFolderPath(null)
+        fun `should allow null path for disk root`() =
+            runTest {
+                val result = useCase.setRootFolderPath(null)
 
-            assertTrue(result.isSuccess)
-            assertEquals(null, repository.savedRootFolderPath)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(null, repository.savedRootFolderPath)
+            }
     }
 
     @Nested
     @DisplayName("setViewMode()")
     inner class SetViewModeTests {
-
         @Test
         @DisplayName("should save GRID view mode")
-        fun `should save GRID view mode`() = runTest {
-            val result = useCase.setViewMode(ViewMode.GRID)
+        fun `should save GRID view mode`() =
+            runTest {
+                val result = useCase.setViewMode(ViewMode.GRID)
 
-            assertTrue(result.isSuccess)
-            assertEquals(ViewMode.GRID, repository.savedViewMode)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(ViewMode.GRID, repository.savedViewMode)
+            }
 
         @Test
         @DisplayName("should save LIST view mode")
-        fun `should save LIST view mode`() = runTest {
-            val result = useCase.setViewMode(ViewMode.LIST)
+        fun `should save LIST view mode`() =
+            runTest {
+                val result = useCase.setViewMode(ViewMode.LIST)
 
-            assertTrue(result.isSuccess)
-            assertEquals(ViewMode.LIST, repository.savedViewMode)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(ViewMode.LIST, repository.savedViewMode)
+            }
     }
 
     @Nested
     @DisplayName("setSortOrder()")
     inner class SetSortOrderTests {
-
         @Test
         @DisplayName("should save DATE_DESC sort order")
-        fun `should save DATE_DESC sort order`() = runTest {
-            val result = useCase.setSortOrder(SortOrder.DATE_DESC)
+        fun `should save DATE_DESC sort order`() =
+            runTest {
+                val result = useCase.setSortOrder(SortOrder.DATE_DESC)
 
-            assertTrue(result.isSuccess)
-            assertEquals(SortOrder.DATE_DESC, repository.savedSortOrder)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(SortOrder.DATE_DESC, repository.savedSortOrder)
+            }
 
         @Test
         @DisplayName("should save NAME_ASC sort order")
-        fun `should save NAME_ASC sort order`() = runTest {
-            val result = useCase.setSortOrder(SortOrder.NAME_ASC)
+        fun `should save NAME_ASC sort order`() =
+            runTest {
+                val result = useCase.setSortOrder(SortOrder.NAME_ASC)
 
-            assertTrue(result.isSuccess)
-            assertEquals(SortOrder.NAME_ASC, repository.savedSortOrder)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(SortOrder.NAME_ASC, repository.savedSortOrder)
+            }
     }
 
     @Nested
     @DisplayName("clearSettings()")
     inner class ClearSettingsTests {
-
         @Test
         @DisplayName("should clear all settings")
-        fun `should clear all settings`() = runTest {
-            val result = useCase.clearSettings()
+        fun `should clear all settings`() =
+            runTest {
+                val result = useCase.clearSettings()
 
-            assertTrue(result.isSuccess)
-            assertTrue(repository.clearSettingsCalled)
-        }
+                assertTrue(result.isSuccess)
+                assertTrue(repository.clearSettingsCalled)
+            }
     }
 
     private class FakeSettingsRepository : ISettingsRepository {

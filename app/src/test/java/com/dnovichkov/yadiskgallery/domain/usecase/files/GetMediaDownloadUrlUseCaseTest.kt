@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("GetMediaDownloadUrlUseCase")
 class GetMediaDownloadUrlUseCaseTest {
-
     private lateinit var useCase: GetMediaDownloadUrlUseCase
     private lateinit var repository: FakeFilesRepository
 
@@ -32,74 +31,77 @@ class GetMediaDownloadUrlUseCaseTest {
     @Nested
     @DisplayName("invoke()")
     inner class InvokeTests {
-
         @Test
         @DisplayName("should return download URL")
-        fun `should return download URL`() = runTest {
-            repository.downloadUrlResult = Result.success("https://download.url/file.jpg")
+        fun `should return download URL`() =
+            runTest {
+                repository.downloadUrlResult = Result.success("https://download.url/file.jpg")
 
-            val result = useCase(path = "/photos/file.jpg")
+                val result = useCase(path = "/photos/file.jpg")
 
-            assertTrue(result.isSuccess)
-            assertEquals("https://download.url/file.jpg", result.getOrNull())
-            assertEquals("/photos/file.jpg", repository.lastDownloadPath)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals("https://download.url/file.jpg", result.getOrNull())
+                assertEquals("/photos/file.jpg", repository.lastDownloadPath)
+            }
 
         @Test
         @DisplayName("should propagate errors")
-        fun `should propagate errors`() = runTest {
-            repository.downloadUrlResult = Result.failure(RuntimeException("Not found"))
+        fun `should propagate errors`() =
+            runTest {
+                repository.downloadUrlResult = Result.failure(RuntimeException("Not found"))
 
-            val result = useCase(path = "/missing.jpg")
+                val result = useCase(path = "/missing.jpg")
 
-            assertTrue(result.isFailure)
-        }
+                assertTrue(result.isFailure)
+            }
     }
 
     @Nested
     @DisplayName("getPreviewUrl()")
     inner class GetPreviewUrlTests {
-
         @Test
         @DisplayName("should return preview URL with default size")
-        fun `should return preview URL with default size`() = runTest {
-            repository.previewUrlResult = Result.success("https://preview.url/thumb.jpg")
+        fun `should return preview URL with default size`() =
+            runTest {
+                repository.previewUrlResult = Result.success("https://preview.url/thumb.jpg")
 
-            val result = useCase.getPreviewUrl(path = "/photo.jpg")
+                val result = useCase.getPreviewUrl(path = "/photo.jpg")
 
-            assertTrue(result.isSuccess)
-            assertEquals(PreviewSize.M, repository.lastPreviewSize)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(PreviewSize.M, repository.lastPreviewSize)
+            }
 
         @Test
         @DisplayName("should return preview URL with specified size")
-        fun `should return preview URL with specified size`() = runTest {
-            repository.previewUrlResult = Result.success("https://preview.url/thumb_xl.jpg")
+        fun `should return preview URL with specified size`() =
+            runTest {
+                repository.previewUrlResult = Result.success("https://preview.url/thumb_xl.jpg")
 
-            val result = useCase.getPreviewUrl(path = "/photo.jpg", size = PreviewSize.XL)
+                val result = useCase.getPreviewUrl(path = "/photo.jpg", size = PreviewSize.XL)
 
-            assertTrue(result.isSuccess)
-            assertEquals(PreviewSize.XL, repository.lastPreviewSize)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(PreviewSize.XL, repository.lastPreviewSize)
+            }
     }
 
     @Nested
     @DisplayName("getPublicDownloadUrl()")
     inner class GetPublicDownloadUrlTests {
-
         @Test
         @DisplayName("should return public download URL")
-        fun `should return public download URL`() = runTest {
-            repository.publicDownloadUrlResult = Result.success("https://public.download/file.jpg")
+        fun `should return public download URL`() =
+            runTest {
+                repository.publicDownloadUrlResult = Result.success("https://public.download/file.jpg")
 
-            val result = useCase.getPublicDownloadUrl(
-                publicUrl = "https://disk.yandex.ru/d/abc",
-                path = "/file.jpg"
-            )
+                val result =
+                    useCase.getPublicDownloadUrl(
+                        publicUrl = "https://disk.yandex.ru/d/abc",
+                        path = "/file.jpg",
+                    )
 
-            assertTrue(result.isSuccess)
-            assertEquals("https://disk.yandex.ru/d/abc", repository.lastPublicUrl)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals("https://disk.yandex.ru/d/abc", repository.lastPublicUrl)
+            }
     }
 
     private class FakeFilesRepository : IFilesRepository {
@@ -115,33 +117,34 @@ class GetMediaDownloadUrlUseCaseTest {
             offset: Int,
             limit: Int,
             sortOrder: SortOrder,
-            mediaOnly: Boolean
+            mediaOnly: Boolean,
         ): Result<PagedResult<DiskItem>> = Result.success(PagedResult(emptyList(), 0, 20, 0, false))
 
         override fun observeFolderContents(
             path: String?,
             sortOrder: SortOrder,
-            mediaOnly: Boolean
+            mediaOnly: Boolean,
         ): Flow<List<DiskItem>> = flowOf(emptyList())
 
         override suspend fun getAllMedia(
             offset: Int,
             limit: Int,
-            sortOrder: SortOrder
+            sortOrder: SortOrder,
         ): Result<PagedResult<MediaFile>> = Result.success(PagedResult(emptyList(), 0, 20, 0, false))
 
-        override suspend fun getMediaFile(path: String): Result<MediaFile> =
-            Result.failure(RuntimeException("Not implemented"))
+        override suspend fun getMediaFile(path: String): Result<MediaFile> = Result.failure(RuntimeException("Not implemented"))
 
-        override suspend fun getFolder(path: String): Result<Folder> =
-            Result.failure(RuntimeException("Not implemented"))
+        override suspend fun getFolder(path: String): Result<Folder> = Result.failure(RuntimeException("Not implemented"))
 
         override suspend fun getDownloadUrl(path: String): Result<String> {
             lastDownloadPath = path
             return downloadUrlResult
         }
 
-        override suspend fun getPreviewUrl(path: String, size: PreviewSize): Result<String> {
+        override suspend fun getPreviewUrl(
+            path: String,
+            size: PreviewSize,
+        ): Result<String> {
             lastPreviewSize = size
             return previewUrlResult
         }
@@ -152,10 +155,13 @@ class GetMediaDownloadUrlUseCaseTest {
             publicUrl: String,
             path: String?,
             offset: Int,
-            limit: Int
+            limit: Int,
         ): Result<PagedResult<DiskItem>> = Result.success(PagedResult(emptyList(), 0, 20, 0, false))
 
-        override suspend fun getPublicDownloadUrl(publicUrl: String, path: String): Result<String> {
+        override suspend fun getPublicDownloadUrl(
+            publicUrl: String,
+            path: String,
+        ): Result<String> {
             lastPublicUrl = publicUrl
             return publicDownloadUrlResult
         }

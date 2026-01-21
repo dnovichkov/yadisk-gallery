@@ -13,15 +13,12 @@ data class CacheMetadataEntity(
     @PrimaryKey
     @ColumnInfo(name = "folder_path")
     val folderPath: String,
-
     @ColumnInfo(name = "last_synced_at")
     val lastSyncedAt: Long,
-
     @ColumnInfo(name = "total_items")
     val totalItems: Int?,
-
     @ColumnInfo(name = "etag")
-    val etag: String? = null
+    val etag: String? = null,
 ) {
     /**
      * Checks if the cache is stale (older than TTL).

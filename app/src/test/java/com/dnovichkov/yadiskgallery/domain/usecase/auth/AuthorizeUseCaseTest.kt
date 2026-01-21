@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("AuthorizeUseCase")
 class AuthorizeUseCaseTest {
-
     private lateinit var useCase: AuthorizeUseCase
     private lateinit var repository: FakeAuthRepository
 
@@ -28,85 +27,89 @@ class AuthorizeUseCaseTest {
     @Nested
     @DisplayName("invoke()")
     inner class InvokeTests {
-
         @Test
         @DisplayName("should initiate authentication")
-        fun `should initiate authentication`() = runTest {
-            val result = useCase()
+        fun `should initiate authentication`() =
+            runTest {
+                val result = useCase()
 
-            assertTrue(result.isSuccess)
-            assertTrue(repository.authenticateCalled)
-        }
+                assertTrue(result.isSuccess)
+                assertTrue(repository.authenticateCalled)
+            }
 
         @Test
         @DisplayName("should propagate authentication errors")
-        fun `should propagate authentication errors`() = runTest {
-            repository.authenticateError = RuntimeException("Auth failed")
+        fun `should propagate authentication errors`() =
+            runTest {
+                repository.authenticateError = RuntimeException("Auth failed")
 
-            val result = useCase()
+                val result = useCase()
 
-            assertTrue(result.isFailure)
-            assertEquals("Auth failed", result.exceptionOrNull()?.message)
-        }
+                assertTrue(result.isFailure)
+                assertEquals("Auth failed", result.exceptionOrNull()?.message)
+            }
     }
 
     @Nested
     @DisplayName("handleCallback()")
     inner class HandleCallbackTests {
-
         @Test
         @DisplayName("should handle auth callback successfully")
-        fun `should handle auth callback successfully`() = runTest {
-            val expectedUser = UserInfo(
-                uid = "123",
-                login = "user@yandex.ru",
-                displayName = "Test User",
-                avatarUrl = "https://avatar.url"
-            )
-            repository.callbackUserInfo = expectedUser
+        fun `should handle auth callback successfully`() =
+            runTest {
+                val expectedUser =
+                    UserInfo(
+                        uid = "123",
+                        login = "user@yandex.ru",
+                        displayName = "Test User",
+                        avatarUrl = "https://avatar.url",
+                    )
+                repository.callbackUserInfo = expectedUser
 
-            val result = useCase.handleCallback("auth_code_123")
+                val result = useCase.handleCallback("auth_code_123")
 
-            assertTrue(result.isSuccess)
-            assertEquals(expectedUser, result.getOrNull())
-            assertEquals("auth_code_123", repository.lastAuthCode)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(expectedUser, result.getOrNull())
+                assertEquals("auth_code_123", repository.lastAuthCode)
+            }
 
         @Test
         @DisplayName("should propagate callback errors")
-        fun `should propagate callback errors`() = runTest {
-            repository.callbackError = RuntimeException("Invalid code")
+        fun `should propagate callback errors`() =
+            runTest {
+                repository.callbackError = RuntimeException("Invalid code")
 
-            val result = useCase.handleCallback("invalid_code")
+                val result = useCase.handleCallback("invalid_code")
 
-            assertTrue(result.isFailure)
-        }
+                assertTrue(result.isFailure)
+            }
     }
 
     @Nested
     @DisplayName("setPublicAccess()")
     inner class SetPublicAccessTests {
-
         @Test
         @DisplayName("should set public access mode")
-        fun `should set public access mode`() = runTest {
-            val url = "https://disk.yandex.ru/d/abc123"
+        fun `should set public access mode`() =
+            runTest {
+                val url = "https://disk.yandex.ru/d/abc123"
 
-            val result = useCase.setPublicAccess(url)
+                val result = useCase.setPublicAccess(url)
 
-            assertTrue(result.isSuccess)
-            assertEquals(url, repository.lastPublicUrl)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(url, repository.lastPublicUrl)
+            }
 
         @Test
         @DisplayName("should propagate errors")
-        fun `should propagate errors`() = runTest {
-            repository.publicAccessError = RuntimeException("Invalid URL")
+        fun `should propagate errors`() =
+            runTest {
+                repository.publicAccessError = RuntimeException("Invalid URL")
 
-            val result = useCase.setPublicAccess("invalid")
+                val result = useCase.setPublicAccess("invalid")
 
-            assertTrue(result.isFailure)
-        }
+                assertTrue(result.isFailure)
+            }
     }
 
     private class FakeAuthRepository : IAuthRepository {
@@ -119,6 +122,7 @@ class AuthorizeUseCaseTest {
         var publicAccessError: Throwable? = null
 
         override fun observeAuthState(): Flow<AuthState> = flowOf(AuthState.NotAuthenticated)
+
         override suspend fun getAuthState(): AuthState = AuthState.NotAuthenticated
 
         override suspend fun authenticate(): Result<Unit> {
@@ -134,8 +138,11 @@ class AuthorizeUseCaseTest {
         }
 
         override suspend fun logout(): Result<Unit> = Result.success(Unit)
+
         override suspend fun getAccessToken(): String? = null
+
         override suspend fun refreshToken(): Result<String> = Result.failure(RuntimeException("Not implemented"))
+
         override suspend fun isTokenValid(): Boolean = false
 
         override suspend fun setPublicAccess(url: String): Result<Unit> {

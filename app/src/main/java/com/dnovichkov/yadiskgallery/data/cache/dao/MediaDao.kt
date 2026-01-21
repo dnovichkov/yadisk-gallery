@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface MediaDao {
-
     // ==================== Queries ====================
 
     @Query("SELECT * FROM media_files WHERE id = :id")
@@ -28,13 +27,20 @@ interface MediaDao {
     fun observeByParentPath(parentPath: String): Flow<List<MediaFileEntity>>
 
     @Query("SELECT * FROM media_files ORDER BY modified_at DESC LIMIT :limit OFFSET :offset")
-    suspend fun getAll(limit: Int, offset: Int): List<MediaFileEntity>
+    suspend fun getAll(
+        limit: Int,
+        offset: Int,
+    ): List<MediaFileEntity>
 
     @Query("SELECT * FROM media_files ORDER BY modified_at DESC")
     fun observeAll(): Flow<List<MediaFileEntity>>
 
     @Query("SELECT * FROM media_files WHERE type = :type ORDER BY modified_at DESC LIMIT :limit OFFSET :offset")
-    suspend fun getByType(type: String, limit: Int, offset: Int): List<MediaFileEntity>
+    suspend fun getByType(
+        type: String,
+        limit: Int,
+        offset: Int,
+    ): List<MediaFileEntity>
 
     @Query("SELECT COUNT(*) FROM media_files")
     suspend fun getCount(): Int

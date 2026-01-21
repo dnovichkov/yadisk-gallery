@@ -18,5 +18,5 @@ data class Folder(
     val path: String,
     val itemsCount: Int?,
     val createdAt: Instant?,
-    val modifiedAt: Instant?
+    val modifiedAt: Instant?,
 )

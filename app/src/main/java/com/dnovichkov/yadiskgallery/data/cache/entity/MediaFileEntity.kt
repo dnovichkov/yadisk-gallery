@@ -14,46 +14,35 @@ import androidx.room.PrimaryKey
         Index(value = ["path"], unique = true),
         Index(value = ["parent_path"]),
         Index(value = ["type"]),
-        Index(value = ["modified_at"])
-    ]
+        Index(value = ["modified_at"]),
+    ],
 )
 data class MediaFileEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: String,
-
     @ColumnInfo(name = "name")
     val name: String,
-
     @ColumnInfo(name = "path")
     val path: String,
-
     @ColumnInfo(name = "parent_path")
     val parentPath: String,
-
     @ColumnInfo(name = "type")
     val type: String,
-
     @ColumnInfo(name = "mime_type")
     val mimeType: String,
-
     @ColumnInfo(name = "size")
     val size: Long,
-
     @ColumnInfo(name = "created_at")
     val createdAt: Long?,
-
     @ColumnInfo(name = "modified_at")
     val modifiedAt: Long?,
-
     @ColumnInfo(name = "preview_url")
     val previewUrl: String?,
-
     @ColumnInfo(name = "md5")
     val md5: String?,
-
     @ColumnInfo(name = "cached_at")
-    val cachedAt: Long = System.currentTimeMillis()
+    val cachedAt: Long = System.currentTimeMillis(),
 ) {
     companion object {
         const val TYPE_IMAGE = "IMAGE"

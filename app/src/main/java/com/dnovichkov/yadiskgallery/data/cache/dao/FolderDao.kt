@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface FolderDao {
-
     // ==================== Queries ====================
 
     @Query("SELECT * FROM folders WHERE id = :id")

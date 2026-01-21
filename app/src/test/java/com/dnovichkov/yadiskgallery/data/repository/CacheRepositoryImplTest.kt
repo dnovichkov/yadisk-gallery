@@ -17,7 +17,6 @@ import org.junit.jupiter.api.io.TempDir
 import java.io.File
 
 class CacheRepositoryImplTest {
-
     @TempDir
     lateinit var tempDir: File
 
@@ -41,109 +40,120 @@ class CacheRepositoryImplTest {
         coEvery { mediaDao.getTotalSize() } returns 0L
         coEvery { mediaDao.getCount() } returns 0
 
-        repository = CacheRepositoryImpl(
-            context = context,
-            mediaDao = mediaDao,
-            folderDao = folderDao,
-            cacheMetadataDao = cacheMetadataDao
-        )
+        repository =
+            CacheRepositoryImpl(
+                context = context,
+                mediaDao = mediaDao,
+                folderDao = folderDao,
+                cacheMetadataDao = cacheMetadataDao,
+            )
     }
 
     @Test
-    fun `getCacheSize returns combined database and file size`() = runTest {
-        coEvery { mediaDao.getTotalSize() } returns 1000L
+    fun `getCacheSize returns combined database and file size`() =
+        runTest {
+            coEvery { mediaDao.getTotalSize() } returns 1000L
 
-        val size = repository.getCacheSize()
+            val size = repository.getCacheSize()
 
-        assertTrue(size >= 1000L)
-    }
-
-    @Test
-    fun `getMaxCacheSize returns default max size`() = runTest {
-        val maxSize = repository.getMaxCacheSize()
-
-        assertEquals(100L * 1024 * 1024, maxSize) // 100 MB default
-    }
+            assertTrue(size >= 1000L)
+        }
 
     @Test
-    fun `setMaxCacheSize updates max size`() = runTest {
-        val newMaxSize = 50L * 1024 * 1024 // 50 MB
+    fun `getMaxCacheSize returns default max size`() =
+        runTest {
+            val maxSize = repository.getMaxCacheSize()
 
-        val result = repository.setMaxCacheSize(newMaxSize)
-
-        assertTrue(result.isSuccess)
-        assertEquals(newMaxSize, repository.getMaxCacheSize())
-    }
+            assertEquals(100L * 1024 * 1024, maxSize) // 100 MB default
+        }
 
     @Test
-    fun `clearCache deletes all cached data`() = runTest {
-        val result = repository.clearCache()
+    fun `setMaxCacheSize updates max size`() =
+        runTest {
+            val newMaxSize = 50L * 1024 * 1024 // 50 MB
 
-        assertTrue(result.isSuccess)
-        coVerify { mediaDao.deleteAll() }
-        coVerify { folderDao.deleteAll() }
-        coVerify { cacheMetadataDao.deleteAll() }
-    }
+            val result = repository.setMaxCacheSize(newMaxSize)
 
-    @Test
-    fun `clearOldCache deletes entries older than cutoff`() = runTest {
-        val maxAgeMillis = 24 * 60 * 60 * 1000L // 24 hours
-        coEvery { mediaDao.deleteOlderThan(any()) } returns 5
-        coEvery { folderDao.deleteOlderThan(any()) } returns 3
-        coEvery { cacheMetadataDao.deleteOlderThan(any()) } returns 2
-
-        val result = repository.clearOldCache(maxAgeMillis)
-
-        assertTrue(result.isSuccess)
-        assertTrue(result.getOrNull()!! >= 10) // At least 5+3+2 items deleted
-    }
+            assertTrue(result.isSuccess)
+            assertEquals(newMaxSize, repository.getMaxCacheSize())
+        }
 
     @Test
-    fun `isCached returns false for non-existent file`() = runTest {
-        val path = "/Photos/nonexistent.jpg"
+    fun `clearCache deletes all cached data`() =
+        runTest {
+            val result = repository.clearCache()
 
-        val cached = repository.isCached(path)
-
-        assertTrue(!cached)
-    }
-
-    @Test
-    fun `getCachedPath returns null for non-cached file`() = runTest {
-        val path = "/Photos/nonexistent.jpg"
-
-        val cachedPath = repository.getCachedPath(path)
-
-        assertEquals(null, cachedPath)
-    }
+            assertTrue(result.isSuccess)
+            coVerify { mediaDao.deleteAll() }
+            coVerify { folderDao.deleteAll() }
+            coVerify { cacheMetadataDao.deleteAll() }
+        }
 
     @Test
-    fun `removeFromCache deletes file and database entry`() = runTest {
-        val path = "/Photos/test.jpg"
+    fun `clearOldCache deletes entries older than cutoff`() =
+        runTest {
+            val maxAgeMillis = 24 * 60 * 60 * 1000L // 24 hours
+            coEvery { mediaDao.deleteOlderThan(any()) } returns 5
+            coEvery { folderDao.deleteOlderThan(any()) } returns 3
+            coEvery { cacheMetadataDao.deleteOlderThan(any()) } returns 2
 
-        val result = repository.removeFromCache(path)
+            val result = repository.clearOldCache(maxAgeMillis)
 
-        assertTrue(result.isSuccess)
-        coVerify { mediaDao.deleteByPath(path) }
-    }
-
-    @Test
-    fun `getCacheStats returns correct statistics`() = runTest {
-        coEvery { mediaDao.getTotalSize() } returns 5000L
-        coEvery { mediaDao.getCount() } returns 10
-
-        val stats = repository.getCacheStats()
-
-        assertTrue(stats.totalSizeBytes >= 5000L)
-        assertTrue(stats.fileCount >= 10)
-        assertEquals(100L * 1024 * 1024, stats.maxSizeBytes)
-    }
+            assertTrue(result.isSuccess)
+            assertTrue(result.getOrNull()!! >= 10) // At least 5+3+2 items deleted
+        }
 
     @Test
-    fun `cacheFile creates parent directories`() = runTest {
-        val path = "/Photos/2024/test.jpg"
+    fun `isCached returns false for non-existent file`() =
+        runTest {
+            val path = "/Photos/nonexistent.jpg"
 
-        val result = repository.cacheFile(path)
+            val cached = repository.isCached(path)
 
-        assertTrue(result.isSuccess)
-    }
+            assertTrue(!cached)
+        }
+
+    @Test
+    fun `getCachedPath returns null for non-cached file`() =
+        runTest {
+            val path = "/Photos/nonexistent.jpg"
+
+            val cachedPath = repository.getCachedPath(path)
+
+            assertEquals(null, cachedPath)
+        }
+
+    @Test
+    fun `removeFromCache deletes file and database entry`() =
+        runTest {
+            val path = "/Photos/test.jpg"
+
+            val result = repository.removeFromCache(path)
+
+            assertTrue(result.isSuccess)
+            coVerify { mediaDao.deleteByPath(path) }
+        }
+
+    @Test
+    fun `getCacheStats returns correct statistics`() =
+        runTest {
+            coEvery { mediaDao.getTotalSize() } returns 5000L
+            coEvery { mediaDao.getCount() } returns 10
+
+            val stats = repository.getCacheStats()
+
+            assertTrue(stats.totalSizeBytes >= 5000L)
+            assertTrue(stats.fileCount >= 10)
+            assertEquals(100L * 1024 * 1024, stats.maxSizeBytes)
+        }
+
+    @Test
+    fun `cacheFile creates parent directories`() =
+        runTest {
+            val path = "/Photos/2024/test.jpg"
+
+            val result = repository.cacheFile(path)
+
+            assertTrue(result.isSuccess)
+        }
 }

@@ -7,7 +7,12 @@
       "Bash(./gradlew.bat assembleDebug:*)",
       "Bash(ls -la \"C:\\\\Users\\\\Dmitriy\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Projects-yadisk-gallery\\\\tasks\"\" 2>/dev/null || echo \"Directory not found \")",
       "Bash(./gradlew.bat test:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: Initialize Android project structure \\(Phase 0\\)\n\nSet up the foundational Android project for YaDisk Gallery app:\n\n- Configure Gradle with version catalog \\(libs.versions.toml\\)\n- Set up Kotlin 2.0.21, Jetpack Compose, Material 3\n- Configure Hilt for dependency injection\n- Add Retrofit, OkHttp, Kotlinx Serialization for networking\n- Add Coil for image loading, ExoPlayer \\(Media3\\) for video\n- Add Room and DataStore for local storage\n- Create Clean Architecture package structure \\(data/domain/presentation/di\\)\n- Add JUnit 5 smoke test\n- Configure GitHub Actions CI/CD workflow\n- Add ktlint for code style\n- Create project documentation \\(CLAUDE.md, README.md, PROJECT_PLAN.md\\)\n\nTechnical details:\n- minSdk: 24, targetSdk: 35, compileSdk: 35\n- Package: com.dnovichkov.yadiskgallery\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(./gradlew test:*)",
+      "Bash(./gradlew assembleDebug:*)",
+      "Bash(./gradlew ktlintCheck:*)",
+      "Bash(./gradlew ktlintFormat:*)"
     ]
   }
 }

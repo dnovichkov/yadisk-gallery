@@ -20,28 +20,19 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
+    @Binds
+    @Singleton
+    abstract fun bindSettingsRepository(impl: SettingsRepositoryImpl): ISettingsRepository
 
     @Binds
     @Singleton
-    abstract fun bindSettingsRepository(
-        impl: SettingsRepositoryImpl
-    ): ISettingsRepository
+    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): IAuthRepository
 
     @Binds
     @Singleton
-    abstract fun bindAuthRepository(
-        impl: AuthRepositoryImpl
-    ): IAuthRepository
+    abstract fun bindFilesRepository(impl: FilesRepositoryImpl): IFilesRepository
 
     @Binds
     @Singleton
-    abstract fun bindFilesRepository(
-        impl: FilesRepositoryImpl
-    ): IFilesRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindCacheRepository(
-        impl: CacheRepositoryImpl
-    ): ICacheRepository
+    abstract fun bindCacheRepository(impl: CacheRepositoryImpl): ICacheRepository
 }

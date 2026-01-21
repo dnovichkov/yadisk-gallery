@@ -10,12 +10,10 @@ import kotlinx.serialization.Serializable
 data class ErrorDto(
     @SerialName("error")
     val error: String,
-
     @SerialName("message")
     val message: String,
-
     @SerialName("description")
-    val description: String? = null
+    val description: String? = null,
 ) {
     companion object {
         // Common error codes from Yandex.Disk API

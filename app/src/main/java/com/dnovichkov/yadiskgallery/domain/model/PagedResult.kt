@@ -15,7 +15,7 @@ data class PagedResult<T>(
     val offset: Int,
     val limit: Int,
     val total: Int?,
-    val hasMore: Boolean
+    val hasMore: Boolean,
 ) {
     /**
      * The offset for the next page of results.

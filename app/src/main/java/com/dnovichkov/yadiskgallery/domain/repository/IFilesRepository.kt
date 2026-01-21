@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
  * Handles both authenticated and public folder access.
  */
 interface IFilesRepository {
-
     /**
      * Gets the contents of a folder with pagination.
      *
@@ -28,7 +27,7 @@ interface IFilesRepository {
         offset: Int = 0,
         limit: Int = 20,
         sortOrder: SortOrder = SortOrder.DATE_DESC,
-        mediaOnly: Boolean = false
+        mediaOnly: Boolean = false,
     ): Result<PagedResult<DiskItem>>
 
     /**
@@ -43,7 +42,7 @@ interface IFilesRepository {
     fun observeFolderContents(
         path: String?,
         sortOrder: SortOrder = SortOrder.DATE_DESC,
-        mediaOnly: Boolean = false
+        mediaOnly: Boolean = false,
     ): Flow<List<DiskItem>>
 
     /**
@@ -58,7 +57,7 @@ interface IFilesRepository {
     suspend fun getAllMedia(
         offset: Int = 0,
         limit: Int = 20,
-        sortOrder: SortOrder = SortOrder.DATE_DESC
+        sortOrder: SortOrder = SortOrder.DATE_DESC,
     ): Result<PagedResult<MediaFile>>
 
     /**
@@ -93,7 +92,10 @@ interface IFilesRepository {
      * @param size Desired preview size (S, M, L, XL, XXL)
      * @return Result containing preview URL or error
      */
-    suspend fun getPreviewUrl(path: String, size: PreviewSize = PreviewSize.M): Result<String>
+    suspend fun getPreviewUrl(
+        path: String,
+        size: PreviewSize = PreviewSize.M,
+    ): Result<String>
 
     /**
      * Refreshes the contents of a folder from the server.
@@ -117,7 +119,7 @@ interface IFilesRepository {
         publicUrl: String,
         path: String? = null,
         offset: Int = 0,
-        limit: Int = 20
+        limit: Int = 20,
     ): Result<PagedResult<DiskItem>>
 
     /**
@@ -127,7 +129,10 @@ interface IFilesRepository {
      * @param path Path to the file within the public folder
      * @return Result containing download URL or error
      */
-    suspend fun getPublicDownloadUrl(publicUrl: String, path: String): Result<String>
+    suspend fun getPublicDownloadUrl(
+        publicUrl: String,
+        path: String,
+    ): Result<String>
 }
 
 /**
@@ -136,12 +141,16 @@ interface IFilesRepository {
 enum class PreviewSize(val value: String) {
     /** Small preview (150x150) */
     S("S"),
+
     /** Medium preview (300x300) */
     M("M"),
+
     /** Large preview (500x500) */
     L("L"),
+
     /** Extra large preview (800x800) */
     XL("XL"),
+
     /** Extra extra large preview (1024x1024) */
-    XXL("XXL")
+    XXL("XXL"),
 }

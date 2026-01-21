@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
  * Handles local caching of media files and metadata.
  */
 interface ICacheRepository {
-
     /**
      * Observes the current cache size in bytes.
      *
@@ -108,7 +107,7 @@ data class CacheStats(
     val fileCount: Int,
     val hitCount: Long,
     val missCount: Long,
-    val maxSizeBytes: Long
+    val maxSizeBytes: Long,
 ) {
     /**
      * Cache hit rate as a percentage (0-100).

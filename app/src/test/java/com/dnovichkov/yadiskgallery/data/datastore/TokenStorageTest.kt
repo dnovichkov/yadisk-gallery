@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test
  * due to EncryptedSharedPreferences dependency.
  */
 class TokenStorageTest {
-
     @Test
     fun `expiration buffer is set to 1 minute`() {
         // Verify the expiration buffer constant value

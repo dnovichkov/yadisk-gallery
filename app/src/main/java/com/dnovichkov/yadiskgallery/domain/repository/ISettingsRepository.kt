@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
  * Settings are persisted locally using DataStore.
  */
 interface ISettingsRepository {
-
     /**
      * Observes the current user settings.
      * Emits new values whenever settings change.

@@ -9,29 +9,28 @@ import java.time.Instant
 
 @DisplayName("MediaFile")
 class MediaFileTest {
-
     @Nested
     @DisplayName("Creation")
     inner class Creation {
-
         @Test
         @DisplayName("should create MediaFile with all properties")
         fun `should create MediaFile with all properties`() {
             val createdAt = Instant.now()
             val modifiedAt = Instant.now()
 
-            val mediaFile = MediaFile(
-                id = "file-123",
-                name = "photo.jpg",
-                path = "/photos/photo.jpg",
-                type = MediaType.IMAGE,
-                mimeType = "image/jpeg",
-                size = 1024L,
-                createdAt = createdAt,
-                modifiedAt = modifiedAt,
-                previewUrl = "https://example.com/preview.jpg",
-                md5 = "abc123def456"
-            )
+            val mediaFile =
+                MediaFile(
+                    id = "file-123",
+                    name = "photo.jpg",
+                    path = "/photos/photo.jpg",
+                    type = MediaType.IMAGE,
+                    mimeType = "image/jpeg",
+                    size = 1024L,
+                    createdAt = createdAt,
+                    modifiedAt = modifiedAt,
+                    previewUrl = "https://example.com/preview.jpg",
+                    md5 = "abc123def456",
+                )
 
             assertEquals("file-123", mediaFile.id)
             assertEquals("photo.jpg", mediaFile.name)
@@ -48,18 +47,19 @@ class MediaFileTest {
         @Test
         @DisplayName("should create MediaFile with optional fields as null")
         fun `should create MediaFile with optional fields as null`() {
-            val mediaFile = MediaFile(
-                id = "file-456",
-                name = "video.mp4",
-                path = "/videos/video.mp4",
-                type = MediaType.VIDEO,
-                mimeType = "video/mp4",
-                size = 2048L,
-                createdAt = null,
-                modifiedAt = null,
-                previewUrl = null,
-                md5 = null
-            )
+            val mediaFile =
+                MediaFile(
+                    id = "file-456",
+                    name = "video.mp4",
+                    path = "/videos/video.mp4",
+                    type = MediaType.VIDEO,
+                    mimeType = "video/mp4",
+                    size = 2048L,
+                    createdAt = null,
+                    modifiedAt = null,
+                    previewUrl = null,
+                    md5 = null,
+                )
 
             assertEquals("file-456", mediaFile.id)
             assertEquals(null, mediaFile.createdAt)
@@ -72,37 +72,38 @@ class MediaFileTest {
     @Nested
     @DisplayName("Equality")
     inner class Equality {
-
         @Test
         @DisplayName("should be equal when all properties match")
         fun `should be equal when all properties match`() {
             val timestamp = Instant.now()
 
-            val file1 = MediaFile(
-                id = "file-1",
-                name = "test.jpg",
-                path = "/test.jpg",
-                type = MediaType.IMAGE,
-                mimeType = "image/jpeg",
-                size = 100L,
-                createdAt = timestamp,
-                modifiedAt = timestamp,
-                previewUrl = "url",
-                md5 = "hash"
-            )
+            val file1 =
+                MediaFile(
+                    id = "file-1",
+                    name = "test.jpg",
+                    path = "/test.jpg",
+                    type = MediaType.IMAGE,
+                    mimeType = "image/jpeg",
+                    size = 100L,
+                    createdAt = timestamp,
+                    modifiedAt = timestamp,
+                    previewUrl = "url",
+                    md5 = "hash",
+                )
 
-            val file2 = MediaFile(
-                id = "file-1",
-                name = "test.jpg",
-                path = "/test.jpg",
-                type = MediaType.IMAGE,
-                mimeType = "image/jpeg",
-                size = 100L,
-                createdAt = timestamp,
-                modifiedAt = timestamp,
-                previewUrl = "url",
-                md5 = "hash"
-            )
+            val file2 =
+                MediaFile(
+                    id = "file-1",
+                    name = "test.jpg",
+                    path = "/test.jpg",
+                    type = MediaType.IMAGE,
+                    mimeType = "image/jpeg",
+                    size = 100L,
+                    createdAt = timestamp,
+                    modifiedAt = timestamp,
+                    previewUrl = "url",
+                    md5 = "hash",
+                )
 
             assertEquals(file1, file2)
             assertEquals(file1.hashCode(), file2.hashCode())
@@ -121,7 +122,6 @@ class MediaFileTest {
     @Nested
     @DisplayName("MediaType")
     inner class MediaTypeTests {
-
         @Test
         @DisplayName("should have IMAGE type")
         fun `should have IMAGE type`() {
@@ -143,7 +143,7 @@ class MediaFileTest {
         path: String = "/test.jpg",
         type: MediaType = MediaType.IMAGE,
         mimeType: String = "image/jpeg",
-        size: Long = 100L
+        size: Long = 100L,
     ) = MediaFile(
         id = id,
         name = name,
@@ -154,6 +154,6 @@ class MediaFileTest {
         createdAt = null,
         modifiedAt = null,
         previewUrl = null,
-        md5 = null
+        md5 = null,
     )
 }

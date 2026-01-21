@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test
  * Note: Full integration tests require Android instrumentation tests.
  */
 class SettingsDataStoreTest {
-
     @Test
     fun `default UserSettings has correct values`() {
         val settings = UserSettings.default()
@@ -29,11 +28,12 @@ class SettingsDataStoreTest {
     @Test
     fun `UserSettings copy works correctly`() {
         val original = UserSettings.default()
-        val updated = original.copy(
-            publicFolderUrl = "https://disk.yandex.ru/d/test",
-            isAuthenticated = true,
-            viewMode = ViewMode.LIST
-        )
+        val updated =
+            original.copy(
+                publicFolderUrl = "https://disk.yandex.ru/d/test",
+                isAuthenticated = true,
+                viewMode = ViewMode.LIST,
+            )
 
         assertEquals("https://disk.yandex.ru/d/test", updated.publicFolderUrl)
         assertTrue(updated.isAuthenticated)

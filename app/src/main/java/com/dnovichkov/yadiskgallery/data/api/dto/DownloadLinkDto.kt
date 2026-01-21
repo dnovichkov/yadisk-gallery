@@ -12,10 +12,8 @@ import kotlinx.serialization.Serializable
 data class DownloadLinkDto(
     @SerialName("href")
     val href: String,
-
     @SerialName("method")
     val method: String,
-
     @SerialName("templated")
-    val templated: Boolean = false
+    val templated: Boolean = false,
 )

@@ -10,21 +10,20 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("UserSettings")
 class UserSettingsTest {
-
     @Nested
     @DisplayName("Creation")
     inner class Creation {
-
         @Test
         @DisplayName("should create UserSettings with all properties")
         fun `should create UserSettings with all properties`() {
-            val settings = UserSettings(
-                publicFolderUrl = "https://disk.yandex.ru/d/abc123",
-                rootFolderPath = "/Photos/2024",
-                isAuthenticated = true,
-                viewMode = ViewMode.GRID,
-                sortOrder = SortOrder.DATE_DESC
-            )
+            val settings =
+                UserSettings(
+                    publicFolderUrl = "https://disk.yandex.ru/d/abc123",
+                    rootFolderPath = "/Photos/2024",
+                    isAuthenticated = true,
+                    viewMode = ViewMode.GRID,
+                    sortOrder = SortOrder.DATE_DESC,
+                )
 
             assertEquals("https://disk.yandex.ru/d/abc123", settings.publicFolderUrl)
             assertEquals("/Photos/2024", settings.rootFolderPath)
@@ -36,13 +35,14 @@ class UserSettingsTest {
         @Test
         @DisplayName("should create UserSettings with null optional fields")
         fun `should create UserSettings with null optional fields`() {
-            val settings = UserSettings(
-                publicFolderUrl = null,
-                rootFolderPath = null,
-                isAuthenticated = false,
-                viewMode = ViewMode.GRID,
-                sortOrder = SortOrder.NAME_ASC
-            )
+            val settings =
+                UserSettings(
+                    publicFolderUrl = null,
+                    rootFolderPath = null,
+                    isAuthenticated = false,
+                    viewMode = ViewMode.GRID,
+                    sortOrder = SortOrder.NAME_ASC,
+                )
 
             assertNull(settings.publicFolderUrl)
             assertNull(settings.rootFolderPath)
@@ -53,7 +53,6 @@ class UserSettingsTest {
     @Nested
     @DisplayName("Default values")
     inner class DefaultValues {
-
         @Test
         @DisplayName("should have sensible defaults")
         fun `should have sensible defaults`() {
@@ -70,7 +69,6 @@ class UserSettingsTest {
     @Nested
     @DisplayName("ViewMode")
     inner class ViewModeTests {
-
         @Test
         @DisplayName("should have GRID mode")
         fun `should have GRID mode`() {
@@ -89,7 +87,6 @@ class UserSettingsTest {
     @Nested
     @DisplayName("SortOrder")
     inner class SortOrderTests {
-
         @Test
         @DisplayName("should have NAME_ASC order")
         fun `should have NAME_ASC order`() {
@@ -136,25 +133,26 @@ class UserSettingsTest {
     @Nested
     @DisplayName("Equality")
     inner class Equality {
-
         @Test
         @DisplayName("should be equal when all properties match")
         fun `should be equal when all properties match`() {
-            val settings1 = UserSettings(
-                publicFolderUrl = "url",
-                rootFolderPath = "/path",
-                isAuthenticated = true,
-                viewMode = ViewMode.GRID,
-                sortOrder = SortOrder.DATE_DESC
-            )
+            val settings1 =
+                UserSettings(
+                    publicFolderUrl = "url",
+                    rootFolderPath = "/path",
+                    isAuthenticated = true,
+                    viewMode = ViewMode.GRID,
+                    sortOrder = SortOrder.DATE_DESC,
+                )
 
-            val settings2 = UserSettings(
-                publicFolderUrl = "url",
-                rootFolderPath = "/path",
-                isAuthenticated = true,
-                viewMode = ViewMode.GRID,
-                sortOrder = SortOrder.DATE_DESC
-            )
+            val settings2 =
+                UserSettings(
+                    publicFolderUrl = "url",
+                    rootFolderPath = "/path",
+                    isAuthenticated = true,
+                    viewMode = ViewMode.GRID,
+                    sortOrder = SortOrder.DATE_DESC,
+                )
 
             assertEquals(settings1, settings2)
             assertEquals(settings1.hashCode(), settings2.hashCode())
@@ -166,12 +164,12 @@ class UserSettingsTest {
         rootFolderPath: String? = null,
         isAuthenticated: Boolean = false,
         viewMode: ViewMode = ViewMode.GRID,
-        sortOrder: SortOrder = SortOrder.DATE_DESC
+        sortOrder: SortOrder = SortOrder.DATE_DESC,
     ) = UserSettings(
         publicFolderUrl = publicFolderUrl,
         rootFolderPath = rootFolderPath,
         isAuthenticated = isAuthenticated,
         viewMode = viewMode,
-        sortOrder = sortOrder
+        sortOrder = sortOrder,
     )
 }

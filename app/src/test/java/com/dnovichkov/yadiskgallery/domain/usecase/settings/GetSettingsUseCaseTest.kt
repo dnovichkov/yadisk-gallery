@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("GetSettingsUseCase")
 class GetSettingsUseCaseTest {
-
     private lateinit var useCase: GetSettingsUseCase
     private lateinit var repository: FakeSettingsRepository
 
@@ -29,67 +28,71 @@ class GetSettingsUseCaseTest {
     @Nested
     @DisplayName("invoke()")
     inner class InvokeTests {
-
         @Test
         @DisplayName("should return settings from repository")
-        fun `should return settings from repository`() = runTest {
-            val expectedSettings = UserSettings(
-                publicFolderUrl = "https://disk.yandex.ru/d/abc123",
-                rootFolderPath = "/Photos",
-                isAuthenticated = true,
-                viewMode = ViewMode.GRID,
-                sortOrder = SortOrder.DATE_DESC
-            )
-            repository.settingsToReturn = expectedSettings
+        fun `should return settings from repository`() =
+            runTest {
+                val expectedSettings =
+                    UserSettings(
+                        publicFolderUrl = "https://disk.yandex.ru/d/abc123",
+                        rootFolderPath = "/Photos",
+                        isAuthenticated = true,
+                        viewMode = ViewMode.GRID,
+                        sortOrder = SortOrder.DATE_DESC,
+                    )
+                repository.settingsToReturn = expectedSettings
 
-            val result = useCase()
+                val result = useCase()
 
-            assertEquals(Result.success(expectedSettings), result)
-        }
+                assertEquals(Result.success(expectedSettings), result)
+            }
 
         @Test
         @DisplayName("should return default settings when none set")
-        fun `should return default settings when none set`() = runTest {
-            repository.settingsToReturn = UserSettings.default()
+        fun `should return default settings when none set`() =
+            runTest {
+                repository.settingsToReturn = UserSettings.default()
 
-            val result = useCase()
+                val result = useCase()
 
-            assertEquals(Result.success(UserSettings.default()), result)
-        }
+                assertEquals(Result.success(UserSettings.default()), result)
+            }
 
         @Test
         @DisplayName("should propagate errors from repository")
-        fun `should propagate errors from repository`() = runTest {
-            val exception = RuntimeException("Database error")
-            repository.errorToThrow = exception
+        fun `should propagate errors from repository`() =
+            runTest {
+                val exception = RuntimeException("Database error")
+                repository.errorToThrow = exception
 
-            val result = useCase()
+                val result = useCase()
 
-            assertEquals(true, result.isFailure)
-            assertEquals(exception, result.exceptionOrNull())
-        }
+                assertEquals(true, result.isFailure)
+                assertEquals(exception, result.exceptionOrNull())
+            }
     }
 
     @Nested
     @DisplayName("observeSettings()")
     inner class ObserveSettingsTests {
-
         @Test
         @DisplayName("should return flow from repository")
-        fun `should return flow from repository`() = runTest {
-            val expectedSettings = UserSettings(
-                publicFolderUrl = "url",
-                rootFolderPath = "/path",
-                isAuthenticated = false,
-                viewMode = ViewMode.LIST,
-                sortOrder = SortOrder.NAME_ASC
-            )
-            repository.settingsFlowToReturn = flowOf(expectedSettings)
+        fun `should return flow from repository`() =
+            runTest {
+                val expectedSettings =
+                    UserSettings(
+                        publicFolderUrl = "url",
+                        rootFolderPath = "/path",
+                        isAuthenticated = false,
+                        viewMode = ViewMode.LIST,
+                        sortOrder = SortOrder.NAME_ASC,
+                    )
+                repository.settingsFlowToReturn = flowOf(expectedSettings)
 
-            val result = useCase.observeSettings().first()
+                val result = useCase.observeSettings().first()
 
-            assertEquals(expectedSettings, result)
-        }
+                assertEquals(expectedSettings, result)
+            }
     }
 
     private class FakeSettingsRepository : ISettingsRepository {
@@ -105,9 +108,13 @@ class GetSettingsUseCaseTest {
         }
 
         override suspend fun setPublicFolderUrl(url: String?): Result<Unit> = Result.success(Unit)
+
         override suspend fun setRootFolderPath(path: String?): Result<Unit> = Result.success(Unit)
+
         override suspend fun setViewMode(viewMode: ViewMode): Result<Unit> = Result.success(Unit)
+
         override suspend fun setSortOrder(sortOrder: SortOrder): Result<Unit> = Result.success(Unit)
+
         override suspend fun clearSettings(): Result<Unit> = Result.success(Unit)
     }
 }

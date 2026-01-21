@@ -5,7 +5,6 @@ package com.dnovichkov.yadiskgallery.domain.model
  * Provides type-safe error handling without relying on exceptions.
  */
 sealed class DomainError {
-
     /**
      * Human-readable error message.
      */
@@ -20,7 +19,6 @@ sealed class DomainError {
      * Network-related errors.
      */
     sealed class Network : DomainError() {
-
         /**
          * No internet connection available.
          */
@@ -59,7 +57,6 @@ sealed class DomainError {
      * Authentication-related errors.
      */
     sealed class Auth : DomainError() {
-
         /**
          * User is not authenticated.
          */
@@ -93,7 +90,6 @@ sealed class DomainError {
      * Yandex.Disk specific errors.
      */
     sealed class Disk : DomainError() {
-
         /**
          * Resource not found on disk.
          *
@@ -140,7 +136,6 @@ sealed class DomainError {
      * Local cache errors.
      */
     sealed class Cache : DomainError() {
-
         /**
          * Failed to read from cache.
          *
@@ -164,7 +159,6 @@ sealed class DomainError {
      * Input validation errors.
      */
     sealed class Validation : DomainError() {
-
         /**
          * Invalid URL format.
          *
@@ -192,6 +186,6 @@ sealed class DomainError {
      */
     data class Unknown(
         override val message: String,
-        override val cause: Throwable?
+        override val cause: Throwable?,
     ) : DomainError()
 }

@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("ClearCacheUseCase")
 class ClearCacheUseCaseTest {
-
     private lateinit var useCase: ClearCacheUseCase
     private lateinit var repository: FakeCacheRepository
 
@@ -27,56 +26,57 @@ class ClearCacheUseCaseTest {
     @Nested
     @DisplayName("invoke()")
     inner class InvokeTests {
-
         @Test
         @DisplayName("should clear all cache")
-        fun `should clear all cache`() = runTest {
-            val result = useCase()
+        fun `should clear all cache`() =
+            runTest {
+                val result = useCase()
 
-            assertTrue(result.isSuccess)
-            assertTrue(repository.clearCacheCalled)
-        }
+                assertTrue(result.isSuccess)
+                assertTrue(repository.clearCacheCalled)
+            }
 
         @Test
         @DisplayName("should propagate errors")
-        fun `should propagate errors`() = runTest {
-            repository.clearCacheError = RuntimeException("Clear failed")
+        fun `should propagate errors`() =
+            runTest {
+                repository.clearCacheError = RuntimeException("Clear failed")
 
-            val result = useCase()
+                val result = useCase()
 
-            assertTrue(result.isFailure)
-        }
+                assertTrue(result.isFailure)
+            }
     }
 
     @Nested
     @DisplayName("clearOldCache()")
     inner class ClearOldCacheTests {
-
         @Test
         @DisplayName("should clear old cache entries")
-        fun `should clear old cache entries`() = runTest {
-            repository.clearOldCacheResult = Result.success(5)
+        fun `should clear old cache entries`() =
+            runTest {
+                repository.clearOldCacheResult = Result.success(5)
 
-            val result = useCase.clearOldCache(maxAgeMillis = 3600000L)
+                val result = useCase.clearOldCache(maxAgeMillis = 3600000L)
 
-            assertTrue(result.isSuccess)
-            assertEquals(5, result.getOrNull())
-            assertEquals(3600000L, repository.lastMaxAge)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(5, result.getOrNull())
+                assertEquals(3600000L, repository.lastMaxAge)
+            }
     }
 
     @Nested
     @DisplayName("removeFromCache()")
     inner class RemoveFromCacheTests {
-
         @Test
         @DisplayName("should remove specific file from cache")
-        fun `should remove specific file from cache`() = runTest {
-            val result = useCase.removeFromCache(path = "/photos/file.jpg")
+        fun `should remove specific file from cache`() =
+            runTest {
+                val result = useCase.removeFromCache(path = "/photos/file.jpg")
 
-            assertTrue(result.isSuccess)
-            assertEquals("/photos/file.jpg", repository.lastRemovedPath)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals("/photos/file.jpg", repository.lastRemovedPath)
+            }
     }
 
     private class FakeCacheRepository : ICacheRepository {
@@ -87,8 +87,11 @@ class ClearCacheUseCaseTest {
         var lastRemovedPath: String? = null
 
         override fun observeCacheSize(): Flow<Long> = flowOf(0L)
+
         override suspend fun getCacheSize(): Long = 0L
+
         override suspend fun getMaxCacheSize(): Long = 100_000_000L
+
         override suspend fun setMaxCacheSize(sizeBytes: Long): Result<Unit> = Result.success(Unit)
 
         override suspend fun clearCache(): Result<Unit> {
@@ -102,7 +105,9 @@ class ClearCacheUseCaseTest {
         }
 
         override suspend fun isCached(path: String): Boolean = false
+
         override suspend fun getCachedPath(path: String): String? = null
+
         override suspend fun cacheFile(path: String): Result<Unit> = Result.success(Unit)
 
         override suspend fun removeFromCache(path: String): Result<Unit> {

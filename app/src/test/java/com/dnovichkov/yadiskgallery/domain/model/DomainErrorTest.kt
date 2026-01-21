@@ -10,11 +10,9 @@ import java.io.IOException
 
 @DisplayName("DomainError")
 class DomainErrorTest {
-
     @Nested
     @DisplayName("Network errors")
     inner class NetworkErrors {
-
         @Test
         @DisplayName("should create NoConnection error")
         fun `should create NoConnection error`() {
@@ -56,7 +54,6 @@ class DomainErrorTest {
     @Nested
     @DisplayName("Auth errors")
     inner class AuthErrors {
-
         @Test
         @DisplayName("should create Unauthorized error")
         fun `should create Unauthorized error`() {
@@ -93,7 +90,6 @@ class DomainErrorTest {
     @Nested
     @DisplayName("Disk errors")
     inner class DiskErrors {
-
         @Test
         @DisplayName("should create NotFound error")
         fun `should create NotFound error`() {
@@ -141,7 +137,6 @@ class DomainErrorTest {
     @Nested
     @DisplayName("Cache errors")
     inner class CacheErrors {
-
         @Test
         @DisplayName("should create ReadError")
         fun `should create ReadError`() {
@@ -166,7 +161,6 @@ class DomainErrorTest {
     @Nested
     @DisplayName("Validation errors")
     inner class ValidationErrors {
-
         @Test
         @DisplayName("should create InvalidUrl error")
         fun `should create InvalidUrl error`() {
@@ -189,7 +183,6 @@ class DomainErrorTest {
     @Nested
     @DisplayName("Unknown error")
     inner class UnknownErrorTests {
-
         @Test
         @DisplayName("should create Unknown error with message and cause")
         fun `should create Unknown error with message and cause`() {
@@ -213,29 +206,30 @@ class DomainErrorTest {
     @Nested
     @DisplayName("Polymorphism")
     inner class PolymorphismTests {
-
         @Test
         @DisplayName("should handle all error types with when expression")
         fun `should handle all error types with when expression`() {
-            val errors: List<DomainError> = listOf(
-                DomainError.Network.NoConnection,
-                DomainError.Auth.Unauthorized,
-                DomainError.Disk.NotFound("/path"),
-                DomainError.Cache.ReadError(IOException("error")),
-                DomainError.Validation.EmptyField("field"),
-                DomainError.Unknown("error", null)
-            )
+            val errors: List<DomainError> =
+                listOf(
+                    DomainError.Network.NoConnection,
+                    DomainError.Auth.Unauthorized,
+                    DomainError.Disk.NotFound("/path"),
+                    DomainError.Cache.ReadError(IOException("error")),
+                    DomainError.Validation.EmptyField("field"),
+                    DomainError.Unknown("error", null),
+                )
 
-            val categories = errors.map { error ->
-                when (error) {
-                    is DomainError.Network -> "network"
-                    is DomainError.Auth -> "auth"
-                    is DomainError.Disk -> "disk"
-                    is DomainError.Cache -> "cache"
-                    is DomainError.Validation -> "validation"
-                    is DomainError.Unknown -> "unknown"
+            val categories =
+                errors.map { error ->
+                    when (error) {
+                        is DomainError.Network -> "network"
+                        is DomainError.Auth -> "auth"
+                        is DomainError.Disk -> "disk"
+                        is DomainError.Cache -> "cache"
+                        is DomainError.Validation -> "validation"
+                        is DomainError.Unknown -> "unknown"
+                    }
                 }
-            }
 
             assertEquals(listOf("network", "auth", "disk", "cache", "validation", "unknown"), categories)
         }
@@ -243,11 +237,12 @@ class DomainErrorTest {
         @Test
         @DisplayName("should access common message property")
         fun `should access common message property`() {
-            val errors: List<DomainError> = listOf(
-                DomainError.Network.NoConnection,
-                DomainError.Auth.Unauthorized,
-                DomainError.Disk.QuotaExceeded
-            )
+            val errors: List<DomainError> =
+                listOf(
+                    DomainError.Network.NoConnection,
+                    DomainError.Auth.Unauthorized,
+                    DomainError.Disk.QuotaExceeded,
+                )
 
             assertTrue(errors.all { it.message.isNotBlank() })
         }

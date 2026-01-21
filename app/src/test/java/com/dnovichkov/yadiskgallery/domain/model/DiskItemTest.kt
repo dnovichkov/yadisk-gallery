@@ -5,15 +5,12 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.time.Instant
 
 @DisplayName("DiskItem")
 class DiskItemTest {
-
     @Nested
     @DisplayName("DiskItem.File")
     inner class FileTests {
-
         @Test
         @DisplayName("should wrap MediaFile correctly")
         fun `should wrap MediaFile correctly`() {
@@ -37,7 +34,6 @@ class DiskItemTest {
     @Nested
     @DisplayName("DiskItem.Directory")
     inner class DirectoryTests {
-
         @Test
         @DisplayName("should wrap Folder correctly")
         fun `should wrap Folder correctly`() {
@@ -61,15 +57,15 @@ class DiskItemTest {
     @Nested
     @DisplayName("Polymorphism")
     inner class PolymorphismTests {
-
         @Test
         @DisplayName("should handle mixed list of DiskItems")
         fun `should handle mixed list of DiskItems`() {
-            val items: List<DiskItem> = listOf(
-                DiskItem.File(createTestMediaFile(id = "file-1", name = "photo.jpg")),
-                DiskItem.Directory(createTestFolder(id = "folder-1", name = "Photos")),
-                DiskItem.File(createTestMediaFile(id = "file-2", name = "video.mp4"))
-            )
+            val items: List<DiskItem> =
+                listOf(
+                    DiskItem.File(createTestMediaFile(id = "file-1", name = "photo.jpg")),
+                    DiskItem.Directory(createTestFolder(id = "folder-1", name = "Photos")),
+                    DiskItem.File(createTestMediaFile(id = "file-2", name = "video.mp4")),
+                )
 
             assertEquals(3, items.size)
             assertTrue(items[0] is DiskItem.File)
@@ -95,17 +91,19 @@ class DiskItemTest {
         @Test
         @DisplayName("should work with when expression exhaustively")
         fun `should work with when expression exhaustively`() {
-            val items = listOf(
-                DiskItem.File(createTestMediaFile()),
-                DiskItem.Directory(createTestFolder())
-            )
+            val items =
+                listOf(
+                    DiskItem.File(createTestMediaFile()),
+                    DiskItem.Directory(createTestFolder()),
+                )
 
-            val results = items.map { item ->
-                when (item) {
-                    is DiskItem.File -> "file:${item.mediaFile.name}"
-                    is DiskItem.Directory -> "dir:${item.folder.name}"
+            val results =
+                items.map { item ->
+                    when (item) {
+                        is DiskItem.File -> "file:${item.mediaFile.name}"
+                        is DiskItem.Directory -> "dir:${item.folder.name}"
+                    }
                 }
-            }
 
             assertEquals("file:test.jpg", results[0])
             assertEquals("dir:TestFolder", results[1])
@@ -118,7 +116,7 @@ class DiskItemTest {
         path: String = "/test.jpg",
         type: MediaType = MediaType.IMAGE,
         mimeType: String = "image/jpeg",
-        size: Long = 100L
+        size: Long = 100L,
     ) = MediaFile(
         id = id,
         name = name,
@@ -129,20 +127,20 @@ class DiskItemTest {
         createdAt = null,
         modifiedAt = null,
         previewUrl = null,
-        md5 = null
+        md5 = null,
     )
 
     private fun createTestFolder(
         id: String = "test-id",
         name: String = "TestFolder",
         path: String = "/TestFolder",
-        itemsCount: Int? = null
+        itemsCount: Int? = null,
     ) = Folder(
         id = id,
         name = name,
         path = path,
         itemsCount = itemsCount,
         createdAt = null,
-        modifiedAt = null
+        modifiedAt = null,
     )
 }

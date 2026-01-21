@@ -26,7 +26,7 @@ data class MediaFile(
     val createdAt: Instant?,
     val modifiedAt: Instant?,
     val previewUrl: String?,
-    val md5: String?
+    val md5: String?,
 )
 
 /**
@@ -34,5 +34,5 @@ data class MediaFile(
  */
 enum class MediaType {
     IMAGE,
-    VIDEO
+    VIDEO,
 }

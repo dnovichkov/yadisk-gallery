@@ -4,7 +4,6 @@ package com.dnovichkov.yadiskgallery.domain.model
  * Represents the authentication state of the application.
  */
 sealed class AuthState {
-
     /**
      * Whether the user is authenticated with Yandex account.
      */
@@ -64,5 +63,5 @@ data class UserInfo(
     val uid: String,
     val login: String,
     val displayName: String?,
-    val avatarUrl: String?
+    val avatarUrl: String?,
 )

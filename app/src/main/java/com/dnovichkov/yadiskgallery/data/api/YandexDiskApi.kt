@@ -15,7 +15,6 @@ import retrofit2.http.Query
  * API Reference: https://yandex.ru/dev/disk-api/doc/ru/
  */
 interface YandexDiskApi {
-
     companion object {
         const val BASE_URL = "https://cloud-api.yandex.net/"
     }
@@ -41,7 +40,7 @@ interface YandexDiskApi {
         @Query("offset") offset: Int? = null,
         @Query("preview_size") previewSize: String? = null,
         @Query("preview_crop") previewCrop: Boolean? = null,
-        @Query("sort") sort: String? = null
+        @Query("sort") sort: String? = null,
     ): Response<ResourceDto>
 
     /**
@@ -65,7 +64,7 @@ interface YandexDiskApi {
         @Query("fields") fields: String? = null,
         @Query("preview_size") previewSize: String? = null,
         @Query("preview_crop") previewCrop: Boolean? = null,
-        @Query("sort") sort: String? = null
+        @Query("sort") sort: String? = null,
     ): Response<FilesResponseDto>
 
     /**
@@ -75,7 +74,7 @@ interface YandexDiskApi {
      */
     @GET("v1/disk/resources/download")
     suspend fun getDownloadLink(
-        @Query("path") path: String
+        @Query("path") path: String,
     ): Response<DownloadLinkDto>
 
     // ==================== Public Resources ====================
@@ -99,7 +98,7 @@ interface YandexDiskApi {
         @Query("offset") offset: Int? = null,
         @Query("preview_size") previewSize: String? = null,
         @Query("preview_crop") previewCrop: Boolean? = null,
-        @Query("sort") sort: String? = null
+        @Query("sort") sort: String? = null,
     ): Response<PublicResourceDto>
 
     /**
@@ -111,7 +110,7 @@ interface YandexDiskApi {
     @GET("v1/disk/public/resources/download")
     suspend fun getPublicDownloadLink(
         @Query("public_key") publicKey: String,
-        @Query("path") path: String? = null
+        @Query("path") path: String? = null,
     ): Response<DownloadLinkDto>
 
     // ==================== Disk Info ====================
@@ -130,10 +129,8 @@ interface YandexDiskApi {
 data class DiskInfoDto(
     @kotlinx.serialization.SerialName("total_space")
     val totalSpace: Long,
-
     @kotlinx.serialization.SerialName("used_space")
     val usedSpace: Long,
-
     @kotlinx.serialization.SerialName("trash_size")
-    val trashSize: Long? = null
+    val trashSize: Long? = null,
 )

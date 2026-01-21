@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test
  */
 @DisplayName("Smoke Tests")
 class SmokeTest {
-
     @Test
     @DisplayName("JUnit 5 is properly configured")
     fun `junit5 should be properly configured`() {

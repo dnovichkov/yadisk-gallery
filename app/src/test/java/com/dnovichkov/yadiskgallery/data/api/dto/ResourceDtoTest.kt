@@ -9,17 +9,16 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("ResourceDto")
 class ResourceDtoTest {
-
     private val json = Json { ignoreUnknownKeys = true }
 
     @Nested
     @DisplayName("Deserialization")
     inner class DeserializationTests {
-
         @Test
         @DisplayName("should deserialize file resource")
         fun `should deserialize file resource`() {
-            val jsonString = """
+            val jsonString =
+                """
                 {
                     "name": "photo.jpg",
                     "path": "disk:/Photos/photo.jpg",
@@ -32,7 +31,7 @@ class ResourceDtoTest {
                     "md5": "abc123def456",
                     "preview": "https://downloader.disk.yandex.ru/preview/..."
                 }
-            """.trimIndent()
+                """.trimIndent()
 
             val resource = json.decodeFromString<ResourceDto>(jsonString)
 
@@ -49,7 +48,8 @@ class ResourceDtoTest {
         @Test
         @DisplayName("should deserialize folder resource")
         fun `should deserialize folder resource`() {
-            val jsonString = """
+            val jsonString =
+                """
                 {
                     "name": "Photos",
                     "path": "disk:/Photos",
@@ -58,7 +58,7 @@ class ResourceDtoTest {
                     "modified": "2024-01-15T12:00:00+00:00",
                     "resource_id": "folder123"
                 }
-            """.trimIndent()
+                """.trimIndent()
 
             val resource = json.decodeFromString<ResourceDto>(jsonString)
 
@@ -75,7 +75,8 @@ class ResourceDtoTest {
         @Test
         @DisplayName("should deserialize resource with embedded items")
         fun `should deserialize resource with embedded items`() {
-            val jsonString = """
+            val jsonString =
+                """
                 {
                     "name": "Photos",
                     "path": "disk:/Photos",
@@ -101,7 +102,7 @@ class ResourceDtoTest {
                         "total": 2
                     }
                 }
-            """.trimIndent()
+                """.trimIndent()
 
             val resource = json.decodeFromString<ResourceDto>(jsonString)
 
@@ -117,13 +118,14 @@ class ResourceDtoTest {
         @Test
         @DisplayName("should handle missing optional fields")
         fun `should handle missing optional fields`() {
-            val jsonString = """
+            val jsonString =
+                """
                 {
                     "name": "file.txt",
                     "path": "disk:/file.txt",
                     "type": "file"
                 }
-            """.trimIndent()
+                """.trimIndent()
 
             val resource = json.decodeFromString<ResourceDto>(jsonString)
 
@@ -141,7 +143,8 @@ class ResourceDtoTest {
         @Test
         @DisplayName("should deserialize video file")
         fun `should deserialize video file`() {
-            val jsonString = """
+            val jsonString =
+                """
                 {
                     "name": "video.mp4",
                     "path": "disk:/Videos/video.mp4",
@@ -151,7 +154,7 @@ class ResourceDtoTest {
                     "resource_id": "video123",
                     "preview": "https://downloader.disk.yandex.ru/preview/video..."
                 }
-            """.trimIndent()
+                """.trimIndent()
 
             val resource = json.decodeFromString<ResourceDto>(jsonString)
 
@@ -164,18 +167,18 @@ class ResourceDtoTest {
     @Nested
     @DisplayName("Serialization")
     inner class SerializationTests {
-
         @Test
         @DisplayName("should serialize resource to JSON")
         fun `should serialize resource to JSON`() {
-            val resource = ResourceDto(
-                name = "test.jpg",
-                path = "disk:/test.jpg",
-                type = "file",
-                mimeType = "image/jpeg",
-                size = 500L,
-                resourceId = "res123"
-            )
+            val resource =
+                ResourceDto(
+                    name = "test.jpg",
+                    path = "disk:/test.jpg",
+                    type = "file",
+                    mimeType = "image/jpeg",
+                    size = 500L,
+                    resourceId = "res123",
+                )
 
             val jsonString = json.encodeToString(ResourceDto.serializer(), resource)
 

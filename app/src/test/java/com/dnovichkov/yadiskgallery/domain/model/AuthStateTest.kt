@@ -10,11 +10,9 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("AuthState")
 class AuthStateTest {
-
     @Nested
     @DisplayName("NotAuthenticated")
     inner class NotAuthenticatedTests {
-
         @Test
         @DisplayName("should create NotAuthenticated state")
         fun `should create NotAuthenticated state`() {
@@ -36,7 +34,6 @@ class AuthStateTest {
     @Nested
     @DisplayName("Authenticating")
     inner class AuthenticatingTests {
-
         @Test
         @DisplayName("should create Authenticating state")
         fun `should create Authenticating state`() {
@@ -49,16 +46,16 @@ class AuthStateTest {
     @Nested
     @DisplayName("Authenticated")
     inner class AuthenticatedTests {
-
         @Test
         @DisplayName("should create Authenticated state with user info")
         fun `should create Authenticated state with user info`() {
-            val userInfo = UserInfo(
-                uid = "12345",
-                login = "user@yandex.ru",
-                displayName = "Test User",
-                avatarUrl = "https://avatars.yandex.net/avatar"
-            )
+            val userInfo =
+                UserInfo(
+                    uid = "12345",
+                    login = "user@yandex.ru",
+                    displayName = "Test User",
+                    avatarUrl = "https://avatars.yandex.net/avatar",
+                )
 
             val state = AuthState.Authenticated(userInfo)
 
@@ -73,12 +70,13 @@ class AuthStateTest {
         @Test
         @DisplayName("should create Authenticated state with minimal user info")
         fun `should create Authenticated state with minimal user info`() {
-            val userInfo = UserInfo(
-                uid = "12345",
-                login = "user",
-                displayName = null,
-                avatarUrl = null
-            )
+            val userInfo =
+                UserInfo(
+                    uid = "12345",
+                    login = "user",
+                    displayName = null,
+                    avatarUrl = null,
+                )
 
             val state = AuthState.Authenticated(userInfo)
 
@@ -91,7 +89,6 @@ class AuthStateTest {
     @Nested
     @DisplayName("PublicAccess")
     inner class PublicAccessTests {
-
         @Test
         @DisplayName("should create PublicAccess state with URL")
         fun `should create PublicAccess state with URL`() {
@@ -105,7 +102,6 @@ class AuthStateTest {
     @Nested
     @DisplayName("AuthError")
     inner class AuthErrorTests {
-
         @Test
         @DisplayName("should create AuthError state with message")
         fun `should create AuthError state with message`() {
@@ -119,27 +115,28 @@ class AuthStateTest {
     @Nested
     @DisplayName("Polymorphism")
     inner class PolymorphismTests {
-
         @Test
         @DisplayName("should handle all states with when expression")
         fun `should handle all states with when expression`() {
-            val states = listOf(
-                AuthState.NotAuthenticated,
-                AuthState.Authenticating,
-                AuthState.Authenticated(UserInfo("1", "user", null, null)),
-                AuthState.PublicAccess("https://disk.yandex.ru/d/abc"),
-                AuthState.AuthError("Error")
-            )
+            val states =
+                listOf(
+                    AuthState.NotAuthenticated,
+                    AuthState.Authenticating,
+                    AuthState.Authenticated(UserInfo("1", "user", null, null)),
+                    AuthState.PublicAccess("https://disk.yandex.ru/d/abc"),
+                    AuthState.AuthError("Error"),
+                )
 
-            val results = states.map { state ->
-                when (state) {
-                    is AuthState.NotAuthenticated -> "not_authenticated"
-                    is AuthState.Authenticating -> "authenticating"
-                    is AuthState.Authenticated -> "authenticated:${state.userInfo.login}"
-                    is AuthState.PublicAccess -> "public:${state.publicUrl}"
-                    is AuthState.AuthError -> "error:${state.message}"
+            val results =
+                states.map { state ->
+                    when (state) {
+                        is AuthState.NotAuthenticated -> "not_authenticated"
+                        is AuthState.Authenticating -> "authenticating"
+                        is AuthState.Authenticated -> "authenticated:${state.userInfo.login}"
+                        is AuthState.PublicAccess -> "public:${state.publicUrl}"
+                        is AuthState.AuthError -> "error:${state.message}"
+                    }
                 }
-            }
 
             assertEquals("not_authenticated", results[0])
             assertEquals("authenticating", results[1])

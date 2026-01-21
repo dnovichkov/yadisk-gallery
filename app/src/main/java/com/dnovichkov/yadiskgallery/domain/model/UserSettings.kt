@@ -14,19 +14,20 @@ data class UserSettings(
     val rootFolderPath: String?,
     val isAuthenticated: Boolean,
     val viewMode: ViewMode,
-    val sortOrder: SortOrder
+    val sortOrder: SortOrder,
 ) {
     companion object {
         /**
          * Creates default settings for a new user.
          */
-        fun default() = UserSettings(
-            publicFolderUrl = null,
-            rootFolderPath = null,
-            isAuthenticated = false,
-            viewMode = ViewMode.GRID,
-            sortOrder = SortOrder.DATE_DESC
-        )
+        fun default() =
+            UserSettings(
+                publicFolderUrl = null,
+                rootFolderPath = null,
+                isAuthenticated = false,
+                viewMode = ViewMode.GRID,
+                sortOrder = SortOrder.DATE_DESC,
+            )
     }
 }
 
@@ -36,8 +37,9 @@ data class UserSettings(
 enum class ViewMode {
     /** Grid view with thumbnails (3 columns) */
     GRID,
+
     /** List view with larger previews and details */
-    LIST
+    LIST,
 }
 
 /**
@@ -46,14 +48,19 @@ enum class ViewMode {
 enum class SortOrder {
     /** Sort by name ascending (A-Z) */
     NAME_ASC,
+
     /** Sort by name descending (Z-A) */
     NAME_DESC,
+
     /** Sort by date ascending (oldest first) */
     DATE_ASC,
+
     /** Sort by date descending (newest first) */
     DATE_DESC,
+
     /** Sort by size ascending (smallest first) */
     SIZE_ASC,
+
     /** Sort by size descending (largest first) */
-    SIZE_DESC
+    SIZE_DESC,
 }

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("ValidatePublicUrlUseCase")
 class ValidatePublicUrlUseCaseTest {
-
     private lateinit var useCase: ValidatePublicUrlUseCase
 
     @BeforeEach
@@ -21,7 +20,6 @@ class ValidatePublicUrlUseCaseTest {
     @Nested
     @DisplayName("Valid URLs")
     inner class ValidUrlTests {
-
         @Test
         @DisplayName("should accept disk.yandex.ru/d/ URL")
         fun `should accept disk yandex ru d URL`() {
@@ -90,7 +88,6 @@ class ValidatePublicUrlUseCaseTest {
     @Nested
     @DisplayName("Invalid URLs")
     inner class InvalidUrlTests {
-
         @Test
         @DisplayName("should reject empty URL")
         fun `should reject empty URL`() {
@@ -163,7 +160,6 @@ class ValidatePublicUrlUseCaseTest {
     @Nested
     @DisplayName("Edge cases")
     inner class EdgeCaseTests {
-
         @Test
         @DisplayName("should accept URL with query parameters")
         fun `should accept URL with query parameters`() {

@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("LogoutUseCase")
 class LogoutUseCaseTest {
-
     private lateinit var useCase: LogoutUseCase
     private lateinit var repository: FakeAuthRepository
 
@@ -27,25 +26,26 @@ class LogoutUseCaseTest {
     @Nested
     @DisplayName("invoke()")
     inner class InvokeTests {
-
         @Test
         @DisplayName("should logout successfully")
-        fun `should logout successfully`() = runTest {
-            val result = useCase()
+        fun `should logout successfully`() =
+            runTest {
+                val result = useCase()
 
-            assertTrue(result.isSuccess)
-            assertTrue(repository.logoutCalled)
-        }
+                assertTrue(result.isSuccess)
+                assertTrue(repository.logoutCalled)
+            }
 
         @Test
         @DisplayName("should propagate logout errors")
-        fun `should propagate logout errors`() = runTest {
-            repository.logoutError = RuntimeException("Logout failed")
+        fun `should propagate logout errors`() =
+            runTest {
+                repository.logoutError = RuntimeException("Logout failed")
 
-            val result = useCase()
+                val result = useCase()
 
-            assertTrue(result.isFailure)
-        }
+                assertTrue(result.isFailure)
+            }
     }
 
     private class FakeAuthRepository : IAuthRepository {
@@ -53,10 +53,12 @@ class LogoutUseCaseTest {
         var logoutError: Throwable? = null
 
         override fun observeAuthState(): Flow<AuthState> = flowOf(AuthState.NotAuthenticated)
+
         override suspend fun getAuthState(): AuthState = AuthState.NotAuthenticated
+
         override suspend fun authenticate(): Result<Unit> = Result.success(Unit)
-        override suspend fun handleAuthCallback(authCode: String): Result<UserInfo> =
-            Result.failure(RuntimeException("Not implemented"))
+
+        override suspend fun handleAuthCallback(authCode: String): Result<UserInfo> = Result.failure(RuntimeException("Not implemented"))
 
         override suspend fun logout(): Result<Unit> {
             logoutCalled = true
@@ -64,8 +66,11 @@ class LogoutUseCaseTest {
         }
 
         override suspend fun getAccessToken(): String? = null
+
         override suspend fun refreshToken(): Result<String> = Result.failure(RuntimeException("Not implemented"))
+
         override suspend fun isTokenValid(): Boolean = false
+
         override suspend fun setPublicAccess(url: String): Result<Unit> = Result.success(Unit)
     }
 }

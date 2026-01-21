@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("RefreshFilesUseCase")
 class RefreshFilesUseCaseTest {
-
     private lateinit var useCase: RefreshFilesUseCase
     private lateinit var repository: FakeFilesRepository
 
@@ -32,34 +31,36 @@ class RefreshFilesUseCaseTest {
     @Nested
     @DisplayName("invoke()")
     inner class InvokeTests {
-
         @Test
         @DisplayName("should refresh folder contents")
-        fun `should refresh folder contents`() = runTest {
-            val result = useCase(path = "/Photos")
+        fun `should refresh folder contents`() =
+            runTest {
+                val result = useCase(path = "/Photos")
 
-            assertTrue(result.isSuccess)
-            assertEquals("/Photos", repository.lastRefreshPath)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals("/Photos", repository.lastRefreshPath)
+            }
 
         @Test
         @DisplayName("should refresh root folder when path is null")
-        fun `should refresh root folder when path is null`() = runTest {
-            val result = useCase(path = null)
+        fun `should refresh root folder when path is null`() =
+            runTest {
+                val result = useCase(path = null)
 
-            assertTrue(result.isSuccess)
-            assertEquals(null, repository.lastRefreshPath)
-        }
+                assertTrue(result.isSuccess)
+                assertEquals(null, repository.lastRefreshPath)
+            }
 
         @Test
         @DisplayName("should propagate refresh errors")
-        fun `should propagate refresh errors`() = runTest {
-            repository.refreshError = RuntimeException("Network error")
+        fun `should propagate refresh errors`() =
+            runTest {
+                repository.refreshError = RuntimeException("Network error")
 
-            val result = useCase(path = "/path")
+                val result = useCase(path = "/path")
 
-            assertTrue(result.isFailure)
-        }
+                assertTrue(result.isFailure)
+            }
     }
 
     private class FakeFilesRepository : IFilesRepository {
@@ -71,32 +72,31 @@ class RefreshFilesUseCaseTest {
             offset: Int,
             limit: Int,
             sortOrder: SortOrder,
-            mediaOnly: Boolean
+            mediaOnly: Boolean,
         ): Result<PagedResult<DiskItem>> = Result.success(PagedResult(emptyList(), 0, 20, 0, false))
 
         override fun observeFolderContents(
             path: String?,
             sortOrder: SortOrder,
-            mediaOnly: Boolean
+            mediaOnly: Boolean,
         ): Flow<List<DiskItem>> = flowOf(emptyList())
 
         override suspend fun getAllMedia(
             offset: Int,
             limit: Int,
-            sortOrder: SortOrder
+            sortOrder: SortOrder,
         ): Result<PagedResult<MediaFile>> = Result.success(PagedResult(emptyList(), 0, 20, 0, false))
 
-        override suspend fun getMediaFile(path: String): Result<MediaFile> =
-            Result.failure(RuntimeException("Not implemented"))
+        override suspend fun getMediaFile(path: String): Result<MediaFile> = Result.failure(RuntimeException("Not implemented"))
 
-        override suspend fun getFolder(path: String): Result<Folder> =
-            Result.failure(RuntimeException("Not implemented"))
+        override suspend fun getFolder(path: String): Result<Folder> = Result.failure(RuntimeException("Not implemented"))
 
-        override suspend fun getDownloadUrl(path: String): Result<String> =
-            Result.failure(RuntimeException("Not implemented"))
+        override suspend fun getDownloadUrl(path: String): Result<String> = Result.failure(RuntimeException("Not implemented"))
 
-        override suspend fun getPreviewUrl(path: String, size: PreviewSize): Result<String> =
-            Result.failure(RuntimeException("Not implemented"))
+        override suspend fun getPreviewUrl(
+            path: String,
+            size: PreviewSize,
+        ): Result<String> = Result.failure(RuntimeException("Not implemented"))
 
         override suspend fun refreshFolder(path: String?): Result<Unit> {
             lastRefreshPath = path
@@ -107,10 +107,12 @@ class RefreshFilesUseCaseTest {
             publicUrl: String,
             path: String?,
             offset: Int,
-            limit: Int
+            limit: Int,
         ): Result<PagedResult<DiskItem>> = Result.success(PagedResult(emptyList(), 0, 20, 0, false))
 
-        override suspend fun getPublicDownloadUrl(publicUrl: String, path: String): Result<String> =
-            Result.failure(RuntimeException("Not implemented"))
+        override suspend fun getPublicDownloadUrl(
+            publicUrl: String,
+            path: String,
+        ): Result<String> = Result.failure(RuntimeException("Not implemented"))
     }
 }

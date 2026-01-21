@@ -16,15 +16,16 @@ import com.dnovichkov.yadiskgallery.data.cache.entity.MediaFileEntity
     entities = [
         MediaFileEntity::class,
         FolderEntity::class,
-        CacheMetadataEntity::class
+        CacheMetadataEntity::class,
     ],
     version = 1,
-    exportSchema = true
+    exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun mediaDao(): MediaDao
+
     abstract fun folderDao(): FolderDao
+
     abstract fun cacheMetadataDao(): CacheMetadataDao
 
     companion object {

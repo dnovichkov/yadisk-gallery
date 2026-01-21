@@ -11,7 +11,6 @@ import com.dnovichkov.yadiskgallery.data.cache.entity.CacheMetadataEntity
  */
 @Dao
 interface CacheMetadataDao {
-
     @Query("SELECT * FROM cache_metadata WHERE folder_path = :folderPath")
     suspend fun getByFolderPath(folderPath: String): CacheMetadataEntity?
 
