@@ -49,7 +49,7 @@
 | Фаза | Название | Статус |
 |------|----------|--------|
 | 0 | Инициализация проекта и CI/CD | DONE |
-| 1 | Domain Layer - Модели и интерфейсы | NOT STARTED |
+| 1 | Domain Layer - Модели и интерфейсы | DONE |
 | 2 | Domain Layer - Use Cases | NOT STARTED |
 | 3 | Data Layer - API и сетевой слой | NOT STARTED |
 | 4 | Data Layer - Локальное хранилище | NOT STARTED |
@@ -100,22 +100,22 @@
 **Задачи (TDD):**
 | # | Задача | Статус |
 |---|--------|--------|
-| 1.1 | Тест: MediaFile model | NOT STARTED |
-| 1.2 | Реализация: MediaFile (id, name, path, type, size, dates, previewUrl, md5) | NOT STARTED |
-| 1.3 | Тест: Folder model | NOT STARTED |
-| 1.4 | Реализация: Folder (id, name, path, itemsCount) | NOT STARTED |
-| 1.5 | Тест: DiskItem sealed class | NOT STARTED |
-| 1.6 | Реализация: DiskItem sealed interface | NOT STARTED |
-| 1.7 | Тест: UserSettings model | NOT STARTED |
-| 1.8 | Реализация: UserSettings | NOT STARTED |
-| 1.9 | Тест: AuthState model | NOT STARTED |
-| 1.10 | Реализация: AuthState sealed class | NOT STARTED |
-| 1.11 | Тест: PagedResult model | NOT STARTED |
-| 1.12 | Реализация: PagedResult | NOT STARTED |
-| 1.13 | Тест: DomainError sealed class | NOT STARTED |
-| 1.14 | Реализация: DomainError | NOT STARTED |
-| 1.15 | Реализация: Repository interfaces | NOT STARTED |
-| 1.16 | Проверка: все тесты проходят | NOT STARTED |
+| 1.1 | Тест: MediaFile model | DONE |
+| 1.2 | Реализация: MediaFile (id, name, path, type, size, dates, previewUrl, md5) | DONE |
+| 1.3 | Тест: Folder model | DONE |
+| 1.4 | Реализация: Folder (id, name, path, itemsCount) | DONE |
+| 1.5 | Тест: DiskItem sealed class | DONE |
+| 1.6 | Реализация: DiskItem sealed interface | DONE |
+| 1.7 | Тест: UserSettings model | DONE |
+| 1.8 | Реализация: UserSettings | DONE |
+| 1.9 | Тест: AuthState model | DONE |
+| 1.10 | Реализация: AuthState sealed class | DONE |
+| 1.11 | Тест: PagedResult model | DONE |
+| 1.12 | Реализация: PagedResult | DONE |
+| 1.13 | Тест: DomainError sealed class | DONE |
+| 1.14 | Реализация: DomainError | DONE |
+| 1.15 | Реализация: Repository interfaces | DONE |
+| 1.16 | Проверка: все тесты проходят | DONE |
 
 **Ключевые файлы:**
 - `domain/model/` - MediaFile, Folder, DiskItem, UserSettings, AuthState, PagedResult, DomainError
