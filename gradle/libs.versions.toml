@@ -51,6 +51,9 @@ coroutinesTest = "1.9.0"
 # Code Quality
 ktlint = "12.1.2"
 
+# Desugaring
+desugarJdkLibs = "2.1.4"
+
 [libraries]
 # AndroidX Core
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -116,6 +119,9 @@ mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "moc
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }
 room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
+
+# Desugaring
+desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

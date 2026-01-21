@@ -22,9 +22,9 @@ import java.net.URLDecoder
 @Composable
 fun NavGraph(
     navController: NavHostController,
+    modifier: Modifier = Modifier,
     onStartYandexLogin: () -> Unit = {},
     startDestination: String = Screen.Settings.route,
-    modifier: Modifier = Modifier,
 ) {
     val navigationActions = remember(navController) { NavigationActions(navController) }
 

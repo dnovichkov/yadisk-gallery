@@ -98,8 +98,8 @@ fun NetworkErrorView(
  */
 @Composable
 fun NotFoundView(
-    message: String = "The requested content could not be found.",
     modifier: Modifier = Modifier,
+    message: String = "The requested content could not be found.",
 ) {
     ErrorView(
         title = "Not Found",

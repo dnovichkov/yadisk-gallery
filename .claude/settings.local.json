@@ -14,7 +14,9 @@
       "Bash(./gradlew ktlintCheck:*)",
       "Bash(./gradlew ktlintFormat:*)",
       "Bash(./gradlew compileDebugKotlin:*)",
-      "Bash(./gradlew ktlintMainSourceSetCheck:*)"
+      "Bash(./gradlew ktlintMainSourceSetCheck:*)",
+      "Bash(./gradlew ktlintKotlinScriptCheck:*)",
+      "Bash(./gradlew lintDebug:*)"
     ]
   }
 }
