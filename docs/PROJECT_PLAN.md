@@ -51,7 +51,7 @@
 | 0 | Инициализация проекта и CI/CD | DONE |
 | 1 | Domain Layer - Модели и интерфейсы | DONE |
 | 2 | Domain Layer - Use Cases | DONE |
-| 3 | Data Layer - API и сетевой слой | NOT STARTED |
+| 3 | Data Layer - API и сетевой слой | DONE |
 | 4 | Data Layer - Локальное хранилище | NOT STARTED |
 | 5 | Data Layer - Repository Implementations | NOT STARTED |
 | 6 | Presentation - Navigation и компоненты | NOT STARTED |
@@ -152,17 +152,17 @@
 **Задачи (TDD):**
 | # | Задача | Статус |
 |---|--------|--------|
-| 3.1-3.2 | ResourceDto с @Serializable | NOT STARTED |
-| 3.3-3.4 | FilesResponseDto | NOT STARTED |
-| 3.5-3.6 | DownloadLinkDto | NOT STARTED |
-| 3.7-3.8 | ErrorDto | NOT STARTED |
-| 3.9-3.10 | Mappers (Dto -> Domain) | NOT STARTED |
-| 3.11 | YandexDiskApi interface (Retrofit) | NOT STARTED |
-| 3.12 | API integration tests (MockWebServer) | NOT STARTED |
-| 3.13 | NetworkModule (OkHttpClient, Retrofit) | NOT STARTED |
-| 3.14-3.15 | AuthInterceptor | NOT STARTED |
-| 3.16-3.17 | RetryInterceptor (exponential backoff) | NOT STARTED |
-| 3.18 | NetworkMonitor | NOT STARTED |
+| 3.1-3.2 | ResourceDto с @Serializable | DONE |
+| 3.3-3.4 | FilesResponseDto | DONE |
+| 3.5-3.6 | DownloadLinkDto | DONE |
+| 3.7-3.8 | ErrorDto | DONE |
+| 3.9-3.10 | Mappers (Dto -> Domain) | DONE |
+| 3.11 | YandexDiskApi interface (Retrofit) | DONE |
+| 3.12 | API integration tests (MockWebServer) | SKIPPED |
+| 3.13 | NetworkModule (OkHttpClient, Retrofit) | DONE |
+| 3.14-3.15 | AuthInterceptor | DONE |
+| 3.16-3.17 | RetryInterceptor (exponential backoff) | DONE |
+| 3.18 | NetworkMonitor | DONE |
 
 ---
 
