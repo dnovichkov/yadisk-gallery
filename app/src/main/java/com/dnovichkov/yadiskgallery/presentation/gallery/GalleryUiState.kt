@@ -20,6 +20,7 @@ data class GalleryUiState(
     val error: String? = null,
     val isEmpty: Boolean = false,
     val isOffline: Boolean = false,
+    val publicFolderUrl: String? = null,
 )
 
 /**
@@ -79,7 +80,11 @@ sealed class GalleryEvent {
  */
 sealed class GalleryNavigationEvent {
     /** Navigate to image viewer */
-    data class NavigateToImageViewer(val path: String, val index: Int) : GalleryNavigationEvent()
+    data class NavigateToImageViewer(
+        val path: String,
+        val index: Int,
+        val publicFolderUrl: String? = null,
+    ) : GalleryNavigationEvent()
 
     /** Navigate to video player */
     data class NavigateToVideoPlayer(val path: String) : GalleryNavigationEvent()

@@ -48,6 +48,12 @@ class AuthInterceptor
         override fun intercept(chain: Interceptor.Chain): Response {
             val originalRequest = chain.request()
 
+            // Skip auth for public endpoints - they don't require authentication
+            val isPublicEndpoint = originalRequest.url.encodedPath.contains("/public/")
+            if (isPublicEndpoint) {
+                return chain.proceed(originalRequest)
+            }
+
             // If no token, proceed without authorization header
             val token = accessToken ?: return chain.proceed(originalRequest)
 

@@ -35,6 +35,7 @@ import kotlinx.coroutines.launch
  *
  * @param folderPath Path to the folder containing images
  * @param initialIndex Initial image index to display
+ * @param publicFolderUrl Optional public folder URL for public folder mode
  * @param onNavigateBack Callback to navigate back
  * @param viewModel ViewModel for the screen
  */
@@ -43,6 +44,7 @@ import kotlinx.coroutines.launch
 fun ImageViewerScreen(
     folderPath: String?,
     initialIndex: Int,
+    publicFolderUrl: String? = null,
     onNavigateBack: () -> Unit,
     viewModel: ImageViewerViewModel = hiltViewModel(),
 ) {
@@ -51,8 +53,8 @@ fun ImageViewerScreen(
     val scope = rememberCoroutineScope()
 
     // Load images on first composition
-    LaunchedEffect(folderPath, initialIndex) {
-        viewModel.onEvent(ImageViewerEvent.LoadImages(folderPath, initialIndex))
+    LaunchedEffect(folderPath, initialIndex, publicFolderUrl) {
+        viewModel.onEvent(ImageViewerEvent.LoadImages(folderPath, initialIndex, publicFolderUrl))
     }
 
     // Setup immersive mode

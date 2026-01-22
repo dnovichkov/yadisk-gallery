@@ -31,19 +31,24 @@ import com.dnovichkov.yadiskgallery.presentation.gallery.components.SkeletonGrid
 @Composable
 fun GalleryScreen(
     onNavigateToSettings: () -> Unit,
-    onNavigateToImageViewer: (path: String, index: Int) -> Unit,
+    onNavigateToImageViewer: (path: String, index: Int, publicUrl: String?) -> Unit,
     onNavigateToVideoPlayer: (path: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: GalleryViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    // Trigger initial content load
+    LaunchedEffect(Unit) {
+        viewModel.onEvent(GalleryEvent.LoadContent)
+    }
+
     // Handle navigation events
     LaunchedEffect(Unit) {
         viewModel.navigationEvents.collect { event ->
             when (event) {
                 is GalleryNavigationEvent.NavigateToImageViewer -> {
-                    onNavigateToImageViewer(event.path, event.index)
+                    onNavigateToImageViewer(event.path, event.index, event.publicFolderUrl)
                 }
                 is GalleryNavigationEvent.NavigateToVideoPlayer -> {
                     onNavigateToVideoPlayer(event.path)

@@ -29,16 +29,21 @@ sealed class Screen(val route: String) {
      * Image viewer screen - fullscreen image viewing with zoom.
      * @param path file path
      * @param index current index in the list
+     * @param publicUrl optional public folder URL for public folder mode
      */
-    data object ImageViewer : Screen("image_viewer/{path}?index={index}") {
+    data object ImageViewer : Screen("image_viewer/{path}?index={index}&publicUrl={publicUrl}") {
         const val PATH_ARG = "path"
         const val INDEX_ARG = "index"
+        const val PUBLIC_URL_ARG = "publicUrl"
 
         fun createRoute(
             path: String,
             index: Int = 0,
+            publicUrl: String? = null,
         ): String {
-            return "image_viewer/${java.net.URLEncoder.encode(path, "UTF-8")}?index=$index"
+            val encodedPath = java.net.URLEncoder.encode(path.ifEmpty { " " }, "UTF-8")
+            val encodedPublicUrl = publicUrl?.let { java.net.URLEncoder.encode(it, "UTF-8") } ?: ""
+            return "image_viewer/$encodedPath?index=$index&publicUrl=$encodedPublicUrl"
         }
     }
 

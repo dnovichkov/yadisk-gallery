@@ -63,7 +63,11 @@ data class ExifData(
  */
 sealed class ImageViewerEvent {
     /** Load images for the given folder path */
-    data class LoadImages(val folderPath: String?, val initialIndex: Int) : ImageViewerEvent()
+    data class LoadImages(
+        val folderPath: String?,
+        val initialIndex: Int,
+        val publicFolderUrl: String? = null,
+    ) : ImageViewerEvent()
 
     /** Navigate to next image */
     data object NextImage : ImageViewerEvent()

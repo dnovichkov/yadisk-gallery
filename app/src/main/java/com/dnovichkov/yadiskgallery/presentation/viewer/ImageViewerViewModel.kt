@@ -30,13 +30,15 @@ class ImageViewerViewModel
         val uiState: StateFlow<ImageViewerUiState> = _uiState.asStateFlow()
 
         private var folderPath: String? = null
+        private var publicFolderUrl: String? = null
 
         /**
          * Handles UI events.
          */
         fun onEvent(event: ImageViewerEvent) {
             when (event) {
-                is ImageViewerEvent.LoadImages -> loadImages(event.folderPath, event.initialIndex)
+                is ImageViewerEvent.LoadImages ->
+                    loadImages(event.folderPath, event.initialIndex, event.publicFolderUrl)
                 is ImageViewerEvent.NextImage -> navigateToNext()
                 is ImageViewerEvent.PreviousImage -> navigateToPrevious()
                 is ImageViewerEvent.GoToImage -> goToImage(event.index)
@@ -54,19 +56,35 @@ class ImageViewerViewModel
         private fun loadImages(
             path: String?,
             initialIndex: Int,
+            publicUrl: String? = null,
         ) {
             folderPath = path
+            publicFolderUrl = publicUrl
+            // Normalize empty/blank string to null for API compatibility
+            val normalizedPath = path?.ifBlank { null }
             _uiState.update { it.copy(isLoading = true, error = null) }
 
             viewModelScope.launch {
-                getFolderContentsUseCase(
-                    path = path,
-                    offset = 0,
-                    limit = MAX_IMAGES_LOAD,
-                    mediaOnly = true,
-                ).onSuccess { result ->
+                val result =
+                    if (publicUrl != null) {
+                        getFolderContentsUseCase.getPublicFolderContents(
+                            publicUrl = publicUrl,
+                            path = normalizedPath,
+                            offset = 0,
+                            limit = MAX_IMAGES_LOAD,
+                        )
+                    } else {
+                        getFolderContentsUseCase(
+                            path = normalizedPath,
+                            offset = 0,
+                            limit = MAX_IMAGES_LOAD,
+                            mediaOnly = true,
+                        )
+                    }
+
+                result.onSuccess { pagedResult ->
                     val images =
-                        result.items
+                        pagedResult.items
                             .filterIsInstance<DiskItem.File>()
                             .map { it.mediaFile }
                             .filter { it.type == MediaType.IMAGE }
@@ -178,7 +196,17 @@ class ImageViewerViewModel
             _uiState.update { it.copy(isLoadingOriginal = true) }
 
             viewModelScope.launch {
-                getMediaDownloadUrlUseCase(currentImage.path)
+                val result =
+                    if (publicFolderUrl != null) {
+                        getMediaDownloadUrlUseCase.getPublicDownloadUrl(
+                            publicUrl = publicFolderUrl!!,
+                            path = currentImage.path,
+                        )
+                    } else {
+                        getMediaDownloadUrlUseCase(currentImage.path)
+                    }
+
+                result
                     .onSuccess { url ->
                         _uiState.update {
                             it.copy(
@@ -200,7 +228,7 @@ class ImageViewerViewModel
 
         private fun retry() {
             _uiState.update { it.copy(error = null) }
-            loadImages(folderPath, _uiState.value.currentIndex)
+            loadImages(folderPath, _uiState.value.currentIndex, publicFolderUrl)
         }
 
         private fun clearError() {

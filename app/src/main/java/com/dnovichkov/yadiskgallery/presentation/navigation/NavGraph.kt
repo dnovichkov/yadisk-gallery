@@ -54,8 +54,8 @@ fun NavGraph(
         ) {
             GalleryScreen(
                 onNavigateToSettings = { navigationActions.navigateToSettings() },
-                onNavigateToImageViewer = { path, index ->
-                    navigationActions.navigateToImageViewer(path, index)
+                onNavigateToImageViewer = { path, index, publicUrl ->
+                    navigationActions.navigateToImageViewer(path, index, publicUrl)
                 },
                 onNavigateToVideoPlayer = { path ->
                     navigationActions.navigateToVideoPlayer(path)
@@ -75,15 +75,27 @@ fun NavGraph(
                         type = NavType.IntType
                         defaultValue = 0
                     },
+                    navArgument(Screen.ImageViewer.PUBLIC_URL_ARG) {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    },
                 ),
         ) { backStackEntry ->
             val encodedPath = backStackEntry.arguments?.getString(Screen.ImageViewer.PATH_ARG) ?: ""
             val folderPath = URLDecoder.decode(encodedPath, "UTF-8").ifEmpty { null }
             val index = backStackEntry.arguments?.getInt(Screen.ImageViewer.INDEX_ARG) ?: 0
+            val encodedPublicUrl =
+                backStackEntry.arguments?.getString(Screen.ImageViewer.PUBLIC_URL_ARG)
+            val publicFolderUrl =
+                encodedPublicUrl?.let {
+                    if (it.isNotEmpty()) URLDecoder.decode(it, "UTF-8") else null
+                }
 
             ImageViewerScreen(
                 folderPath = folderPath,
                 initialIndex = index,
+                publicFolderUrl = publicFolderUrl,
                 onNavigateBack = { navigationActions.navigateBack() },
             )
         }
@@ -129,8 +141,9 @@ class NavigationActions(private val navController: NavHostController) {
     fun navigateToImageViewer(
         path: String,
         index: Int = 0,
+        publicUrl: String? = null,
     ) {
-        navController.navigate(Screen.ImageViewer.createRoute(path, index))
+        navController.navigate(Screen.ImageViewer.createRoute(path, index, publicUrl))
     }
 
     fun navigateToVideoPlayer(path: String) {

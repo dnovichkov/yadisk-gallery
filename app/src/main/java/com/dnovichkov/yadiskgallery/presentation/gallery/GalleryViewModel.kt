@@ -50,11 +50,17 @@ class GalleryViewModel
         private fun observeSettings() {
             viewModelScope.launch {
                 getSettingsUseCase.observeSettings().collect { settings ->
+                    val previousUrl = _uiState.value.publicFolderUrl
                     _uiState.update { currentState ->
                         currentState.copy(
                             viewMode = settings.viewMode,
                             sortOrder = settings.sortOrder,
+                            publicFolderUrl = settings.publicFolderUrl,
                         )
+                    }
+                    // Reload if public URL changed or on first load
+                    if (previousUrl != settings.publicFolderUrl) {
+                        loadContent()
                     }
                 }
             }
@@ -96,19 +102,33 @@ class GalleryViewModel
             viewModelScope.launch {
                 _uiState.update { it.copy(isLoading = true, error = null) }
 
-                getFolderContentsUseCase(
-                    path = currentState.currentPath,
-                    offset = 0,
-                    limit = PAGE_SIZE,
-                    sortOrder = currentState.sortOrder,
-                    mediaOnly = false,
-                ).onSuccess { result ->
+                val result =
+                    if (currentState.publicFolderUrl != null) {
+                        // Public folder mode
+                        getFolderContentsUseCase.getPublicFolderContents(
+                            publicUrl = currentState.publicFolderUrl,
+                            path = currentState.currentPath,
+                            offset = 0,
+                            limit = PAGE_SIZE,
+                        )
+                    } else {
+                        // Private folder mode (requires auth)
+                        getFolderContentsUseCase(
+                            path = currentState.currentPath,
+                            offset = 0,
+                            limit = PAGE_SIZE,
+                            sortOrder = currentState.sortOrder,
+                            mediaOnly = false,
+                        )
+                    }
+
+                result.onSuccess { pagedResult ->
                     _uiState.update {
                         it.copy(
-                            items = result.items,
+                            items = pagedResult.items,
                             isLoading = false,
-                            hasMoreItems = result.hasMore,
-                            isEmpty = result.items.isEmpty(),
+                            hasMoreItems = pagedResult.hasMore,
+                            isEmpty = pagedResult.items.isEmpty(),
                         )
                     }
                 }.onFailure { error ->
@@ -152,18 +172,30 @@ class GalleryViewModel
             viewModelScope.launch {
                 _uiState.update { it.copy(isLoadingMore = true) }
 
-                getFolderContentsUseCase(
-                    path = currentState.currentPath,
-                    offset = currentState.items.size,
-                    limit = PAGE_SIZE,
-                    sortOrder = currentState.sortOrder,
-                    mediaOnly = false,
-                ).onSuccess { result ->
+                val result =
+                    if (currentState.publicFolderUrl != null) {
+                        getFolderContentsUseCase.getPublicFolderContents(
+                            publicUrl = currentState.publicFolderUrl,
+                            path = currentState.currentPath,
+                            offset = currentState.items.size,
+                            limit = PAGE_SIZE,
+                        )
+                    } else {
+                        getFolderContentsUseCase(
+                            path = currentState.currentPath,
+                            offset = currentState.items.size,
+                            limit = PAGE_SIZE,
+                            sortOrder = currentState.sortOrder,
+                            mediaOnly = false,
+                        )
+                    }
+
+                result.onSuccess { pagedResult ->
                     _uiState.update {
                         it.copy(
-                            items = it.items + result.items,
+                            items = it.items + pagedResult.items,
                             isLoadingMore = false,
-                            hasMoreItems = result.hasMore,
+                            hasMoreItems = pagedResult.hasMore,
                         )
                     }
                 }.onFailure { error ->
@@ -185,20 +217,32 @@ class GalleryViewModel
                     _uiState.update { it.copy(items = emptyList()) }
                 }
 
-                getFolderContentsUseCase(
-                    path = currentState.currentPath,
-                    offset = 0,
-                    limit = PAGE_SIZE,
-                    sortOrder = currentState.sortOrder,
-                    mediaOnly = false,
-                ).onSuccess { result ->
+                val result =
+                    if (currentState.publicFolderUrl != null) {
+                        getFolderContentsUseCase.getPublicFolderContents(
+                            publicUrl = currentState.publicFolderUrl,
+                            path = currentState.currentPath,
+                            offset = 0,
+                            limit = PAGE_SIZE,
+                        )
+                    } else {
+                        getFolderContentsUseCase(
+                            path = currentState.currentPath,
+                            offset = 0,
+                            limit = PAGE_SIZE,
+                            sortOrder = currentState.sortOrder,
+                            mediaOnly = false,
+                        )
+                    }
+
+                result.onSuccess { pagedResult ->
                     _uiState.update {
                         it.copy(
-                            items = result.items,
+                            items = pagedResult.items,
                             isLoading = false,
                             isRefreshing = false,
-                            hasMoreItems = result.hasMore,
-                            isEmpty = result.items.isEmpty(),
+                            hasMoreItems = pagedResult.hasMore,
+                            isEmpty = pagedResult.items.isEmpty(),
                         )
                     }
                 }.onFailure { error ->
@@ -278,6 +322,7 @@ class GalleryViewModel
                             GalleryNavigationEvent.NavigateToImageViewer(
                                 path = currentState.currentPath ?: "",
                                 index = if (index >= 0) index else 0,
+                                publicFolderUrl = currentState.publicFolderUrl,
                             ),
                         )
                     }
