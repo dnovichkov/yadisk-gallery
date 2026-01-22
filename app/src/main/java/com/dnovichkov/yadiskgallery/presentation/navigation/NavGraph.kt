@@ -12,6 +12,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.dnovichkov.yadiskgallery.presentation.gallery.GalleryScreen
 import com.dnovichkov.yadiskgallery.presentation.settings.SettingsScreen
 import java.net.URLDecoder
 
@@ -52,10 +53,16 @@ fun NavGraph(
                         defaultValue = null
                     },
                 ),
-        ) { backStackEntry ->
-            val path = backStackEntry.arguments?.getString(Screen.Gallery.PATH_ARG)
-            // TODO: Replace with GalleryScreen when implemented
-            PlaceholderScreen("Gallery: ${path ?: "Root"}")
+        ) {
+            GalleryScreen(
+                onNavigateToSettings = { navigationActions.navigateToSettings() },
+                onNavigateToImageViewer = { path, index ->
+                    navigationActions.navigateToImageViewer(path, index)
+                },
+                onNavigateToVideoPlayer = { path ->
+                    navigationActions.navigateToVideoPlayer(path)
+                },
+            )
         }
 
         // Image Viewer Screen

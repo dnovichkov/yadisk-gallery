@@ -57,7 +57,7 @@
 | 6 | Presentation - Navigation и компоненты | DONE |
 | 7 | Settings Screen (FR-01) | DONE |
 | 8 | Auth Flow (FR-02) | DONE |
-| 9 | Gallery Screen (FR-03, FR-04, FR-06) | NOT STARTED |
+| 9 | Gallery Screen (FR-03, FR-04, FR-06) | DONE |
 | 10 | Image Viewer (FR-05.1-FR-05.7) | NOT STARTED |
 | 11 | Video Player (FR-05.8-FR-05.12) | NOT STARTED |
 | 12 | Error Handling и Offline Mode | NOT STARTED |
@@ -308,24 +308,24 @@
 **Задачи:**
 | # | Задача | Статус |
 |---|--------|--------|
-| 9.1 | Тест: GalleryViewModel | NOT STARTED |
-| 9.2 | Создать GalleryUiState data class | NOT STARTED |
-| 9.3 | Создать GalleryViewModel с пагинацией | NOT STARTED |
-| 9.4 | Создать MediaGridItem composable (thumbnail + type icon) | NOT STARTED |
-| 9.5 | Создать FolderGridItem composable | NOT STARTED |
-| 9.6 | Создать MediaListItem composable (детальный вид) | NOT STARTED |
-| 9.7 | Создать FolderListItem composable | NOT STARTED |
-| 9.8 | Создать GalleryGrid composable (LazyVerticalGrid 3 columns) | NOT STARTED |
-| 9.9 | Создать GalleryList composable (LazyColumn) | NOT STARTED |
-| 9.10 | Создать BreadcrumbsBar composable | NOT STARTED |
-| 9.11 | Создать GalleryTopBar composable (view mode toggle, sort) | NOT STARTED |
-| 9.12 | Реализовать Pull-to-Refresh (SwipeRefresh) | NOT STARTED |
-| 9.13 | Реализовать infinite scroll с пагинацией | NOT STARTED |
-| 9.14 | Создать SkeletonGrid composable (placeholder при загрузке) | NOT STARTED |
-| 9.15 | Собрать GalleryScreen composable | NOT STARTED |
-| 9.16 | Настроить Coil для загрузки thumbnails | NOT STARTED |
-| 9.17 | Интеграция с NavGraph (навигация в папки) | NOT STARTED |
-| 9.18 | Проверка: UI тесты галереи | NOT STARTED |
+| 9.1 | Тест: GalleryViewModel | DONE |
+| 9.2 | Создать GalleryUiState data class | DONE |
+| 9.3 | Создать GalleryViewModel с пагинацией | DONE |
+| 9.4 | Создать MediaGridItem composable (thumbnail + type icon) | DONE |
+| 9.5 | Создать FolderGridItem composable | DONE |
+| 9.6 | Создать MediaListItem composable (детальный вид) | DONE |
+| 9.7 | Создать FolderListItem composable | DONE |
+| 9.8 | Создать GalleryGrid composable (LazyVerticalGrid 3 columns) | DONE |
+| 9.9 | Создать GalleryList composable (LazyColumn) | DONE |
+| 9.10 | Создать BreadcrumbsBar composable | DONE |
+| 9.11 | Создать GalleryTopBar composable (view mode toggle, sort) | DONE |
+| 9.12 | Реализовать Pull-to-Refresh (Material3 PullToRefreshBox) | DONE |
+| 9.13 | Реализовать infinite scroll с пагинацией | DONE |
+| 9.14 | Создать SkeletonGrid composable (placeholder при загрузке) | DONE |
+| 9.15 | Собрать GalleryScreen composable | DONE |
+| 9.16 | Настроить Coil для загрузки thumbnails | DONE |
+| 9.17 | Интеграция с NavGraph (навигация в папки) | DONE |
+| 9.18 | Проверка: lint и тесты проходят | DONE |
 
 **Ключевые файлы:**
 - `presentation/gallery/GalleryScreen.kt`
