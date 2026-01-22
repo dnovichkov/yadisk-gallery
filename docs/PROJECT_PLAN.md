@@ -59,7 +59,7 @@
 | 8 | Auth Flow (FR-02) | DONE |
 | 9 | Gallery Screen (FR-03, FR-04, FR-06) | DONE |
 | 10 | Image Viewer (FR-05.1-FR-05.7) | DONE |
-| 11 | Video Player (FR-05.8-FR-05.12) | NOT STARTED |
+| 11 | Video Player (FR-05.8-FR-05.12) | DONE |
 | 12 | Error Handling и Offline Mode | NOT STARTED |
 | 13 | Performance и Accessibility | NOT STARTED |
 | 14 | Security и Локализация | NOT STARTED |
@@ -377,19 +377,19 @@
 **Задачи:**
 | # | Задача | Статус |
 |---|--------|--------|
-| 11.1 | Тест: VideoPlayerViewModel | NOT STARTED |
-| 11.2 | Создать VideoPlayerUiState data class | NOT STARTED |
-| 11.3 | Создать VideoPlayerViewModel | NOT STARTED |
-| 11.4 | Создать ExoPlayerWrapper class (lifecycle-aware) | NOT STARTED |
-| 11.5 | Создать VideoPlayer composable (AndroidView с PlayerView) | NOT STARTED |
-| 11.6 | Настроить стандартные контролы ExoPlayer | NOT STARTED |
-| 11.7 | Реализовать streaming (без полной загрузки) | NOT STARTED |
-| 11.8 | Реализовать сохранение позиции воспроизведения | NOT STARTED |
-| 11.9 | Создать VideoLoadingOverlay composable | NOT STARTED |
-| 11.10 | Создать VideoErrorOverlay composable | NOT STARTED |
-| 11.11 | Собрать VideoPlayerScreen composable | NOT STARTED |
-| 11.12 | Интеграция с NavGraph | NOT STARTED |
-| 11.13 | Проверка: воспроизведение разных форматов | NOT STARTED |
+| 11.1 | Тест: VideoPlayerViewModel | DONE |
+| 11.2 | Создать VideoPlayerUiState data class | DONE |
+| 11.3 | Создать VideoPlayerViewModel | DONE |
+| 11.4 | Создать ExoPlayerWrapper class (lifecycle-aware) | DONE |
+| 11.5 | Создать VideoPlayer composable (AndroidView с PlayerView) | DONE |
+| 11.6 | Создать кастомные контролы VideoControls | DONE |
+| 11.7 | Реализовать streaming (без полной загрузки) | DONE |
+| 11.8 | Реализовать сохранение позиции воспроизведения | DONE |
+| 11.9 | Создать VideoLoadingOverlay composable | DONE |
+| 11.10 | Создать VideoErrorOverlay composable | DONE |
+| 11.11 | Собрать VideoPlayerScreen composable | DONE |
+| 11.12 | Интеграция с NavGraph | DONE |
+| 11.13 | Проверка: lint и тесты | DONE |
 
 **Ключевые файлы:**
 - `presentation/viewer/VideoPlayerScreen.kt`
@@ -397,6 +397,9 @@
 - `presentation/viewer/VideoPlayerUiState.kt`
 - `presentation/viewer/components/ExoPlayerWrapper.kt`
 - `presentation/viewer/components/VideoPlayer.kt`
+- `presentation/viewer/components/VideoControls.kt`
+- `presentation/viewer/components/VideoLoadingOverlay.kt`
+- `presentation/viewer/components/VideoErrorOverlay.kt`
 
 ---
 

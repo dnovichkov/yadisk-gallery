@@ -1,11 +1,7 @@
 package com.dnovichkov.yadiskgallery.presentation.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -15,6 +11,7 @@ import androidx.navigation.navArgument
 import com.dnovichkov.yadiskgallery.presentation.gallery.GalleryScreen
 import com.dnovichkov.yadiskgallery.presentation.settings.SettingsScreen
 import com.dnovichkov.yadiskgallery.presentation.viewer.ImageViewerScreen
+import com.dnovichkov.yadiskgallery.presentation.viewer.VideoPlayerScreen
 import java.net.URLDecoder
 
 /**
@@ -103,22 +100,12 @@ fun NavGraph(
         ) { backStackEntry ->
             val encodedPath = backStackEntry.arguments?.getString(Screen.VideoPlayer.PATH_ARG) ?: ""
             val path = URLDecoder.decode(encodedPath, "UTF-8")
-            // TODO: Replace with VideoPlayerScreen when implemented
-            PlaceholderScreen("Video Player: $path")
-        }
-    }
-}
 
-/**
- * Placeholder screen for destinations not yet implemented.
- */
-@Composable
-private fun PlaceholderScreen(name: String) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(text = name)
+            VideoPlayerScreen(
+                filePath = path,
+                onNavigateBack = { navigationActions.navigateBack() },
+            )
+        }
     }
 }
 
