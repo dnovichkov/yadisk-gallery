@@ -5,6 +5,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import com.dnovichkov.yadiskgallery.domain.model.MediaFile
@@ -47,11 +49,14 @@ fun ImagePager(
         }
     }
 
-    // Notify ViewModel when page changes
+    // Keep currentIndex updated for use in long-running LaunchedEffect
+    val currentIndexUpdated by rememberUpdatedState(currentIndex)
+
+    // Notify ViewModel when page changes (only for user swipes, not programmatic changes)
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.settledPage }
             .collect { page ->
-                if (page != currentIndex) {
+                if (page != currentIndexUpdated) {
                     onIndexChange(page)
                 }
             }
