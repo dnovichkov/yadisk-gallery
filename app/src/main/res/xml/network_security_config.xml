@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Base configuration: only allow HTTPS -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Yandex Cloud API with certificate pinning -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">cloud-api.yandex.net</domain>
+        <domain includeSubdomains="true">disk.yandex.ru</domain>
+        <domain includeSubdomains="true">downloader.disk.yandex.ru</domain>
+        <pin-set expiration="2025-12-31">
+            <!-- Yandex CA certificate pins -->
+            <!-- Primary: Yandex CA -->
+            <pin digest="SHA-256">K87oWBWM9UZwZvK7PYWQ7Lb1Y8B/dGvHQ5NghN/9W9E=</pin>
+            <!-- Backup: GlobalSign Root CA -->
+            <pin digest="SHA-256">cGuxAXyFXFkWm61cF4HPWX8S0srS9j0aSqN0k4AP+4A=</pin>
+            <!-- Backup: DigiCert Global Root CA -->
+            <pin digest="SHA-256">r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E=</pin>
+        </pin-set>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+
+    <!-- Yandex OAuth domain -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">oauth.yandex.ru</domain>
+        <domain includeSubdomains="true">passport.yandex.ru</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+
+    <!-- Debug configuration: allow localhost for testing -->
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>

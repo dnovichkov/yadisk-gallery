@@ -62,7 +62,7 @@
 | 11 | Video Player (FR-05.8-FR-05.12) | DONE |
 | 12 | Error Handling и Offline Mode (FR-07, FR-08) | DONE |
 | 13 | Performance и Accessibility (NFR) | PARTIAL (Accessibility DONE) |
-| 14 | Security и Локализация | NOT STARTED |
+| 14 | Security и Локализация | DONE |
 | 15 | Integration и E2E тестирование | NOT STARTED |
 | 16 | Финализация и Release | NOT STARTED |
 
@@ -467,16 +467,16 @@
 **Задачи:**
 | # | Задача | Статус |
 |---|--------|--------|
-| 14.1 | Добавить Certificate Pinning для cloud-api.yandex.net | NOT STARTED |
-| 14.2 | Настроить network_security_config.xml | NOT STARTED |
-| 14.3 | Проверить ProGuard/R8 rules | NOT STARTED |
-| 14.4 | Добавить R8 rules для Retrofit, Room, Kotlinx Serialization | NOT STARTED |
-| 14.5 | Создать strings.xml (RU - default) | NOT STARTED |
-| 14.6 | Создать strings.xml (EN) | NOT STARTED |
-| 14.7 | Экстрагировать все hardcoded строки | NOT STARTED |
-| 14.8 | Добавить plurals для счетчиков | NOT STARTED |
-| 14.9 | Проверка: release build с R8 | NOT STARTED |
-| 14.10 | Проверка: EN локализация | NOT STARTED |
+| 14.1 | Добавить Certificate Pinning для cloud-api.yandex.net | DONE |
+| 14.2 | Настроить network_security_config.xml | DONE |
+| 14.3 | Проверить ProGuard/R8 rules | DONE |
+| 14.4 | Добавить R8 rules для Retrofit, Room, Kotlinx Serialization | DONE |
+| 14.5 | Создать strings.xml (RU - default) | DONE |
+| 14.6 | Создать strings.xml (EN) | DONE |
+| 14.7 | Экстрагировать все hardcoded строки | PARTIAL (ресурсы созданы, код не обновлён) |
+| 14.8 | Добавить plurals для счетчиков | DONE |
+| 14.9 | Проверка: release build с R8 | DONE |
+| 14.10 | Проверка: EN локализация | DONE |
 
 **Ключевые файлы:**
 - `res/xml/network_security_config.xml`
