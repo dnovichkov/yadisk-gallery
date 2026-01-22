@@ -1,6 +1,7 @@
 package com.dnovichkov.yadiskgallery.presentation.gallery
 
 import app.cash.turbine.test
+import com.dnovichkov.yadiskgallery.data.network.NetworkMonitor
 import com.dnovichkov.yadiskgallery.domain.model.DiskItem
 import com.dnovichkov.yadiskgallery.domain.model.Folder
 import com.dnovichkov.yadiskgallery.domain.model.MediaFile
@@ -45,6 +46,7 @@ class GalleryViewModelTest {
     private lateinit var refreshFilesUseCase: RefreshFilesUseCase
     private lateinit var getSettingsUseCase: GetSettingsUseCase
     private lateinit var saveSettingsUseCase: SaveSettingsUseCase
+    private lateinit var networkMonitor: NetworkMonitor
     private lateinit var viewModel: GalleryViewModel
 
     private val defaultSettings = UserSettings.default()
@@ -87,9 +89,11 @@ class GalleryViewModelTest {
         refreshFilesUseCase = mockk()
         getSettingsUseCase = mockk()
         saveSettingsUseCase = mockk()
+        networkMonitor = mockk(relaxed = true)
 
         // Default mock behavior
         every { getSettingsUseCase.observeSettings() } returns flowOf(defaultSettings)
+        every { networkMonitor.isOnline } returns flowOf(true)
         coEvery {
             getFolderContentsUseCase(
                 any(),
@@ -112,6 +116,7 @@ class GalleryViewModelTest {
             refreshFilesUseCase = refreshFilesUseCase,
             getSettingsUseCase = getSettingsUseCase,
             saveSettingsUseCase = saveSettingsUseCase,
+            networkMonitor = networkMonitor,
         )
 
     @Nested

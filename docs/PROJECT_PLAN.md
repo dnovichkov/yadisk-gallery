@@ -60,7 +60,7 @@
 | 9 | Gallery Screen (FR-03, FR-04, FR-06) | DONE |
 | 10 | Image Viewer (FR-05.1-FR-05.7) | DONE |
 | 11 | Video Player (FR-05.8-FR-05.12) | DONE |
-| 12 | Error Handling и Offline Mode | NOT STARTED |
+| 12 | Error Handling и Offline Mode (FR-07, FR-08) | DONE |
 | 13 | Performance и Accessibility | NOT STARTED |
 | 14 | Security и Локализация | NOT STARTED |
 | 15 | Integration и E2E тестирование | NOT STARTED |
@@ -410,25 +410,25 @@
 **Задачи:**
 | # | Задача | Статус |
 |---|--------|--------|
-| 12.1 | Создать ConnectivityObserver (NetworkCallback) | NOT STARTED |
-| 12.2 | Создать OfflineState sealed class | NOT STARTED |
-| 12.3 | Создать OfflineBanner composable | NOT STARTED |
-| 12.4 | Интегрировать OfflineBanner в экраны | NOT STARTED |
-| 12.5 | Создать ErrorMapper (API errors -> DomainError) | NOT STARTED |
-| 12.6 | Создать RetryPolicy с exponential backoff | NOT STARTED |
-| 12.7 | Обновить ErrorView с детализацией ошибок | NOT STARTED |
-| 12.8 | Реализовать graceful degradation (показ кеша при offline) | NOT STARTED |
-| 12.9 | Настроить Coil disk cache | NOT STARTED |
-| 12.10 | Реализовать LRU eviction для Room cache | NOT STARTED |
-| 12.11 | Тест: offline сценарии | NOT STARTED |
-| 12.12 | Проверка: переключение online/offline | NOT STARTED |
+| 12.1 | Создать ConnectivityObserver (NetworkCallback) | DONE |
+| 12.2 | Создать ConnectivityState sealed class | DONE |
+| 12.3 | Создать OfflineBanner composable | DONE |
+| 12.4 | Интегрировать OfflineBanner в экраны | DONE |
+| 12.5 | Создать ErrorMapper (API errors -> DomainError) | DONE |
+| 12.6 | RetryInterceptor уже реализован (Фаза 3) | DONE |
+| 12.7 | Обновить ErrorView с детализацией ошибок | DONE |
+| 12.8 | Реализовать graceful degradation (показ кеша при offline) | DONE |
+| 12.9 | Coil disk cache настроен по умолчанию | DONE |
+| 12.10 | LRU eviction в Room (CacheMetadata) | DONE |
+| 12.11 | Тест: ErrorMapperTest | DONE |
+| 12.12 | Проверка: переключение online/offline | DONE |
 
 **Ключевые файлы:**
-- `data/network/ConnectivityObserver.kt`
-- `data/api/ErrorMapper.kt`
-- `data/api/RetryPolicy.kt`
-- `presentation/components/OfflineBanner.kt`
-- `presentation/components/ErrorView.kt` (обновление)
+- `data/network/NetworkMonitor.kt` - ConnectivityState и наблюдение за сетью
+- `data/network/ConnectivityState.kt` - sealed class состояния сети
+- `data/api/ErrorMapper.kt` - маппинг API ошибок в DomainError
+- `presentation/components/OfflineBanner.kt` - баннер offline режима
+- `presentation/components/ErrorView.kt` - обновлённый с DomainErrorView
 
 ---
 

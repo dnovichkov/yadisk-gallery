@@ -8,6 +8,7 @@ import com.dnovichkov.yadiskgallery.data.cache.entity.CacheMetadataEntity
 import com.dnovichkov.yadiskgallery.data.cache.entity.FolderEntity
 import com.dnovichkov.yadiskgallery.data.cache.entity.MediaFileEntity
 import com.dnovichkov.yadiskgallery.data.mapper.ResourceMapper
+import com.dnovichkov.yadiskgallery.data.network.NetworkMonitor
 import com.dnovichkov.yadiskgallery.domain.model.DiskItem
 import com.dnovichkov.yadiskgallery.domain.model.DomainError
 import com.dnovichkov.yadiskgallery.domain.model.Folder
@@ -26,7 +27,7 @@ import javax.inject.Singleton
 
 /**
  * Implementation of IFilesRepository.
- * Handles file operations with caching strategy.
+ * Handles file operations with caching strategy and offline support.
  */
 @Singleton
 class FilesRepositoryImpl
@@ -37,6 +38,7 @@ class FilesRepositoryImpl
         private val folderDao: FolderDao,
         private val cacheMetadataDao: CacheMetadataDao,
         private val resourceMapper: ResourceMapper,
+        private val networkMonitor: NetworkMonitor,
     ) : IFilesRepository {
         override suspend fun getFolderContents(
             path: String?,
@@ -45,82 +47,127 @@ class FilesRepositoryImpl
             sortOrder: SortOrder,
             mediaOnly: Boolean,
         ): Result<PagedResult<DiskItem>> {
+            val folderPath = path ?: "/"
+
+            // Check cache freshness
+            val cacheMetadata = cacheMetadataDao.getByFolderPath(folderPath)
+            val shouldRefresh = cacheMetadata == null || cacheMetadata.isStale()
+            val isOnline = networkMonitor.isCurrentlyConnected()
+
+            // If offline and have cache, return cached data
+            if (!isOnline && cacheMetadata != null) {
+                return Result.success(getCachedFolderContents(folderPath, offset, limit, sortOrder))
+            }
+
+            // If offline and no cache, return error
+            if (!isOnline) {
+                return Result.failure(DomainException(DomainError.Network.NoConnection))
+            }
+
+            // Online: try to fetch from API
+            return if (shouldRefresh) {
+                fetchAndCacheFolderContents(folderPath, offset, limit, sortOrder, mediaOnly)
+            } else {
+                Result.success(getCachedFolderContents(folderPath, offset, limit, sortOrder))
+            }
+        }
+
+        /**
+         * Fetches folder contents from API and caches them.
+         * Falls back to cache on network error.
+         */
+        private suspend fun fetchAndCacheFolderContents(
+            folderPath: String,
+            offset: Int,
+            limit: Int,
+            sortOrder: SortOrder,
+            mediaOnly: Boolean,
+        ): Result<PagedResult<DiskItem>> {
             return runCatching {
-                val folderPath = path ?: "/"
-
-                // Check cache freshness
-                val cacheMetadata = cacheMetadataDao.getByFolderPath(folderPath)
-                val shouldRefresh = cacheMetadata == null || cacheMetadata.isStale()
-
-                if (shouldRefresh) {
-                    // Fetch from API
-                    val response =
-                        api.getResource(
-                            path = folderPath,
-                            limit = limit,
-                            offset = offset,
-                            sort = toApiSortParam(sortOrder),
-                            previewSize = "M",
-                        )
-
-                    if (!response.isSuccessful) {
-                        throw mapApiError(response.code(), response.message())
-                    }
-
-                    val resource =
-                        response.body()
-                            ?: throw DomainException(DomainError.Network.ServerError(0, "Empty response"))
-
-                    // Cache the results
-                    val items = resource.embedded?.items ?: emptyList()
-                    cacheItems(folderPath, items)
-
-                    // Update cache metadata
-                    cacheMetadataDao.insert(
-                        CacheMetadataEntity(
-                            folderPath = folderPath,
-                            lastSyncedAt = System.currentTimeMillis(),
-                            totalItems = resource.embedded?.total,
-                        ),
-                    )
-
-                    // Map to domain models
-                    val diskItems = resourceMapper.toDiskItems(items, mediaOnly)
-                    val total = resource.embedded?.total
-                    val hasMore = total != null && (offset + diskItems.size) < total
-
-                    PagedResult(
-                        items = diskItems,
-                        offset = offset,
+                val response =
+                    api.getResource(
+                        path = folderPath,
                         limit = limit,
-                        total = total,
-                        hasMore = hasMore,
+                        offset = offset,
+                        sort = toApiSortParam(sortOrder),
+                        previewSize = "M",
                     )
+
+                if (!response.isSuccessful) {
+                    throw mapApiError(response.code(), response.message())
+                }
+
+                val resource =
+                    response.body()
+                        ?: throw DomainException(DomainError.Network.ServerError(0, "Empty response"))
+
+                // Cache the results
+                val items = resource.embedded?.items ?: emptyList()
+                cacheItems(folderPath, items)
+
+                // Update cache metadata
+                cacheMetadataDao.insert(
+                    CacheMetadataEntity(
+                        folderPath = folderPath,
+                        lastSyncedAt = System.currentTimeMillis(),
+                        totalItems = resource.embedded?.total,
+                    ),
+                )
+
+                // Map to domain models
+                val diskItems = resourceMapper.toDiskItems(items, mediaOnly)
+                val total = resource.embedded?.total
+                val hasMore = total != null && (offset + diskItems.size) < total
+
+                PagedResult(
+                    items = diskItems,
+                    offset = offset,
+                    limit = limit,
+                    total = total,
+                    hasMore = hasMore,
+                )
+            }.recoverCatching { error ->
+                // On network error, try to return cached data
+                val cachedData = getCachedFolderContents(folderPath, offset, limit, sortOrder)
+                if (cachedData.items.isNotEmpty()) {
+                    cachedData
                 } else {
-                    // Return from cache
-                    val folders = folderDao.getByParentPath(folderPath)
-                    val mediaFiles = mediaDao.getByParentPath(folderPath)
-
-                    val diskItems =
-                        buildList {
-                            addAll(folders.map { DiskItem.Directory(it.toDomain()) })
-                            addAll(mediaFiles.map { DiskItem.File(it.toDomain()) })
-                        }.sortedWith(getSortComparator(sortOrder))
-                            .drop(offset)
-                            .take(limit)
-
-                    val total = cacheMetadata?.totalItems
-                    val hasMore = total != null && (offset + diskItems.size) < total
-
-                    PagedResult(
-                        items = diskItems,
-                        offset = offset,
-                        limit = limit,
-                        total = total,
-                        hasMore = hasMore,
-                    )
+                    throw error
                 }
             }
+        }
+
+        /**
+         * Returns cached folder contents.
+         */
+        private suspend fun getCachedFolderContents(
+            folderPath: String,
+            offset: Int,
+            limit: Int,
+            sortOrder: SortOrder,
+        ): PagedResult<DiskItem> {
+            val cacheMetadata = cacheMetadataDao.getByFolderPath(folderPath)
+            val folders = folderDao.getByParentPath(folderPath)
+            val mediaFiles = mediaDao.getByParentPath(folderPath)
+
+            val diskItems =
+                buildList {
+                    addAll(folders.map { DiskItem.Directory(it.toDomain()) })
+                    addAll(mediaFiles.map { DiskItem.File(it.toDomain()) })
+                }.sortedWith(getSortComparator(sortOrder))
+                    .drop(offset)
+                    .take(limit)
+
+            val total = cacheMetadata?.totalItems
+            val hasMore = total != null && (offset + diskItems.size) < total
+
+            return PagedResult(
+                items = diskItems,
+                offset = offset,
+                limit = limit,
+                total = total,
+                hasMore = hasMore,
+            )
         }
 
         override fun observeFolderContents(

@@ -2,6 +2,7 @@ package com.dnovichkov.yadiskgallery.presentation.gallery
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dnovichkov.yadiskgallery.data.network.NetworkMonitor
 import com.dnovichkov.yadiskgallery.domain.model.DiskItem
 import com.dnovichkov.yadiskgallery.domain.model.MediaType
 import com.dnovichkov.yadiskgallery.domain.model.SortOrder
@@ -33,6 +34,7 @@ class GalleryViewModel
         private val refreshFilesUseCase: RefreshFilesUseCase,
         private val getSettingsUseCase: GetSettingsUseCase,
         private val saveSettingsUseCase: SaveSettingsUseCase,
+        private val networkMonitor: NetworkMonitor,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(GalleryUiState())
         val uiState: StateFlow<GalleryUiState> = _uiState.asStateFlow()
@@ -42,6 +44,7 @@ class GalleryViewModel
 
         init {
             observeSettings()
+            observeNetworkState()
         }
 
         private fun observeSettings() {
@@ -53,6 +56,14 @@ class GalleryViewModel
                             sortOrder = settings.sortOrder,
                         )
                     }
+                }
+            }
+        }
+
+        private fun observeNetworkState() {
+            viewModelScope.launch {
+                networkMonitor.isOnline.collect { isOnline ->
+                    _uiState.update { it.copy(isOffline = !isOnline) }
                 }
             }
         }

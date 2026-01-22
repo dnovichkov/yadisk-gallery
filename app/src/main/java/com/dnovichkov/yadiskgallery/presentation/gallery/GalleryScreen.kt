@@ -17,6 +17,7 @@ import com.dnovichkov.yadiskgallery.domain.model.DiskItem
 import com.dnovichkov.yadiskgallery.domain.model.ViewMode
 import com.dnovichkov.yadiskgallery.presentation.components.EmptyStateView
 import com.dnovichkov.yadiskgallery.presentation.components.ErrorView
+import com.dnovichkov.yadiskgallery.presentation.components.OfflineBanner
 import com.dnovichkov.yadiskgallery.presentation.gallery.components.BreadcrumbsBar
 import com.dnovichkov.yadiskgallery.presentation.gallery.components.GalleryGrid
 import com.dnovichkov.yadiskgallery.presentation.gallery.components.GalleryList
@@ -73,6 +74,9 @@ fun GalleryScreen(
                     .fillMaxSize()
                     .padding(paddingValues),
         ) {
+            // Offline banner
+            OfflineBanner(isOffline = uiState.isOffline)
+
             // Breadcrumbs navigation
             if (uiState.breadcrumbs.size > 1 || uiState.currentPath != null) {
                 BreadcrumbsBar(

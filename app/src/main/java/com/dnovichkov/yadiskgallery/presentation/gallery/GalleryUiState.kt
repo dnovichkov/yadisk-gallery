@@ -19,6 +19,7 @@ data class GalleryUiState(
     val hasMoreItems: Boolean = false,
     val error: String? = null,
     val isEmpty: Boolean = false,
+    val isOffline: Boolean = false,
 )
 
 /**

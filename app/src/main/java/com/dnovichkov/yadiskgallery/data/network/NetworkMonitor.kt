@@ -10,6 +10,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,33 +27,25 @@ class NetworkMonitor
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         /**
-         * Flow that emits network connectivity status changes.
+         * Flow that emits detailed connectivity state changes.
          */
-        val isOnline: Flow<Boolean> =
+        val connectivityState: Flow<ConnectivityState> =
             callbackFlow {
                 val callback =
                     object : ConnectivityManager.NetworkCallback() {
                         override fun onAvailable(network: Network) {
-                            trySend(true)
+                            trySend(getCurrentConnectivityState())
                         }
 
                         override fun onLost(network: Network) {
-                            trySend(isCurrentlyConnected())
+                            trySend(getCurrentConnectivityState())
                         }
 
                         override fun onCapabilitiesChanged(
                             network: Network,
                             networkCapabilities: NetworkCapabilities,
                         ) {
-                            val hasInternet =
-                                networkCapabilities.hasCapability(
-                                    NetworkCapabilities.NET_CAPABILITY_INTERNET,
-                                )
-                            val hasValidated =
-                                networkCapabilities.hasCapability(
-                                    NetworkCapabilities.NET_CAPABILITY_VALIDATED,
-                                )
-                            trySend(hasInternet && hasValidated)
+                            trySend(getConnectivityStateFromCapabilities(networkCapabilities))
                         }
                     }
 
@@ -64,12 +57,18 @@ class NetworkMonitor
                 connectivityManager.registerNetworkCallback(request, callback)
 
                 // Emit initial state
-                trySend(isCurrentlyConnected())
+                trySend(getCurrentConnectivityState())
 
                 awaitClose {
                     connectivityManager.unregisterNetworkCallback(callback)
                 }
             }.distinctUntilChanged()
+
+        /**
+         * Flow that emits network connectivity status changes.
+         */
+        val isOnline: Flow<Boolean> =
+            connectivityState.map { it.isOnline }
 
         /**
          * Checks if the device is currently connected to the internet.
@@ -100,5 +99,44 @@ class NetworkMonitor
             val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
 
             return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+        }
+
+        /**
+         * Gets the current connectivity state.
+         */
+        fun getCurrentConnectivityState(): ConnectivityState {
+            val network =
+                connectivityManager.activeNetwork
+                    ?: return ConnectivityState.Disconnected
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(network)
+                    ?: return ConnectivityState.Disconnected
+
+            return getConnectivityStateFromCapabilities(capabilities)
+        }
+
+        /**
+         * Converts network capabilities to ConnectivityState.
+         */
+        private fun getConnectivityStateFromCapabilities(capabilities: NetworkCapabilities): ConnectivityState {
+            val hasInternet = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            val hasValidated = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+
+            if (!hasInternet || !hasValidated) {
+                return ConnectivityState.Disconnected
+            }
+
+            val connectionType =
+                when {
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ->
+                        ConnectionType.WIFI
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ->
+                        ConnectionType.CELLULAR
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ->
+                        ConnectionType.ETHERNET
+                    else -> ConnectionType.OTHER
+                }
+
+            return ConnectivityState.Connected(connectionType)
         }
     }

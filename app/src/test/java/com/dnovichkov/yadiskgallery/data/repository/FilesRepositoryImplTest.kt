@@ -9,6 +9,7 @@ import com.dnovichkov.yadiskgallery.data.cache.dao.CacheMetadataDao
 import com.dnovichkov.yadiskgallery.data.cache.dao.FolderDao
 import com.dnovichkov.yadiskgallery.data.cache.dao.MediaDao
 import com.dnovichkov.yadiskgallery.data.mapper.ResourceMapper
+import com.dnovichkov.yadiskgallery.data.network.NetworkMonitor
 import com.dnovichkov.yadiskgallery.domain.model.SortOrder
 import com.dnovichkov.yadiskgallery.domain.repository.PreviewSize
 import io.mockk.coEvery
@@ -28,6 +29,7 @@ class FilesRepositoryImplTest {
     private lateinit var folderDao: FolderDao
     private lateinit var cacheMetadataDao: CacheMetadataDao
     private lateinit var resourceMapper: ResourceMapper
+    private lateinit var networkMonitor: NetworkMonitor
     private lateinit var repository: FilesRepositoryImpl
 
     @BeforeEach
@@ -37,6 +39,10 @@ class FilesRepositoryImplTest {
         folderDao = mockk(relaxed = true)
         cacheMetadataDao = mockk(relaxed = true)
         resourceMapper = ResourceMapper()
+        networkMonitor = mockk(relaxed = true)
+
+        // Default: online mode
+        coEvery { networkMonitor.isCurrentlyConnected() } returns true
 
         repository =
             FilesRepositoryImpl(
@@ -45,6 +51,7 @@ class FilesRepositoryImplTest {
                 folderDao = folderDao,
                 cacheMetadataDao = cacheMetadataDao,
                 resourceMapper = resourceMapper,
+                networkMonitor = networkMonitor,
             )
     }
 
