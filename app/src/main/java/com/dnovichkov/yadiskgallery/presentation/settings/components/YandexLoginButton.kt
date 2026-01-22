@@ -12,6 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dnovichkov.yadiskgallery.presentation.theme.YaDiskGalleryTheme
@@ -28,6 +30,7 @@ fun YandexLoginButton(
     isLoading: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val buttonDescription = if (isLoading) "Signing in with Yandex" else "Sign in with Yandex"
     Button(
         onClick = onClick,
         enabled = !isLoading,
@@ -39,7 +42,8 @@ fun YandexLoginButton(
         modifier =
             modifier
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(48.dp)
+                .semantics { contentDescription = buttonDescription },
     ) {
         if (isLoading) {
             CircularProgressIndicator(

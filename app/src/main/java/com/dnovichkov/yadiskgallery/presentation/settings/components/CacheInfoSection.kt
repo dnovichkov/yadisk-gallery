@@ -21,6 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dnovichkov.yadiskgallery.presentation.theme.YaDiskGalleryTheme
@@ -80,10 +82,15 @@ fun CacheInfoSection(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            val buttonDescription =
+                if (isClearing) "Clearing cache" else "Clear cache, ${formatFileSize(cacheSize)}"
             OutlinedButton(
                 onClick = onClearCache,
                 enabled = !isClearing && cacheSize > 0,
-                modifier = Modifier.fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .semantics { contentDescription = buttonDescription },
             ) {
                 if (isClearing) {
                     CircularProgressIndicator(
@@ -91,6 +98,7 @@ fun CacheInfoSection(
                         strokeWidth = 2.dp,
                     )
                 } else {
+                    // Decorative icon, button text describes action
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = null,

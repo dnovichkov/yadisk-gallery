@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dnovichkov.yadiskgallery.presentation.theme.YaDiskGalleryTheme
@@ -29,6 +31,7 @@ fun VideoLoadingOverlay(
         modifier =
             modifier
                 .fillMaxSize()
+                .semantics { contentDescription = "Loading video" }
                 .then(
                     if (showBackground) {
                         Modifier.background(Color.Black.copy(alpha = 0.3f))
@@ -54,7 +57,10 @@ fun VideoLoadingOverlay(
 @Composable
 fun VideoBufferingOverlay(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .semantics { contentDescription = "Buffering video" },
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(

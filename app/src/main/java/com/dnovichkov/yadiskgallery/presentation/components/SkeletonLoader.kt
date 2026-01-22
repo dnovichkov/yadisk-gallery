@@ -30,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dnovichkov.yadiskgallery.presentation.theme.YaDiskGalleryTheme
@@ -156,7 +158,10 @@ fun SkeletonGrid(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(columns),
-        modifier = modifier.padding(4.dp),
+        modifier =
+            modifier
+                .padding(4.dp)
+                .semantics { contentDescription = "Loading content" },
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {

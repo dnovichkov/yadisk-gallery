@@ -37,6 +37,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -207,6 +209,8 @@ fun VideoControls(
                         .padding(horizontal = 16.dp, vertical = 12.dp)
                         .align(Alignment.BottomCenter),
             ) {
+                val currentTimeFormatted = formatDuration(currentPosition)
+                val totalTimeFormatted = formatDuration(duration)
                 Slider(
                     value = progress,
                     onValueChange = { value ->
@@ -223,7 +227,13 @@ fun VideoControls(
                             activeTrackColor = MaterialTheme.colorScheme.primary,
                             inactiveTrackColor = Color.White.copy(alpha = 0.3f),
                         ),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .semantics {
+                                contentDescription =
+                                    "Video progress: $currentTimeFormatted of $totalTimeFormatted"
+                            },
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))

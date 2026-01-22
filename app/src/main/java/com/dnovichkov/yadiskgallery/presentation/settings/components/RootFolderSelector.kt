@@ -21,6 +21,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dnovichkov.yadiskgallery.presentation.theme.YaDiskGalleryTheme
@@ -35,6 +39,7 @@ fun RootFolderSelector(
     onClearFolder: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val folderDescription = currentPath ?: "Disk root"
     Card(
         modifier = modifier.fillMaxWidth(),
         colors =
@@ -46,7 +51,14 @@ fun RootFolderSelector(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .clickable(onClick = onSelectFolder)
+                    .semantics {
+                        contentDescription = "Root folder: $folderDescription. Tap to change."
+                        role = Role.Button
+                    }
+                    .clickable(
+                        onClick = onSelectFolder,
+                        onClickLabel = "Select root folder",
+                    )
                     .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -81,9 +93,10 @@ fun RootFolderSelector(
                     )
                 }
             } else {
+                // Decorative icon, card semantics describes the action
                 Icon(
                     imageVector = Icons.Default.ChevronRight,
-                    contentDescription = "Select folder",
+                    contentDescription = null,
                 )
             }
         }

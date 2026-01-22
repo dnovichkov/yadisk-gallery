@@ -15,6 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -61,7 +65,7 @@ fun Breadcrumbs(
         // Home icon for root
         Icon(
             imageVector = Icons.Default.Home,
-            contentDescription = "Root",
+            contentDescription = "Root folder",
             tint =
                 if (items.isEmpty()) {
                     MaterialTheme.colorScheme.primary
@@ -70,9 +74,11 @@ fun Breadcrumbs(
                 },
             modifier =
                 Modifier
-                    .clickable {
-                        onItemClick(BreadcrumbItem(name = "Root", path = "/"))
-                    }
+                    .semantics { role = Role.Button }
+                    .clickable(
+                        onClick = { onItemClick(BreadcrumbItem(name = "Root", path = "/")) },
+                        onClickLabel = "Navigate to root",
+                    )
                     .padding(8.dp),
         )
 
@@ -99,7 +105,18 @@ fun Breadcrumbs(
                 overflow = TextOverflow.Ellipsis,
                 modifier =
                     Modifier
-                        .clickable(enabled = !isLast) { onItemClick(item) }
+                        .semantics {
+                            if (isLast) {
+                                heading()
+                            } else {
+                                role = Role.Button
+                            }
+                        }
+                        .clickable(
+                            enabled = !isLast,
+                            onClick = { onItemClick(item) },
+                            onClickLabel = "Navigate to ${item.name}",
+                        )
                         .padding(horizontal = 8.dp, vertical = 4.dp),
             )
         }

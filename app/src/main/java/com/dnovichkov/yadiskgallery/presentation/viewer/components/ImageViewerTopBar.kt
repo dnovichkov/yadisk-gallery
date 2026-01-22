@@ -79,7 +79,7 @@ fun ImageViewerTopBar(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Назад",
+                            contentDescription = "Back",
                         )
                     }
                 },
@@ -94,7 +94,7 @@ fun ImageViewerTopBar(
                     IconButton(onClick = onInfoClick) {
                         Icon(
                             imageVector = Icons.Outlined.Info,
-                            contentDescription = "Информация",
+                            contentDescription = "Image information",
                         )
                     }
                 },
