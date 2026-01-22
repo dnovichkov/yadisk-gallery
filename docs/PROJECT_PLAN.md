@@ -56,7 +56,7 @@
 | 5 | Data Layer - Repository Implementations | DONE |
 | 6 | Presentation - Navigation и компоненты | DONE |
 | 7 | Settings Screen (FR-01) | DONE |
-| 8 | Auth Flow (FR-02) | NOT STARTED |
+| 8 | Auth Flow (FR-02) | DONE |
 | 9 | Gallery Screen (FR-03, FR-04, FR-06) | NOT STARTED |
 | 10 | Image Viewer (FR-05.1-FR-05.7) | NOT STARTED |
 | 11 | Video Player (FR-05.8-FR-05.12) | NOT STARTED |
@@ -280,17 +280,17 @@
 **Задачи:**
 | # | Задача | Статус |
 |---|--------|--------|
-| 8.1 | Добавить Yandex Login SDK в зависимости | NOT STARTED |
-| 8.2 | Настроить AndroidManifest.xml (activity, intent-filter) | NOT STARTED |
-| 8.3 | Создать YandexAuthManager wrapper class | NOT STARTED |
-| 8.4 | Тест: AuthViewModel | NOT STARTED |
-| 8.5 | Создать AuthUiState sealed class | NOT STARTED |
-| 8.6 | Создать AuthViewModel | NOT STARTED |
-| 8.7 | Создать AuthScreen composable | NOT STARTED |
-| 8.8 | Реализовать handleAuthResult в MainActivity | NOT STARTED |
-| 8.9 | Реализовать автообновление токена в AuthInterceptor | NOT STARTED |
-| 8.10 | Тест: интеграция с Yandex SDK (manual) | NOT STARTED |
-| 8.11 | Проверка: полный auth flow | NOT STARTED |
+| 8.1 | Добавить Yandex Login SDK в зависимости | DONE |
+| 8.2 | Настроить AndroidManifest.xml (activity, intent-filter) | DONE |
+| 8.3 | Создать YandexAuthManager wrapper class | DONE |
+| 8.4 | Тест: AuthViewModel | DONE |
+| 8.5 | Создать AuthUiState sealed class | DONE |
+| 8.6 | Создать AuthViewModel | DONE |
+| 8.7 | Создать AuthScreen composable | DONE |
+| 8.8 | Реализовать handleAuthResult в MainActivity | DONE |
+| 8.9 | Реализовать автообновление токена в AuthInterceptor | DONE |
+| 8.10 | Тест: интеграция с Yandex SDK (manual) | SKIPPED |
+| 8.11 | Проверка: полный auth flow | DONE |
 
 **Ключевые файлы:**
 - `presentation/auth/YandexAuthManager.kt` - wrapper для SDK

@@ -130,6 +130,9 @@ dependencies {
     implementation(libs.datastore.preferences)
     implementation(libs.security.crypto)
 
+    // Yandex Auth
+    implementation(libs.yandex.authsdk)
+
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
 

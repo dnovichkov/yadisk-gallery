@@ -6,7 +6,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * OkHttp interceptor that adds OAuth token to requests.
+ * OkHttp interceptor that adds OAuth token to requests and handles token expiration.
  */
 @Singleton
 class AuthInterceptor
@@ -14,6 +14,9 @@ class AuthInterceptor
     constructor() : Interceptor {
         @Volatile
         private var accessToken: String? = null
+
+        @Volatile
+        private var onTokenExpired: (() -> Unit)? = null
 
         /**
          * Updates the access token used for authentication.
@@ -34,6 +37,14 @@ class AuthInterceptor
             accessToken = null
         }
 
+        /**
+         * Sets a callback to be invoked when the token is expired (401 response).
+         * This can be used to trigger re-authentication.
+         */
+        fun setOnTokenExpiredCallback(callback: (() -> Unit)?) {
+            onTokenExpired = callback
+        }
+
         override fun intercept(chain: Interceptor.Chain): Response {
             val originalRequest = chain.request()
 
@@ -46,11 +57,20 @@ class AuthInterceptor
                     .header(HEADER_AUTHORIZATION, "$BEARER_PREFIX$token")
                     .build()
 
-            return chain.proceed(authenticatedRequest)
+            val response = chain.proceed(authenticatedRequest)
+
+            // Handle 401 Unauthorized - token may be expired
+            if (response.code == HTTP_UNAUTHORIZED) {
+                // Notify that token has expired
+                onTokenExpired?.invoke()
+            }
+
+            return response
         }
 
         companion object {
             private const val HEADER_AUTHORIZATION = "Authorization"
             private const val BEARER_PREFIX = "OAuth "
+            private const val HTTP_UNAUTHORIZED = 401
         }
     }

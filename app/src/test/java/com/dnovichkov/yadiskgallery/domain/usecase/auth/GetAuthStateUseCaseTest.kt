@@ -142,5 +142,14 @@ class GetAuthStateUseCaseTest {
         override suspend fun isTokenValid(): Boolean = false
 
         override suspend fun setPublicAccess(url: String): Result<Unit> = Result.success(Unit)
+
+        override suspend fun saveToken(
+            accessToken: String,
+            expiresInSeconds: Long,
+        ): Result<Unit> = Result.success(Unit)
+
+        override suspend fun setAuthError(message: String) {
+            // No-op for tests
+        }
     }
 }

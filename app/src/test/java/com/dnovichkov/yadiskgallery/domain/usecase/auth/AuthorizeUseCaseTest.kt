@@ -149,5 +149,14 @@ class AuthorizeUseCaseTest {
             lastPublicUrl = url
             return publicAccessError?.let { Result.failure(it) } ?: Result.success(Unit)
         }
+
+        override suspend fun saveToken(
+            accessToken: String,
+            expiresInSeconds: Long,
+        ): Result<Unit> = Result.success(Unit)
+
+        override suspend fun setAuthError(message: String) {
+            // No-op for tests
+        }
     }
 }

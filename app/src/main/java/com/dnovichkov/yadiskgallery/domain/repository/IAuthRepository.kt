@@ -42,6 +42,26 @@ interface IAuthRepository {
     suspend fun handleAuthCallback(authCode: String): Result<UserInfo>
 
     /**
+     * Saves OAuth token received directly from Yandex SDK.
+     * Used with Yandex Login SDK 3.x which provides tokens directly.
+     *
+     * @param accessToken The OAuth access token
+     * @param expiresInSeconds Token expiration time in seconds
+     * @return Result indicating success or error
+     */
+    suspend fun saveToken(
+        accessToken: String,
+        expiresInSeconds: Long,
+    ): Result<Unit>
+
+    /**
+     * Sets the authentication error state.
+     *
+     * @param message Error message
+     */
+    suspend fun setAuthError(message: String)
+
+    /**
      * Logs out the current user.
      * Clears stored tokens and resets auth state.
      *

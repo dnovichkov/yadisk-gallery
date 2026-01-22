@@ -48,6 +48,9 @@ mockk = "1.13.13"
 turbine = "1.2.0"
 coroutinesTest = "1.9.0"
 
+# Yandex Auth
+yandexAuthSdk = "3.1.0"
+
 # Code Quality
 ktlint = "12.1.2"
 
@@ -119,6 +122,9 @@ mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "moc
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }
 room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
+
+# Yandex Auth
+yandex-authsdk = { group = "com.yandex.android", name = "authsdk", version.ref = "yandexAuthSdk" }
 
 # Desugaring
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }

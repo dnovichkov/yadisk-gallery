@@ -150,6 +150,30 @@ class AuthRepositoryImpl
             }
         }
 
+        override suspend fun saveToken(
+            accessToken: String,
+            expiresInSeconds: Long,
+        ): Result<Unit> {
+            return runCatching {
+                tokenStorage.saveTokenData(accessToken, null, expiresInSeconds)
+                settingsDataStore.setAuthenticated(true)
+                // Create a basic user info - in a full implementation,
+                // we would fetch user info from Yandex API
+                val userInfo =
+                    UserInfo(
+                        uid = "yandex_user",
+                        login = "user@yandex.ru",
+                        displayName = "Yandex User",
+                        avatarUrl = null,
+                    )
+                _authState.update { AuthState.Authenticated(userInfo) }
+            }
+        }
+
+        override suspend fun setAuthError(message: String) {
+            _authState.update { AuthState.AuthError(message) }
+        }
+
         /**
          * Updates the authentication state on error.
          */
