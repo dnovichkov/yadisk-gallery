@@ -118,6 +118,10 @@ fun ImageViewerScreen(
                                         false
                                     }
                                 }
+                                Key.Spacebar -> {
+                                    viewModel.onEvent(ImageViewerEvent.ToggleSlideshow)
+                                    true
+                                }
                                 else -> false
                             }
                         } else {
@@ -191,7 +195,11 @@ fun ImageViewerScreen(
                         null
                     },
                 isVisible = uiState.showControls,
+                isSlideshowPlaying = uiState.isSlideshowPlaying,
+                slideshowIntervalMs = uiState.slideshowIntervalMs,
                 onBackClick = onNavigateBack,
+                onSlideshowToggle = { viewModel.onEvent(ImageViewerEvent.ToggleSlideshow) },
+                onIntervalChange = { viewModel.onEvent(ImageViewerEvent.SetSlideshowInterval(it)) },
                 onInfoClick = { viewModel.onEvent(ImageViewerEvent.ShowExifInfo) },
                 modifier = Modifier.align(Alignment.TopCenter),
             )

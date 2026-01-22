@@ -17,6 +17,8 @@ data class ImageViewerUiState(
     val showControls: Boolean = true,
     val exifData: ExifData? = null,
     val showExifSheet: Boolean = false,
+    val isSlideshowPlaying: Boolean = false,
+    val slideshowIntervalMs: Long = DEFAULT_SLIDESHOW_INTERVAL_MS,
 ) {
     val currentImage: MediaFile?
         get() = images.getOrNull(currentIndex)
@@ -38,6 +40,10 @@ data class ImageViewerUiState(
         const val MIN_ZOOM = 1f
         const val MAX_ZOOM = 5f
         const val DOUBLE_TAP_ZOOM = 2f
+        const val DEFAULT_SLIDESHOW_INTERVAL_MS = 3000L
+        const val SLIDESHOW_INTERVAL_3S = 3000L
+        const val SLIDESHOW_INTERVAL_5S = 5000L
+        const val SLIDESHOW_INTERVAL_10S = 10000L
     }
 }
 
@@ -101,4 +107,10 @@ sealed class ImageViewerEvent {
 
     /** Clear error */
     data object ClearError : ImageViewerEvent()
+
+    /** Toggle slideshow play/pause */
+    data object ToggleSlideshow : ImageViewerEvent()
+
+    /** Set slideshow interval */
+    data class SetSlideshowInterval(val intervalMs: Long) : ImageViewerEvent()
 }

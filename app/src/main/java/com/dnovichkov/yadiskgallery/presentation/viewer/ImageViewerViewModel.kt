@@ -8,10 +8,13 @@ import com.dnovichkov.yadiskgallery.domain.model.MediaType
 import com.dnovichkov.yadiskgallery.domain.usecase.files.GetFolderContentsUseCase
 import com.dnovichkov.yadiskgallery.domain.usecase.files.GetMediaDownloadUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,6 +34,7 @@ class ImageViewerViewModel
 
         private var folderPath: String? = null
         private var publicFolderUrl: String? = null
+        private var slideshowJob: Job? = null
 
         /**
          * Handles UI events.
@@ -50,6 +54,8 @@ class ImageViewerViewModel
                 is ImageViewerEvent.LoadOriginalImage -> loadOriginalImage()
                 is ImageViewerEvent.Retry -> retry()
                 is ImageViewerEvent.ClearError -> clearError()
+                is ImageViewerEvent.ToggleSlideshow -> toggleSlideshow()
+                is ImageViewerEvent.SetSlideshowInterval -> setSlideshowInterval(event.intervalMs)
             }
         }
 
@@ -114,6 +120,14 @@ class ImageViewerViewModel
         }
 
         private fun navigateToNext() {
+            // Stop slideshow on manual navigation
+            if (_uiState.value.isSlideshowPlaying) {
+                stopSlideshow()
+            }
+            navigateToNextInternal()
+        }
+
+        private fun navigateToNextInternal() {
             val currentState = _uiState.value
             if (!currentState.hasNextImage) return
 
@@ -122,6 +136,11 @@ class ImageViewerViewModel
         }
 
         private fun navigateToPrevious() {
+            // Stop slideshow on manual navigation
+            if (_uiState.value.isSlideshowPlaying) {
+                stopSlideshow()
+            }
+
             val currentState = _uiState.value
             if (!currentState.hasPreviousImage) return
 
@@ -130,6 +149,11 @@ class ImageViewerViewModel
         }
 
         private fun goToImage(index: Int) {
+            // Stop slideshow on manual navigation (swipe)
+            if (_uiState.value.isSlideshowPlaying) {
+                stopSlideshow()
+            }
+
             val currentState = _uiState.value
             val validIndex = index.coerceIn(0, (currentState.images.size - 1).coerceAtLeast(0))
 
@@ -159,6 +183,11 @@ class ImageViewerViewModel
                     ImageViewerUiState.MIN_ZOOM,
                     ImageViewerUiState.MAX_ZOOM,
                 )
+
+            // Stop slideshow when user zooms in
+            if (clampedZoom > ImageViewerUiState.MIN_ZOOM && _uiState.value.isSlideshowPlaying) {
+                stopSlideshow()
+            }
 
             _uiState.update { it.copy(zoomLevel = clampedZoom) }
         }
@@ -233,6 +262,47 @@ class ImageViewerViewModel
 
         private fun clearError() {
             _uiState.update { it.copy(error = null) }
+        }
+
+        private fun toggleSlideshow() {
+            if (_uiState.value.isSlideshowPlaying) {
+                stopSlideshow()
+            } else {
+                startSlideshow()
+            }
+        }
+
+        private fun startSlideshow() {
+            // Don't start if already at the last image
+            if (!_uiState.value.hasNextImage) return
+
+            _uiState.update { it.copy(isSlideshowPlaying = true) }
+            slideshowJob =
+                viewModelScope.launch {
+                    while (isActive && _uiState.value.hasNextImage) {
+                        delay(_uiState.value.slideshowIntervalMs)
+                        if (_uiState.value.hasNextImage) {
+                            navigateToNextInternal()
+                        }
+                    }
+                    // Auto-stop at the end
+                    _uiState.update { it.copy(isSlideshowPlaying = false) }
+                }
+        }
+
+        private fun stopSlideshow() {
+            slideshowJob?.cancel()
+            slideshowJob = null
+            _uiState.update { it.copy(isSlideshowPlaying = false) }
+        }
+
+        private fun setSlideshowInterval(intervalMs: Long) {
+            _uiState.update { it.copy(slideshowIntervalMs = intervalMs) }
+            // Restart slideshow if playing to apply new interval
+            if (_uiState.value.isSlideshowPlaying) {
+                stopSlideshow()
+                startSlideshow()
+            }
         }
 
         /**
