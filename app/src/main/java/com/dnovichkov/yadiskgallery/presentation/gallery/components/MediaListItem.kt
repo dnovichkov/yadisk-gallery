@@ -27,6 +27,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
@@ -46,11 +50,22 @@ fun MediaListItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val typeDescription = if (mediaFile.type == MediaType.IMAGE) "image" else "video"
+    val sizeText = formatFileSize(mediaFile.size)
+    val actionDescription = "$typeDescription ${mediaFile.name}, $sizeText"
+
     Card(
         modifier =
             modifier
                 .fillMaxWidth()
-                .clickable(onClick = onClick),
+                .semantics {
+                    contentDescription = actionDescription
+                    role = Role.Button
+                }
+                .clickable(
+                    onClick = onClick,
+                    onClickLabel = "Open $typeDescription",
+                ),
         shape = RoundedCornerShape(8.dp),
         colors =
             CardDefaults.cardColors(
@@ -96,11 +111,11 @@ fun MediaListItem(
                     },
                 )
 
-                // Video play indicator overlay
+                // Video play indicator overlay (decorative, described by card semantics)
                 if (mediaFile.type == MediaType.VIDEO) {
                     Icon(
                         imageVector = Icons.Default.PlayCircle,
-                        contentDescription = "Video",
+                        contentDescription = null,
                         modifier = Modifier.size(24.dp),
                         tint = Color.White,
                     )
@@ -135,7 +150,7 @@ fun MediaListItem(
                 }
             }
 
-            // Type icon
+            // Type icon (decorative, described by card semantics)
             Icon(
                 imageVector =
                     if (mediaFile.type == MediaType.IMAGE) {
@@ -143,7 +158,7 @@ fun MediaListItem(
                     } else {
                         Icons.Default.VideoFile
                     },
-                contentDescription = if (mediaFile.type == MediaType.IMAGE) "Image" else "Video",
+                contentDescription = null,
                 modifier = Modifier.size(24.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )

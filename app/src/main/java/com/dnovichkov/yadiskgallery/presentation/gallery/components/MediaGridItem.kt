@@ -22,6 +22,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
@@ -38,11 +42,21 @@ fun MediaGridItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val typeDescription = if (mediaFile.type == MediaType.VIDEO) "video" else "image"
+    val actionDescription = "Open $typeDescription ${mediaFile.name}"
+
     Card(
         modifier =
             modifier
                 .aspectRatio(1f)
-                .clickable(onClick = onClick),
+                .semantics {
+                    contentDescription = actionDescription
+                    role = Role.Button
+                }
+                .clickable(
+                    onClick = onClick,
+                    onClickLabel = "Open $typeDescription",
+                ),
         shape = RoundedCornerShape(8.dp),
         colors =
             CardDefaults.cardColors(
@@ -90,9 +104,10 @@ fun MediaGridItem(
                             .background(Color.Black.copy(alpha = 0.3f)),
                     contentAlignment = Alignment.Center,
                 ) {
+                    // Decorative icon, described by card semantics
                     Icon(
                         imageVector = Icons.Default.PlayCircle,
-                        contentDescription = "Video",
+                        contentDescription = null,
                         modifier = Modifier.size(48.dp),
                         tint = Color.White,
                     )

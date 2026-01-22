@@ -18,6 +18,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -32,11 +36,21 @@ fun FolderGridItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val itemCountText = folder.itemsCount?.let { ", $it items" } ?: ""
+    val actionDescription = "Folder ${folder.name}$itemCountText"
+
     Card(
         modifier =
             modifier
                 .aspectRatio(1f)
-                .clickable(onClick = onClick),
+                .semantics {
+                    contentDescription = actionDescription
+                    role = Role.Button
+                }
+                .clickable(
+                    onClick = onClick,
+                    onClickLabel = "Open folder",
+                ),
         shape = RoundedCornerShape(8.dp),
         colors =
             CardDefaults.cardColors(
@@ -51,9 +65,10 @@ fun FolderGridItem(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
+            // Decorative icon, described by card semantics
             Icon(
                 imageVector = Icons.Default.Folder,
-                contentDescription = "Folder",
+                contentDescription = null,
                 modifier = Modifier.size(48.dp),
                 tint = MaterialTheme.colorScheme.primary,
             )

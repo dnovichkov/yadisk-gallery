@@ -20,6 +20,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.dnovichkov.yadiskgallery.domain.model.Folder
@@ -35,11 +39,21 @@ fun FolderListItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val itemCountText = folder.itemsCount?.let { ", $it items" } ?: ""
+    val actionDescription = "Folder ${folder.name}$itemCountText"
+
     Card(
         modifier =
             modifier
                 .fillMaxWidth()
-                .clickable(onClick = onClick),
+                .semantics {
+                    contentDescription = actionDescription
+                    role = Role.Button
+                }
+                .clickable(
+                    onClick = onClick,
+                    onClickLabel = "Open folder",
+                ),
         shape = RoundedCornerShape(8.dp),
         colors =
             CardDefaults.cardColors(
@@ -53,10 +67,10 @@ fun FolderListItem(
                     .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // Folder icon
+            // Folder icon (decorative, described by card semantics)
             Icon(
                 imageVector = Icons.Default.Folder,
-                contentDescription = "Folder",
+                contentDescription = null,
                 modifier = Modifier.size(48.dp),
                 tint = MaterialTheme.colorScheme.primary,
             )
@@ -91,10 +105,10 @@ fun FolderListItem(
                 }
             }
 
-            // Arrow indicator
+            // Arrow indicator (decorative, described by card semantics)
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = "Open folder",
+                contentDescription = null,
                 modifier = Modifier.size(24.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )

@@ -18,6 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -91,7 +95,18 @@ private fun BreadcrumbChip(
         text = text,
         modifier =
             modifier
-                .clickable(enabled = !isActive, onClick = onClick)
+                .semantics {
+                    if (isActive) {
+                        heading()
+                    } else {
+                        role = Role.Button
+                    }
+                }
+                .clickable(
+                    enabled = !isActive,
+                    onClick = onClick,
+                    onClickLabel = "Navigate to $text",
+                )
                 .padding(horizontal = 4.dp, vertical = 2.dp),
         style = MaterialTheme.typography.bodyMedium,
         fontWeight = if (isActive) FontWeight.Bold else FontWeight.Normal,
