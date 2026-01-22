@@ -4,10 +4,28 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+    <!-- Photo frame background -->
     <path
-        android:fillColor="#000000"
-        android:pathData="M54,30 L54,30 A24,24 0,1,1 53.99,30 Z M54,42 L54,42 A12,12 0,1,0 54.01,42 Z"/>
+        android:fillColor="#FFFFFF"
+        android:pathData="M26,32 h56 a4,4 0,0,1 4,4 v36 a4,4 0,0,1 -4,4 h-56 a4,4 0,0,1 -4,-4 v-36 a4,4 0,0,1 4,-4 z"/>
+    <!-- Photo frame border -->
     <path
-        android:fillColor="#000000"
-        android:pathData="M54,48 L54,48 A6,6 0,1,1 53.99,48 Z"/>
+        android:fillColor="#1A1A1A"
+        android:pathData="M26,32 h56 a4,4 0,0,1 4,4 v36 a4,4 0,0,1 -4,4 h-56 a4,4 0,0,1 -4,-4 v-36 a4,4 0,0,1 4,-4 z M26,35 a1,1 0,0,0 -1,1 v33 a1,1 0,0,0 1,1 h56 a1,1 0,0,0 1,-1 v-33 a1,1 0,0,0 -1,-1 z"/>
+    <!-- Mountain landscape - big mountain -->
+    <path
+        android:fillColor="#4A4A4A"
+        android:pathData="M28,70 L48,45 L68,70 z"/>
+    <!-- Mountain landscape - small mountain -->
+    <path
+        android:fillColor="#6A6A6A"
+        android:pathData="M55,70 L70,52 L85,70 z"/>
+    <!-- Sun -->
+    <path
+        android:fillColor="#FFCC00"
+        android:pathData="M75,42 m-6,0 a6,6 0,1,1 12,0 a6,6 0,1,1 -12,0"/>
+    <!-- Yandex Disk ring (bottom right corner as brand element) -->
+    <path
+        android:fillColor="#1A1A1A"
+        android:pathData="M80,68 m-8,0 a8,8 0,1,1 16,0 a8,8 0,1,1 -16,0 M80,68 m-4,0 a4,4 0,1,0 8,0 a4,4 0,1,0 -8,0"/>
 </vector>

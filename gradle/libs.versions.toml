@@ -57,6 +57,9 @@ yandexAuthSdk = "3.1.0"
 # Code Quality
 ktlint = "12.1.2"
 
+# Splash Screen
+splashscreen = "1.0.1"
+
 # Desugaring
 desugarJdkLibs = "2.1.4"
 
@@ -133,6 +136,9 @@ room-testing = { group = "androidx.room", name = "room-testing", version.ref = "
 
 # Yandex Auth
 yandex-authsdk = { group = "com.yandex.android", name = "authsdk", version.ref = "yandexAuthSdk" }
+
+# Splash Screen
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
 
 # Desugaring
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
