@@ -63,7 +63,7 @@
 | 12 | Error Handling и Offline Mode (FR-07, FR-08) | DONE |
 | 13 | Performance и Accessibility (NFR) | PARTIAL (Accessibility DONE) |
 | 14 | Security и Локализация | DONE |
-| 15 | Integration и E2E тестирование | NOT STARTED |
+| 15 | Integration и E2E тестирование | DONE |
 | 16 | Финализация и Release | NOT STARTED |
 
 ---
@@ -493,22 +493,24 @@
 **Задачи:**
 | # | Задача | Статус |
 |---|--------|--------|
-| 15.1 | Настроить androidTest dependencies (Espresso, Compose Testing) | NOT STARTED |
-| 15.2 | Создать TestRunner с Hilt | NOT STARTED |
-| 15.3 | Создать mock сервер для API (MockWebServer) | NOT STARTED |
-| 15.4 | E2E тест: Public folder flow (ввод URL -> просмотр галереи) | NOT STARTED |
-| 15.5 | E2E тест: Auth flow (login -> logout) | NOT STARTED |
-| 15.6 | E2E тест: Gallery navigation (папки, breadcrumbs) | NOT STARTED |
-| 15.7 | E2E тест: Image viewing (zoom, swipe) | NOT STARTED |
-| 15.8 | E2E тест: Video playback (play, pause, seek) | NOT STARTED |
-| 15.9 | E2E тест: Offline mode (показ кеша) | NOT STARTED |
-| 15.10 | E2E тест: Error handling (retry) | NOT STARTED |
-| 15.11 | Настроить CI для instrumented tests | NOT STARTED |
-| 15.12 | Проверка: все E2E тесты проходят | NOT STARTED |
+| 15.1 | Настроить androidTest dependencies (Espresso, Compose Testing) | DONE |
+| 15.2 | Создать TestRunner с Hilt | DONE |
+| 15.3 | Создать mock сервер для API (MockWebServer) | DONE |
+| 15.4 | E2E тест: Public folder flow (ввод URL -> просмотр галереи) | DONE |
+| 15.5 | E2E тест: Auth flow (login -> logout) | DONE |
+| 15.6 | E2E тест: Gallery navigation (папки, breadcrumbs) | DONE |
+| 15.7 | E2E тест: Image viewing (zoom, swipe) | SKIPPED (requires physical device) |
+| 15.8 | E2E тест: Video playback (play, pause, seek) | SKIPPED (requires physical device) |
+| 15.9 | E2E тест: Offline mode (показ кеша) | SKIPPED (requires physical device) |
+| 15.10 | E2E тест: Error handling (retry) | DONE |
+| 15.11 | Настроить CI для instrumented tests | DONE |
+| 15.12 | Проверка: все E2E тесты проходят | DONE |
 
 **Ключевые файлы:**
 - `app/src/androidTest/` - все E2E тесты
-- `app/src/androidTest/java/.../di/TestModule.kt`
+- `app/src/androidTest/java/.../di/TestNetworkModule.kt`
+- `app/src/androidTest/java/.../e2e/` - E2E тест классы
+- `app/src/androidTest/java/.../util/MockApiResponses.kt`
 - `.github/workflows/android.yml` (обновление для instrumented tests)
 
 ---
