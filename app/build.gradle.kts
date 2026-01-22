@@ -186,6 +186,7 @@ dependencies {
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.okhttp.mockwebserver)
     androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.retrofit.kotlinx.serialization)
 
     // Debug
     debugImplementation(libs.androidx.ui.tooling)
