@@ -61,7 +61,7 @@
 | 10 | Image Viewer (FR-05.1-FR-05.7) | DONE |
 | 11 | Video Player (FR-05.8-FR-05.12) | DONE |
 | 12 | Error Handling и Offline Mode (FR-07, FR-08) | DONE |
-| 13 | Performance и Accessibility | NOT STARTED |
+| 13 | Performance и Accessibility (NFR) | PARTIAL (Accessibility DONE) |
 | 14 | Security и Локализация | NOT STARTED |
 | 15 | Integration и E2E тестирование | NOT STARTED |
 | 16 | Финализация и Release | NOT STARTED |
@@ -447,9 +447,9 @@
 | 13.6 | Оптимизация LazyGrid (contentType, key) | NOT STARTED |
 | 13.7 | Профилирование memory (LeakCanary) | NOT STARTED |
 | 13.8 | Оптимизация Coil memory cache | NOT STARTED |
-| 13.9 | Добавить contentDescription ко всем интерактивным элементам | NOT STARTED |
-| 13.10 | Добавить semantics для TalkBack | NOT STARTED |
-| 13.11 | Увеличить touch targets до минимум 48dp | NOT STARTED |
+| 13.9 | Добавить contentDescription ко всем интерактивным элементам | DONE |
+| 13.10 | Добавить semantics для TalkBack | DONE |
+| 13.11 | Увеличить touch targets до минимум 48dp | DONE |
 | 13.12 | Тест: TalkBack navigation | NOT STARTED |
 | 13.13 | Benchmark тесты (Macrobenchmark) | NOT STARTED |
 
