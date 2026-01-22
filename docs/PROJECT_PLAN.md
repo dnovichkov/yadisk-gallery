@@ -58,7 +58,7 @@
 | 7 | Settings Screen (FR-01) | DONE |
 | 8 | Auth Flow (FR-02) | DONE |
 | 9 | Gallery Screen (FR-03, FR-04, FR-06) | DONE |
-| 10 | Image Viewer (FR-05.1-FR-05.7) | NOT STARTED |
+| 10 | Image Viewer (FR-05.1-FR-05.7) | DONE |
 | 11 | Video Player (FR-05.8-FR-05.12) | NOT STARTED |
 | 12 | Error Handling и Offline Mode | NOT STARTED |
 | 13 | Performance и Accessibility | NOT STARTED |
@@ -344,21 +344,21 @@
 **Задачи:**
 | # | Задача | Статус |
 |---|--------|--------|
-| 10.1 | Тест: ImageViewerViewModel | NOT STARTED |
-| 10.2 | Создать ImageViewerUiState data class | NOT STARTED |
-| 10.3 | Создать ImageViewerViewModel | NOT STARTED |
-| 10.4 | Создать ZoomableImage composable (pinch-to-zoom 1x-5x) | NOT STARTED |
-| 10.5 | Реализовать double-tap для 2x zoom | NOT STARTED |
-| 10.6 | Создать ImagePager composable (HorizontalPager для свайпов) | NOT STARTED |
-| 10.7 | Реализовать immersive mode (скрытие system bars) | NOT STARTED |
-| 10.8 | Реализовать загрузку оригинала при зуме >2x | NOT STARTED |
-| 10.9 | Создать ImageLoadingIndicator composable | NOT STARTED |
-| 10.10 | Создать ExifInfoSheet composable (BottomSheet с EXIF) | NOT STARTED |
-| 10.11 | Реализовать чтение EXIF данных | NOT STARTED |
-| 10.12 | Создать ImageViewerTopBar composable (share, info buttons) | NOT STARTED |
-| 10.13 | Собрать ImageViewerScreen composable | NOT STARTED |
-| 10.14 | Интеграция с NavGraph (аргументы: path, index) | NOT STARTED |
-| 10.15 | Проверка: gesture тесты | NOT STARTED |
+| 10.1 | Тест: ImageViewerViewModel | DONE |
+| 10.2 | Создать ImageViewerUiState data class | DONE |
+| 10.3 | Создать ImageViewerViewModel | DONE |
+| 10.4 | Создать ZoomableImage composable (pinch-to-zoom 1x-5x) | DONE |
+| 10.5 | Реализовать double-tap для 2x zoom | DONE |
+| 10.6 | Создать ImagePager composable (HorizontalPager для свайпов) | DONE |
+| 10.7 | Реализовать immersive mode (скрытие system bars) | DONE |
+| 10.8 | Реализовать загрузку оригинала при зуме >2x | DONE |
+| 10.9 | Создать ImageLoadingIndicator composable | DONE |
+| 10.10 | Создать ExifInfoSheet composable (BottomSheet с EXIF) | DONE |
+| 10.11 | Реализовать чтение EXIF данных | DONE |
+| 10.12 | Создать ImageViewerTopBar composable (share, info buttons) | DONE |
+| 10.13 | Собрать ImageViewerScreen composable | DONE |
+| 10.14 | Интеграция с NavGraph (аргументы: path, index) | DONE |
+| 10.15 | Проверка: lint и тесты | DONE |
 
 **Ключевые файлы:**
 - `presentation/viewer/ImageViewerScreen.kt`

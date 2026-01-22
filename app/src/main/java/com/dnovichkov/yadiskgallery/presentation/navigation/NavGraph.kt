@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.dnovichkov.yadiskgallery.presentation.gallery.GalleryScreen
 import com.dnovichkov.yadiskgallery.presentation.settings.SettingsScreen
+import com.dnovichkov.yadiskgallery.presentation.viewer.ImageViewerScreen
 import java.net.URLDecoder
 
 /**
@@ -80,10 +81,14 @@ fun NavGraph(
                 ),
         ) { backStackEntry ->
             val encodedPath = backStackEntry.arguments?.getString(Screen.ImageViewer.PATH_ARG) ?: ""
-            val path = URLDecoder.decode(encodedPath, "UTF-8")
+            val folderPath = URLDecoder.decode(encodedPath, "UTF-8").ifEmpty { null }
             val index = backStackEntry.arguments?.getInt(Screen.ImageViewer.INDEX_ARG) ?: 0
-            // TODO: Replace with ImageViewerScreen when implemented
-            PlaceholderScreen("Image Viewer: $path (index: $index)")
+
+            ImageViewerScreen(
+                folderPath = folderPath,
+                initialIndex = index,
+                onNavigateBack = { navigationActions.navigateBack() },
+            )
         }
 
         // Video Player Screen
