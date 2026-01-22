@@ -3,6 +3,7 @@ package com.dnovichkov.yadiskgallery.presentation.viewer
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,10 +15,18 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -28,6 +37,7 @@ import com.dnovichkov.yadiskgallery.presentation.components.LoadingIndicator
 import com.dnovichkov.yadiskgallery.presentation.viewer.components.ExifInfoSheet
 import com.dnovichkov.yadiskgallery.presentation.viewer.components.ImagePager
 import com.dnovichkov.yadiskgallery.presentation.viewer.components.ImageViewerTopBar
+import com.dnovichkov.yadiskgallery.presentation.viewer.components.NavigationArrows
 import kotlinx.coroutines.launch
 
 /**
@@ -51,6 +61,12 @@ fun ImageViewerScreen(
     val uiState by viewModel.uiState.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
+    val focusRequester = remember { FocusRequester() }
+
+    // Request focus for keyboard navigation
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 
     // Load images on first composition
     LaunchedEffect(folderPath, initialIndex, publicFolderUrl) {
@@ -80,7 +96,34 @@ fun ImageViewerScreen(
                 Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .background(Color.Black),
+                    .background(Color.Black)
+                    .focusRequester(focusRequester)
+                    .focusable()
+                    .onKeyEvent { event ->
+                        if (event.type == KeyEventType.KeyDown && uiState.zoomLevel <= 1f) {
+                            when (event.key) {
+                                Key.DirectionLeft -> {
+                                    if (uiState.hasPreviousImage) {
+                                        viewModel.onEvent(ImageViewerEvent.PreviousImage)
+                                        true
+                                    } else {
+                                        false
+                                    }
+                                }
+                                Key.DirectionRight -> {
+                                    if (uiState.hasNextImage) {
+                                        viewModel.onEvent(ImageViewerEvent.NextImage)
+                                        true
+                                    } else {
+                                        false
+                                    }
+                                }
+                                else -> false
+                            }
+                        } else {
+                            false
+                        }
+                    },
         ) {
             when {
                 uiState.isLoading && uiState.images.isEmpty() -> {
@@ -126,6 +169,15 @@ fun ImageViewerScreen(
                             modifier = Modifier.align(Alignment.Center),
                         )
                     }
+
+                    // Navigation arrows
+                    NavigationArrows(
+                        hasPreviousImage = uiState.hasPreviousImage,
+                        hasNextImage = uiState.hasNextImage,
+                        isVisible = uiState.showControls,
+                        onPreviousClick = { viewModel.onEvent(ImageViewerEvent.PreviousImage) },
+                        onNextClick = { viewModel.onEvent(ImageViewerEvent.NextImage) },
+                    )
                 }
             }
 
